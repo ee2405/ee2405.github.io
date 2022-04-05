@@ -1,0 +1,139 @@
+EE2405 Embedded System Laboratory Exam #1
+###########################################
+:Date:    2021-04-07 15:30
+:Tags:    Exams
+:Summary: Exam #1
+:Status: Draft
+
+.. sectnum::
+    :depth: 2
+
+.. include:: ../LARC_def.txt
+
+.. contents::
+
+****
+Rule
+****
+
+#. Any communication with others is strictly prohibited.
+
+#. Please commit your changes every time you compile your code. This is the record of your programming.
+
+#. If you cannot connect to internet with your own notebook or phone, please use the desktop PC to submit your results.
+   TAs will prepare a few USB sticks for data transfer, you don't need to setup the mbed OS/Compiler on the PC.
+
+**********
+Submission
+**********
+
+* Due time: 18:20, April 7th, 2021
+
+* Submit your answer: `Exam #1 <https://forms.gle/XmpwkyP2w2qPTaGAA>`__
+
+  #. URL of your git remote repo
+  #. In the git repo, you should include the following items:
+
+     #. All mbed and PC Python source codes 
+     #. A Readme file in your git repo to explain briefly how to setup and run your program 
+     #. The screen shots of plots at PC
+     #. The screen shots of Picoscope measurement
+     #. The photo of your circuit including breadboard and uLCD (If you don't have a phone, please ask TAs to help you).
+
+*********************
+Equipment List
+*********************
+
+#. PC or notebook (or an optional VM copy just in case your notebook fails)
+#. USB Stick to transfer codes and backup data (Recommended but optional)
+#. A phone (to take a picture of your hardware setup)
+#. B_L4S5I_IOT01A
+#. Bread board
+#. Buttons * 3 (Please keep the same connection as HW2)
+#. Picoscope
+#. uLCD display
+#. Wires 
+
+*********
+Questions
+*********
+
+- In this exam, you will need to do the following:
+
+  #. (**Inputs**) Add buttons on the bread board (as DigitalIn): up, down and select.
+  #. (**Display**) Create a selection display on uLCD to select from 4 different slew rates: 1/8, 1/4, 1/2, 1.
+  #. (**Generate waveform**) Use DAC to generate a waveform with a fixed frequency and the selected slew rate. 
+  #. (**Measure**) Use Picoscope to measure the generated wave form. 
+  #. (**Sample**) Sample the generated wave form and send the value to PC/Python.
+  #. (**Analysis**) Analyze the captured waveform: show frequency response and wave on screen with Matplotlib.
+
+- Detailed parts for this exam
+
+  #. (**20% Inputs and display**) Add 3 buttons to mbed.
+
+     #. Plugin 3 buttons and wire to mbed:
+
+        .. image:: exam/img/HW2_3buttons.png
+           :alt: hw2 input circuit
+
+     #. Use Up and Down buttons to select a menu on uLCD
+        There is no need to create a GUI-based menu. You may simply display the current selection on the uLCD.
+     #. Use Confirm button to confirm a selection on uLCD
+     #. Please write these functions as three independent interrupt service routines.
+
+	#. ISR1 (Up button): change the selection in the following order: 1/8->1/4->1/2->1.
+	   It will stay at 1 if the current selection is 1.
+	#. ISR2 (Down button): change the selection in the following order: 1->1/2->1/4->1/8.
+	   It will stay at 1/8 if the current selection is 1/8.
+	#. ISR3 (Selection button): the function will show the current selection on uLCD. 
+	   And then it will put the following functions (waveform generation and sampling) to their EventQueue calls.
+
+     #. To simplify the problem, all selection is done before we generate a waveform in the following.
+        We do not change any selection during waveform generation.
+
+  #. (**20% Generate waveform**) Use DAC to generate a wave form 
+
+     #. Once user confirm the slew rate selection, please generate continously a waveform with DAC output.
+     #. The Waveform is a square signal with a specified rising and falling rates (slew rates):
+
+        #. The signal peaks at 3V (the reference voltage of DAC).
+        #. The base frequency is about ~4.166Hz (240ms period).
+	#. For each period we have 3 sections: (0, 80ms), (80ms, 160ms), (160ms, 240ms).
+	#. For the second section: (80ms, 160ms), we keep the output signal at peak 3V.
+	#. For the first section: (0, 80ms), the signal rise from 0 to 3V. We want to control the rate (how fast) the signal rise to 3V:
+
+	   #. Slew rate=1, if the signal takes a full section of 80ms to reach 3V (the slowest form).
+	   #. Slew rate=1/2, if the signal takes a half of the section: 40ms to reach 3V.
+	   #. Slew rate=1/4, if the signal take one fourth of the section: 20ms to reach 3V.
+	   #. Slew rate=1/8, if the signal take one eighth of the section: 10ms to reach 3V.
+	#. Similarly, for the last section: (160ms, 240ms), the signal fall from 3V to 0V. 
+           We will use the same falling slew rate as the first section.
+
+     .. image:: exam/img/square4.png
+        :alt: four different square signals
+
+     #. Please write a function and prepare an EventQueue for calling this function as an independent thread.
+
+  #. (**20% Measure**) Picoscope.
+
+     #. Please use Picoscope to measure the above waveform and confirm the frequency.
+     #. Please save the screen shots of Picoscope.
+
+  #. (**20% Sample**) Sample the generated waveform 
+
+     #. Please use ADC on mbed to sample the above waveform.
+
+     #. Send the wave data from mbed to PC.
+
+     #. The ADC samples on mbed should be as close to the original waveform as possible.
+
+     #. Please write a function and prepare an EventQueue for calling this function as an independent thread.
+
+  #. (**20% Analysis**) Python program 
+
+     #. Please write a Python program in PC to get the waveform values.
+
+     #. Plot the waveform and the FFT of the wave form in the same plot (with two subplots) with Python in PC.
+
+     #. Please compare the frequency and waveform with those measured by Picoscope.
+

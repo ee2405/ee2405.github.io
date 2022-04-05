@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 11 XBee</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-11-xbee.html" rel="bookmark"
+                   title="Permalink to mbed Lab 11 XBee">mbed Lab 11 XBee</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-05-04T15:00:00+08:00">
+                May 04, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#test-and-configure-xbee" id="id6">4.2&nbsp;&nbsp;&nbsp;Test and configure XBee</a><ul class="auto-toc">
+<li><a class="reference internal" href="#use-coolterm-to-configure-one-xbee-chip-a" id="id7">4.2.1&nbsp;&nbsp;&nbsp;Use CoolTerm to configure one XBee chip (A)</a></li>
+<li><a class="reference internal" href="#use-coolterm-to-configure-the-other-xbee-chip-b" id="id8">4.2.2&nbsp;&nbsp;&nbsp;Use CoolTerm to configure the other XBee chip (B)</a></li>
+<li><a class="reference internal" href="#use-b-l4s5i-iot01a-to-test-xbee-chip-b" id="id9">4.2.3&nbsp;&nbsp;&nbsp;Use B_L4S5I_IOT01A to test XBee Chip (B)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#xbee-programming" id="id10">4.3&nbsp;&nbsp;&nbsp;XBee Programming</a><ul class="auto-toc">
+<li><a class="reference internal" href="#xbee-b-mbed" id="id11">4.3.1&nbsp;&nbsp;&nbsp;XBee B (mbed)</a></li>
+<li><a class="reference internal" href="#xbee-a-python" id="id12">4.3.2&nbsp;&nbsp;&nbsp;XBee A (Python)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#xbee-application-with-rpc" id="id13">4.4&nbsp;&nbsp;&nbsp;XBee Application with RPC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id14">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+<li><a class="reference internal" href="#reference-list" id="id15">6&nbsp;&nbsp;&nbsp;Reference List</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>ZigBee protocol</li>
+<li>Programming with ZigBee</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>May. 4, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>In this lab, we will learn
+<a class="reference external" href="http://en.wikipedia.org/wiki/ZigBee">the ZigBee standard</a>
+for communications between devices.
+ZigBee or XBee for short is a common low-power wireless protocol used
+in smart homes.</p>
+<p>We use UART interface to work with XBee module.
+The XBee module (or similar communication module) usually has a set of &quot;AT&quot; commands (a command string starting with &quot;AT&quot;).
+These &quot;AT&quot; commands are used to configure parameters of the XBee module.
+A few essential &quot;AT&quot; commands will be demonstrated in this lab.</p>
+<p>In this lab, we test the following configurations:</p>
+<ol class="arabic simple">
+<li>(Test and configuration) Both XBees on PC (CoolTerm) or One XBee on B_L4S5I_IOT01A (mbed) connected to PC (CoolTerm)</li>
+<li>(Point to point) One XBee on PC (Python) + The other XBee on B_L4S5I_IOT01A (mbed); We will also try RPC on this configuration.</li>
+</ol>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B_L4S5I_IOT01A * 1</li>
+<li>XBee S2C * 2</li>
+<li>XBee S2C Adaptor * 2</li>
+<li>Mini USB to USB * 2</li>
+<li>Wire * n</li>
+<li>Breadboard * 1</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 12: Zigbee <a class="reference external" href="notes/ch12_xbee.pdf">ch12_xbee.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="test-and-configure-xbee">
+<h3><a class="toc-backref" href="#id6">4.2&nbsp;&nbsp;&nbsp;Test and configure XBee</a></h3>
+<div class="instruct docutils container">
+In this section, we use CoolTerm app to test, configure and control a XBee module.
+We will work in &quot;AT command&quot; mode, in which a command starts with an &quot;AT&quot; string.
+We will try two ways to connect XBee module to a PC:
+(1) XBee modules are plug to the host's USB port <a class="reference external" href="labs/img/XBee/XBee_USB.jpg">like this</a>.
+(2) One XBee module is connected to the mbed B_L4S5I_IOT01A <a class="reference external" href="labs/img/XBee/191359.png">like this</a> .</div>
+<div class="section" id="use-coolterm-to-configure-one-xbee-chip-a">
+<h4><a class="toc-backref" href="#id7">4.2.1&nbsp;&nbsp;&nbsp;Use CoolTerm to configure one XBee chip (A)</a></h4>
+<ol class="arabic">
+<li><p class="first">Plug in the XBee module to the host's USB port with a USB-to-Serial cable <a class="reference external" href="labs/img/XBee/XBee_USB.jpg">like this</a>.
+Our configuration is PC -&gt; USB -&gt; XBee Chip A.</p>
+</li>
+<li><p class="first">Start CoolTerm app and connect to XBee chip with UART device:
+Click <strong>&quot;Options&quot;</strong> and select Port with the pull down menu.
+Note that USB-to-Serial cable will create a UART device like COM* (Windows) or /dev/cu.usbserial-* (Mac OS).</p>
+<p>Also click <strong>&quot;Terminal&quot;</strong> (under &quot;Options&quot;) at left panel. Check <strong>&quot;Local Echo&quot;</strong> box.
+This will enable echo back everything you typed to send to the other XBee chip.</p>
+<p>Then click <strong>&quot;Connect&quot;</strong>.</p>
+</li>
+<li><p class="first">Configure MY &amp; DL addresses</p>
+<div class="instruct docutils container">
+<p>What are MY and DL?</p>
+<p><span class="file">MY (Source Address)</span>: Sets the address of the node itself (the default value is 0).</p>
+<p><span class="file">DL (Destination Low address)</span>: The destination address of the XBee for which the transmitted packets will be sent (the default value is 0).</p>
+<p>We will use DL to indicate which node receives data.
+A hexadecimal value of FFFF performs a broadcast and sends data to all nodes on the PAN.</p>
+<p>Note that you will get two XBee chips (we call them base XBee and remote XBee;
+The <span class="file">base</span> is plugged in our <span class="file">PC</span> <a class="reference external" href="labs/img/XBee/XBee_USB.jpg">like this</a> ,
+and the <span class="file">remote</span> is at <span class="file">mbed B_L4S5I_IOT01A</span> <a class="reference external" href="labs/img/XBee/191359.png">like this</a> ).
+Currently, for both chips, we have MY and DL as 0.
+So when you loop back the remote XBee, our network for the two chips are as follows:</p>
+<p>Send from base XBee (DL=0) --&gt; Received by remote XBee (MY=0) --&gt; Send by remote XBee (DL=0) --&gt; Received by base Xbee (MY=0).</p>
+</div>
+<p><strong>We need to setup each pair with individual addresses to avoid conflicts.</strong></p>
+<div class="instruct docutils container">
+<p><strong>How to set MY and DL:</strong></p>
+<p>Note that you have to use hexadecimal number in the setup.</p>
+<p>Assume seat number = 40 (Decimal).
+<strong>Set MY and DL with your seat number!</strong>
+<strong>No credit for the demo of this lab (1pt) if you don't follow the MY/DL address rules.</strong></p>
+<ul class="simple">
+<li>XBEE A MY = <span class="hl">use hexadecimal 0x140</span></li>
+<li>XBEE A DL = <span class="hl">use hexadecimal 0x240</span></li>
+<li>XBEE B MY = 0x240</li>
+<li>XBEE B DL = 0x140</li>
+<li>PAN ID = 0x1</li>
+</ul>
+</div>
+<ol class="arabic">
+<li><p class="first">Type <code class="cmd-host">+++</code> to enter the AT Command mode. (No <span class="hotkey">Enter</span> is necessary).</p>
+<p>Wait 2 more seconds, and you should see “OK.”</p>
+<div class="instruct docutils container">
+<p>If &quot;+++&quot; did not return &quot;OK&quot;, please simply try again.
+It sometimes does not work, specially when booting up the first time.</p>
+</div>
+<div class="instruct docutils container">
+<p>The AT command mode will time out in 10 second by default.
+If time out interrupts your configuration, you may use the following command to
+set a longer time out in AT command mode (after &quot;+++&quot;):</p>
+<ol class="arabic simple">
+<li><code class="cmd-host">ATCT 512</code> (default is 64).</li>
+</ol>
+</div>
+</li>
+<li><p class="first">Use <code class="cmd-host">ATDL xx</code> to change DL in AT Command mode.
+For example, if your seat number is 40 in decimal, you can type &quot;ATDL 0x240&quot; in XBee A, and &quot;ATDL 0x140&quot; in XBee B.
+Change above addresses according to your seat number!</p>
+</li>
+<li><p class="first">Use <code class="cmd-host">ATMY xx</code> to change MY in AT Command mode.
+For example, if your seat number is 40 in decimal, you can type &quot;ATMY 0x140&quot; in XBee A, and &quot;ATMY 0x240&quot; in XBee B.</p>
+</li>
+<li><p class="first">Use <code class="cmd-host">ATID xx</code> to change PAN ID in AT Command mode.</p>
+</li>
+<li><p class="first">Use <code class="cmd-host">ATWR</code> to store your setting.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Check XBee configuration</p>
+<ol class="arabic simple">
+<li>Type <code class="cmd-host">+++</code> to enter the AT Command mode.</li>
+<li>Use <code class="cmd-host">ATDL</code> to display current DL in AT Command mode.</li>
+<li>Use <code class="cmd-host">ATMY</code> to display current MY in AT Command mode.</li>
+<li>Use <code class="cmd-host">ATCN</code> to exit AT Command mode.</li>
+</ol>
+</li>
+<li><p class="first">Please keep the CoolTerm app open after configuration, we will use it later.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="use-coolterm-to-configure-the-other-xbee-chip-b">
+<h4><a class="toc-backref" href="#id8">4.2.2&nbsp;&nbsp;&nbsp;Use CoolTerm to configure the other XBee chip (B)</a></h4>
+<ol class="arabic">
+<li><p class="first">Please repeat above process for the second XBee module with another USB-to-Serial cable.
+This configuration is PC -&gt; USB -&gt; XBee Chip B.</p>
+</li>
+<li><p class="first">In CoolTerm app, please click <strong>File -&gt; New</strong> to open a new Window and connect to XBee chip with UART device.
+Click <strong>&quot;Options&quot;</strong> and select Port with the pull down menu for USB serial cable.
+Note that it should be a different device name from XBee Chip A.
+Also set <strong>Echo</strong> for terminal and click <strong>Connect</strong>.</p>
+</li>
+<li><p class="first">Please set correct MY and DL addresses for XBee Chip B.</p>
+<div class="instruct docutils container">
+<p><strong>Set MY and DL for XBee Chip B:</strong></p>
+<p>Assume seat number = 40 (Decimal).
+<strong>Set MY and DL with your seat number!</strong>
+<strong>No credit for the demo of this lab (1pt) if you don't follow the MY/DL address rules.</strong></p>
+<ul class="simple">
+<li>XBEE B MY = 0x240</li>
+<li>XBEE B DL = 0x140</li>
+<li>PAN ID = 0x1</li>
+</ul>
+</div>
+</li>
+<li><p class="first">After above two XBees (Chip A and B) are setup. You may now type some messages on either CoolTerm terminal.
+You should see the message appearing right away at the other terminal.</p>
+<p>Note that the configurations of MY/DL are permanently written on the XBee chips, so the above setup only
+have to be done once for each pair of XBee chips.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="use-b-l4s5i-iot01a-to-test-xbee-chip-b">
+<h4><a class="toc-backref" href="#id9">4.2.3&nbsp;&nbsp;&nbsp;Use B_L4S5I_IOT01A to test XBee Chip (B)</a></h4>
+<ol class="arabic">
+<li><p class="first">Please wire XBee Chip B to the mbed B_L4S5I_IOT01A <a class="reference external" href="labs/img/XBee/191359.png">like this</a> .
+Once we connect the USB to B_L4S5I_IOT01A, our configuration is PC -&gt; USB -&gt; B_L4S5I_IOT01A -&gt; XBee Chip B.</p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>11_1_XBee_config</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<p>This mbed program works as a pass-through channel from USB to UART (XBee B),
+which is similar to the above USB-Serial cable.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="k">static</span> <span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span> <span class="n">USBRX</span><span class="p">);</span>
+<span class="lineno"> 4 </span><span class="k">static</span> <span class="n">BufferedSerial</span> <span class="nf">xbee</span><span class="p">(</span><span class="n">D1</span><span class="p">,</span> <span class="n">D0</span><span class="p">);</span>
+<span class="lineno"> 5 </span><span class="n">EventQueue</span> <span class="nf">queue</span><span class="p">(</span><span class="mi">32</span> <span class="o">*</span> <span class="n">EVENTS_EVENT_SIZE</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">Thread</span> <span class="n">t</span><span class="p">;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">void</span> <span class="nf">pc_rx_interrupt</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="lineno"> 9 </span><span class="kt">void</span> <span class="nf">pc_rx</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="lineno">10 </span><span class="kt">void</span> <span class="nf">xbee_rx_interrupt</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="lineno">11 </span><span class="kt">void</span> <span class="nf">xbee_rx</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">16 </span>   <span class="n">xbee</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">17 </span>   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Begin test</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">18 </span>   <span class="n">t</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">EventQueue</span><span class="o">::</span><span class="n">dispatch_forever</span><span class="p">));</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span>   <span class="c1">// Setup a serial interrupt function of receiving data from pc</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">set_blocking</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="lineno">23 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">sigio</span><span class="p">(</span><span class="n">mbed_event_queue</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">event</span><span class="p">(</span><span class="n">pc_rx_interrupt</span><span class="p">));</span>
+<span class="lineno">24 </span>
+<span class="lineno">25 </span>   <span class="c1">// Setup a serial interrupt function of receiving data from xbee</span>
+<span class="lineno">26 </span>
+<span class="lineno">27 </span>   <span class="n">xbee</span><span class="p">.</span><span class="n">set_blocking</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="lineno">28 </span>   <span class="n">xbee</span><span class="p">.</span><span class="n">sigio</span><span class="p">(</span><span class="n">mbed_event_queue</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">event</span><span class="p">(</span><span class="n">xbee_rx_interrupt</span><span class="p">));</span>
+<span class="lineno">29 </span>
+<span class="lineno">30 </span><span class="p">}</span>
+<span class="lineno">31 </span>
+<span class="lineno">32 </span><span class="kt">void</span> <span class="nf">pc_rx_interrupt</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+<span class="lineno">33 </span>   <span class="n">queue</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pc_rx</span><span class="p">);</span>
+<span class="lineno">34 </span><span class="p">}</span>
+<span class="lineno">35 </span>
+<span class="lineno">36 </span><span class="kt">void</span> <span class="nf">pc_rx</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+<span class="lineno">37 </span>   <span class="k">static</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">38 </span>   <span class="k">static</span> <span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="lineno">39 </span>   <span class="k">while</span><span class="p">(</span><span class="n">pc</span><span class="p">.</span><span class="n">readable</span><span class="p">()){</span>
+<span class="lineno">40 </span>      <span class="kt">char</span> <span class="o">*</span><span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="lineno">41 </span>      <span class="n">pc</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">42 </span>      <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="o">!=</span><span class="sc">&#39;\r&#39;</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">c</span><span class="o">!=</span><span class="sc">&#39;\n&#39;</span><span class="p">){</span>
+<span class="lineno">43 </span>
+<span class="lineno">44 </span>         <span class="n">pc</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">45 </span>         <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="n">c</span><span class="p">;</span>
+<span class="lineno">46 </span>         <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">47 </span>         <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\r&#39;</span><span class="p">;</span>
+<span class="lineno">48 </span>         <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="lineno">49 </span>         <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+<span class="lineno">50 </span>
+<span class="lineno">51 </span>         <span class="k">if</span><span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="s">&quot;+++&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+<span class="lineno">52 </span>            <span class="n">xbee</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;+++&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+<span class="lineno">53 </span>            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">54 </span>         <span class="p">}</span>
+<span class="lineno">55 </span>
+<span class="lineno">56 </span>      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<span class="lineno">57 </span>         <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">58 </span>         <span class="n">xbee</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">str</span><span class="p">));</span>
+<span class="lineno">59 </span>         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">60 </span>      <span class="p">}</span>
+<span class="lineno">61 </span>   <span class="p">}</span>
+<span class="lineno">62 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">63 </span><span class="p">}</span>
+<span class="lineno">64 </span>
+<span class="lineno">65 </span><span class="kt">void</span> <span class="nf">xbee_rx_interrupt</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+<span class="lineno">66 </span>   <span class="n">queue</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">xbee_rx</span><span class="p">);</span>
+<span class="lineno">67 </span><span class="p">}</span>
+<span class="lineno">68 </span>
+<span class="lineno">69 </span><span class="kt">void</span> <span class="nf">xbee_rx</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+<span class="lineno">70 </span>   <span class="k">while</span><span class="p">(</span><span class="n">xbee</span><span class="p">.</span><span class="n">readable</span><span class="p">()){</span>
+<span class="lineno">71 </span>      <span class="kt">char</span> <span class="o">*</span><span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="lineno">72 </span>      <span class="n">xbee</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">73 </span>      <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="o">!=</span><span class="sc">&#39;\r&#39;</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">c</span><span class="o">!=</span><span class="sc">&#39;\n&#39;</span><span class="p">){</span>
+<span class="lineno">74 </span>         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="o">*</span><span class="n">c</span><span class="p">);</span>
+<span class="lineno">75 </span>      <span class="p">}</span>
+<span class="lineno">76 </span>      <span class="k">else</span><span class="p">{</span>
+<span class="lineno">77 </span>         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">78 </span>      <span class="p">}</span>
+<span class="lineno">79 </span>   <span class="p">}</span>
+<span class="lineno">80 </span>   <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">81 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and flash the program.</p>
+</li>
+<li><p class="first">Push the reset button on the B_L4S5I_IOT01A and the program will start.</p>
+</li>
+<li><p class="first">In CoolTerm, click <strong>File -&gt; New</strong> to open a new Windows and connect to B_L4S5I_IOT01A.
+Note that this is a different UART device from Chip A or Chip B.
+Do not turn on Echo for this part, because our mbed program automatically return entered characters.</p>
+</li>
+<li><p class="first">The monitor will be <a class="reference external" href="labs/img/XBee/begintest.png">like this</a> .</p>
+</li>
+<li><p class="first">Check XBee configuration</p>
+<ol class="arabic simple">
+<li>Type “+++” to enter the AT Command mode.</li>
+<li>Use <code class="cmd-host">ATDL</code> to display current DL in AT Command mode.</li>
+<li>Use <code class="cmd-host">ATMY</code> to display current MY in AT Command mode.</li>
+<li>Use <code class="cmd-host">ATCN</code> to exit AT Command mode.</li>
+</ol>
+</li>
+<li><p class="first">Again, you may now type some messages on either CoolTerm terminal.
+You should see the message appearing right away at the other terminal.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="xbee-programming">
+<h3><a class="toc-backref" href="#id10">4.3&nbsp;&nbsp;&nbsp;XBee Programming</a></h3>
+<div class="instruct docutils container">
+<p>The connection of XBee A and B are the same as in previous section:</p>
+<p>In this section, we connect a XBee Chip A to our <span class="file">PC</span> <a class="reference external" href="labs/img/XBee/XBee_USB.jpg">like this</a>.
+And the other XBee Chip B is connected to a <span class="file">mbed B_L4S5I_IOT01A</span> <a class="reference external" href="labs/img/XBee/191359.png">like this</a> ).</p>
+</div>
+<div class="section" id="xbee-b-mbed">
+<h4><a class="toc-backref" href="#id11">4.3.1&nbsp;&nbsp;&nbsp;XBee B (mbed)</a></h4>
+<div class="instruct docutils container">
+Note that after we setup Xbee chips and connect them to either a PC or mbed board,
+the Xbee chips work like a regular UART device. In the following programs, we demonstrate this
+by sending and receiving messages through the UART interface by both mbed and Python.</div>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>11_4_XBee_remote</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<p>This mbed program will wait for messages from XBee A and it will return the same message back to XBee A.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 4 </span>   <span class="n">BufferedSerial</span> <span class="n">serdev</span><span class="p">(</span><span class="n">D1</span><span class="p">,</span> <span class="n">D0</span><span class="p">,</span> <span class="mi">9600</span><span class="p">);</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span>   <span class="c1">//Get a message from remote and resend the message to remote</span>
+<span class="lineno"> 7 </span>   <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+<span class="lineno"> 8 </span>   <span class="kt">char</span> <span class="n">instr</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+<span class="lineno"> 9 </span>   <span class="n">memset</span><span class="p">(</span><span class="n">instr</span><span class="p">,</span> <span class="sc">&#39;\0&#39;</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span> <span class="c1">//clear buffer</span>
+<span class="lineno">10 </span>   <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="lineno">11 </span>   <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">){</span>
+<span class="lineno">12 </span>      <span class="n">serdev</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">13 </span>      <span class="k">if</span><span class="p">(</span><span class="n">c</span><span class="o">!=</span><span class="sc">&#39;\r&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">!=</span><span class="sc">&#39;\n&#39;</span><span class="p">){</span>
+<span class="lineno">14 </span>         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+<span class="lineno">15 </span>         <span class="c1">//prepare echo back</span>
+<span class="lineno">16 </span>         <span class="n">instr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">c</span><span class="p">;</span>
+<span class="lineno">17 </span>         <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">18 </span>      <span class="p">}</span>
+<span class="lineno">19 </span>      <span class="k">else</span><span class="p">{</span> <span class="c1">//Either &#39;\r&#39; or &#39;\n&#39;</span>
+<span class="lineno">20 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;string=%s, strlen=%d.</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">instr</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">instr</span><span class="p">));</span>
+<span class="lineno">21 </span>        <span class="c1">//Echo back when eol</span>
+<span class="lineno">22 </span>        <span class="n">serdev</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">instr</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">instr</span><span class="p">));</span>
+<span class="lineno">23 </span>        <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">24 </span>        <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="lineno">25 </span>        <span class="n">memset</span><span class="p">(</span><span class="n">instr</span><span class="p">,</span> <span class="sc">&#39;\0&#39;</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span>
+<span class="lineno">26 </span>      <span class="p">}</span>
+<span class="lineno">27 </span>   <span class="p">}</span>
+<span class="lineno">28 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="xbee-a-python">
+<h4><a class="toc-backref" href="#id12">4.3.2&nbsp;&nbsp;&nbsp;XBee A (Python)</a></h4>
+<ol class="arabic">
+<li><p class="first">Edit XBee_host.py and copy the following codes.</p>
+<p>This send messages to XBee B and read back the messages from XBee B.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">serial</span>
+<span class="lineno"> 2 </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="lineno"> 3 </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+<span class="lineno"> 6 </span>    <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;No port input specified.&quot;</span><span class="p">)</span>
+<span class="lineno"> 7 </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">serdev</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+<span class="lineno">12 </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;message: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="lineno">13 </span>    <span class="n">outstr</span><span class="o">=</span><span class="s2">&quot;Send message: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="c1">#send only one ENTER</span>
+<span class="lineno">14 </span>    <span class="n">serdev</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outstr</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+<span class="lineno">15 </span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="lineno">16 </span>    <span class="n">line</span><span class="o">=</span><span class="n">serdev</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+<span class="lineno">17 </span>    <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span><span class="n">serdev</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</li>
+<li><p class="first">Start a Terminal app and execute above Python script.
+Replace the device name in the command with COM* (Windows) or /dev/cu.usbserial-* (Mac OS).
+It will be the same UART device we connected above with CoolTerm for Chip A.</p>
+<p><code class="cmd-host">python3 XBee_host.py COM*</code> (Windows)</p>
+<p>or</p>
+<p><code class="cmd-host">python3 XBee_host.py /dev/cu.usbserial-*</code>  (Mac OS)</p>
+</li>
+<li><p class="first">Please check if you see a message received by both XBee Chips.</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="xbee-application-with-rpc">
+<h3><a class="toc-backref" href="#id13">4.4&nbsp;&nbsp;&nbsp;XBee Application with RPC</a></h3>
+<div class="instruct docutils container">
+We use the same XBee connections as in previous section: One XBee on PC (Python) + The other XBee on B_L4S5I_IOT01A (mbed).
+The XBee Chip A is plugged in our <span class="file">PC</span> <a class="reference external" href="labs/img/XBee/XBee_USB.jpg">like this</a> ,
+and the XBee Chip B is connected to <span class="file">mbed B_L4S5I_IOT01A</span> <a class="reference external" href="labs/img/XBee/191359.png">like this</a> ).</div>
+<ol class="arabic">
+<li><p class="first">Please repeat the example in <em>9_1_erpc_blinky</em>. You should be able to run the example without any modification.
+However, because XBee is an wireless communication, there may be interference noises. Therefore, it will not be as reliable as a wired UART interface.
+Some conditions may appear as follows, when running the Python script. Please simply use <span class="hotkey">Ctrl+C</span> to stop the Python program and execute it again.</p>
+<ol class="arabic">
+<li><p class="first">The Python program stops at one iteration of the loop without any message.</p>
+</li>
+<li><p class="first">The Python program stops with the following message: (this means the message has errors during XBee transfer).</p>
+<pre class="terminal literal-block">
+...
+erpc.client.RequestError: invalid message CRC
+</pre>
+</li>
+</ol>
+<p>If you see the following terminal message, you have to quit CoolTerm that is connected to the USB serial device of Chip A.</p>
+<pre class="terminal literal-block">
+...
+erial.serialutil.SerialException: [Errno 16] could not open port /dev/cu.usbserial-AC00CNOQ: [Errno 16] Resource busy: '/dev/cu.usbserial-AC00CNOQ'
+</pre>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id14">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Show your git remote repository.</li>
+<li>Know the configuration and connection of XBee.</li>
+<li>Send and receive messages with XBee in mbed and Python.</li>
+</ol>
+</div>
+<div class="section" id="reference-list">
+<h2><a class="toc-backref" href="#id15">6&nbsp;&nbsp;&nbsp;Reference List</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://www.digi.com/resources/documentation/digidocs/pdfs/90002002.pdf">XBee S2C User Guide</a>.</li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

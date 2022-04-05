@@ -1,0 +1,47 @@
+K66F Bootloader Update Tutorial
+###########################################################
+:Date:    2018-03-07 20:00
+:Tags:    Tutorial
+:Summary: K66F Bootloader
+:Status: Draft
+
+.. sectnum::
+	 :depth: 2
+
+.. include:: ../LARC_def.txt
+
+.. contents::
+
+.. container:: tasklist
+
+	The goal of this lab is to learn:
+
+	#. How to update K66F
+
+****************
+Lab Introduction
+****************
+
+***************
+Lab Description
+***************
+
+#. How to update K66F's bootloader.
+
+   #. Download the latest version of bootloader mbed.
+
+      Bootloader download link : `k20dx_frdmk66f_if_crc_legacy_0x8000.bin <https://www.nxp.com/assets/downloads/data/en/snippets-boot-code-headers-monitors/k20dx_frdmk66f_if_crc_legacy_0x8000.bin>`__
+
+   #. Update the bootloader.
+
+   #. While holding the board's reset button, connect it to your computer using the board's debug USB port (`Screenshot <labs/img/Mbed_Intro/Selection_016.png>`__). The device mounts in its bootloader mode.
+
+   #. Copy the bootloader from Download to a directory where the K66F is mounted.
+
+   #. Wait a minute and you will see the LED light green, the window named K66F pop up. `Screenshot <tutorial/images/k66f/k66f.png>`__
+
+**************
+Reference List
+**************
+
+`Reference <https://www.nxp.com/support/developer-resources/run-time-software/kinetis-developer-resources/ides-for-kinetis-mcus/opensda-serial-and-debug-adapter:OPENSDA?&tid=vanOpenSDA#FRDM-K66F>`__

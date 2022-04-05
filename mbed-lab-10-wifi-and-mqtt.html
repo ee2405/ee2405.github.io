@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 10 WiFi and MQTT</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-10-wifi-and-mqtt.html" rel="bookmark"
+                   title="Permalink to mbed Lab 10 WiFi and MQTT">mbed Lab 10 WiFi and MQTT</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-04-27T15:00:00+08:00">
+                Apr 27, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#connect-b-l4s5i-iot01a-to-wifi" id="id6">4.2&nbsp;&nbsp;&nbsp;Connect B-L4S5I-IOT01A to WiFi</a><ul class="auto-toc">
+<li><a class="reference internal" href="#setup-apache-web-server" id="id7">4.2.1&nbsp;&nbsp;&nbsp;Setup Apache Web Server</a></li>
+<li><a class="reference internal" href="#setup-mbed-ethernet-example" id="id8">4.2.2&nbsp;&nbsp;&nbsp;Setup mbed Ethernet Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mqtt-broker-and-client" id="id9">4.3&nbsp;&nbsp;&nbsp;MQTT Broker and Client</a><ul class="auto-toc">
+<li><a class="reference internal" href="#mqtt-broker" id="id10">4.3.1&nbsp;&nbsp;&nbsp;MQTT Broker</a></li>
+<li><a class="reference internal" href="#mbed-mqtt-client" id="id11">4.3.2&nbsp;&nbsp;&nbsp;mbed MQTT Client</a></li>
+<li><a class="reference internal" href="#python-mqtt-client" id="id12">4.3.3&nbsp;&nbsp;&nbsp;Python MQTT Client</a></li>
+<li><a class="reference internal" href="#test-mqtt-client-and-server" id="id13">4.3.4&nbsp;&nbsp;&nbsp;Test MQTT Client and Server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id14">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+<li><a class="reference internal" href="#faq" id="id15">6&nbsp;&nbsp;&nbsp;FAQ</a></li>
+<li><a class="reference internal" href="#reference-list" id="id16">7&nbsp;&nbsp;&nbsp;Reference List</a><ul class="auto-toc">
+<li><a class="reference internal" href="#update-the-firmware-optional" id="id17">7.1&nbsp;&nbsp;&nbsp;Update the firmware (optional)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>Learn WiFi interface on an IoT Node</li>
+<li>Learn MQTT protocols</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>Apr. 27, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>B-L4S5I-IOT01A includes an ism43362 WiFi chip on the board (connected with a
+SPI interface).  In this lab, we will use an mbed Ethernet driver to connect to
+a WiFi access point and access a web server on installed PC.</p>
+<p>In the later parts of the lab, we use MQTT to transfer structured information
+between mbed and PC.  MQTT protocol is an easy and commonly used standard in
+many IoT devices for collecting sensor data. In this lab, We will use WiFi
+interface to create an MQTT connection between mbed and PC.</p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B-L4S5I-IOT01A * 1</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 11: TCP/IP, WiFi, MQTT <a class="reference external" href="notes/ch11_wifi_mqtt.pdf">ch11_wifi_mqtt.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="connect-b-l4s5i-iot01a-to-wifi">
+<h3><a class="toc-backref" href="#id6">4.2&nbsp;&nbsp;&nbsp;Connect B-L4S5I-IOT01A to WiFi</a></h3>
+<div class="instruct docutils container">
+<p>Note 1: <span class="hl">It's recommended to setup your own hotspot to avoid network congestion on public routers.</span></p>
+<p>Note 2: <span class="hl">Your PC and B_L4S5I_IOT01A should both be connected to the same hotspot (belong to the same sub-network).</span></p>
+<p>Note 3: <span class="hl">You may share the same hotspot with other students. Just to make sure to connect to your own host IP.</span></p>
+<p>Note 4: <span class="hl">This lab does not need data communication to public ethernet. However, if you share Cell hotspot from your cell phone with your PC,
+other programs on your PC may consume the bandwidth of your data plan.</span></p>
+<ol class="arabic simple">
+<li>Windows 10<ol class="arabic">
+<li>Select the Start button, then select Settings -&gt; Network &amp; Internet -&gt; Mobile hotspot.</li>
+<li>For <strong>Share my Internet connection from</strong>, choose the Internet connection you want to share.</li>
+<li>Select Edit -&gt; enter a new network name and password -&gt; Save.</li>
+<li>Turn on <strong>Share my Internet connection with other devices</strong>.</li>
+</ol>
+</li>
+<li>Mac OS<ol class="arabic">
+<li>Click <span class="hl">Apple icon &gt; System Preferences &gt; Sharing</span>, to go to the setting window.</li>
+<li>Click on Internet Sharing and set WIFI as the following.
+<a class="reference external" href="labs/img/Wifi_MQTT/MACOS1.png">screenshot</a> <a class="reference external" href="labs/img/Wifi_MQTT/MACOS2.png">screenshot</a></li>
+<li>Now turn on Internet Sharing by clicking the tick mark next to Internet Sharing in the sidebar.</li>
+<li>Click Start on the menu that pops up in order to turn Internet Sharing on.</li>
+</ol>
+</li>
+<li>Android<ol class="arabic">
+<li>Open the Settings app.</li>
+<li>Press the Network &amp; Internet option.  <a class="reference external" href="labs/img/Wifi_MQTT/Windows_1.png">screenshot</a></li>
+<li>Press the Hotspot &amp; tethering option.</li>
+<li>Toggle the switch next to Wi-Fi hotspot to on.</li>
+<li>Tap Set up Wi-Fi hotspot to manage name and password settings for your hotspot.  <a class="reference external" href="labs/img/Wifi_MQTT/Windows_2.png">screenshot</a></li>
+</ol>
+</li>
+<li>iOS<ol class="arabic">
+<li>Open the Settings app.</li>
+<li>Tap Personal Hotspot.</li>
+<li>Switch the slider next to Personal Hotspot to the on position.</li>
+<li>From that same screen you can edit your Wi-Fi password.</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="instruct docutils container">
+<p>We may setup a few WiFi hotspots. You may choose any of them depends on the signal intensity.
+<span class="hl">Note that your PC and mbed should be connected to the same hotspot</span>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">SSID</th>
+<th class="head">Password</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>emlab</td>
+<td>eenthu2405</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="setup-apache-web-server">
+<h4><a class="toc-backref" href="#id7">4.2.1&nbsp;&nbsp;&nbsp;Setup Apache Web Server</a></h4>
+<ol class="arabic">
+<li><p class="first">Get the IP of your PC with:</p>
+<p>This IP will be used in the following lab. Every time you switch to a new hotspot, you should recheck the IP address of your PC.</p>
+<ol class="arabic">
+<li><p class="first">For Windows:</p>
+<ol class="arabic simple">
+<li>Click the wifi icon on the task bar and click &quot;Properties&quot;.</li>
+<li>Scroll down to check the IPv4 address.</li>
+</ol>
+<p>Or.</p>
+<ol class="arabic simple">
+<li>Start GitHub bash</li>
+<li>Use <code class="cmd-host">$ ipconfig</code> to check IPv4 Address.</li>
+</ol>
+</li>
+<li><p class="first">For Mac OS:</p>
+<ol class="arabic simple">
+<li>Click the wifi icon on the top status bar and click &quot;Preference&quot; (the last one).</li>
+<li>Check the IP address.</li>
+</ol>
+<p>Or.</p>
+<ol class="arabic simple">
+<li>Start Terminal app</li>
+<li>Use <code class="cmd-host">$ ifconfig</code> to check inet Address.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p class="first">Install apache2 web server</p>
+<ol class="arabic">
+<li><p class="first">For Windows: (Reference: <a class="reference external" href="https://codebriefly.com/how-to-setup-apache-php-mysql-on-windows-10/">https://codebriefly.com/how-to-setup-apache-php-mysql-on-windows-10/</a>)</p>
+<ol class="arabic">
+<li><p class="first">Download <a class="reference external" href="https://www.apachelounge.com/download/VS16/binaries/httpd-2.4.52-win64-VS16.zip">httpd-2.4.52-win64-VS16.zip</a></p>
+</li>
+<li><p class="first">Extract the zip. Here we assume it's &quot;C:\Apache24&quot;</p>
+</li>
+<li><p class="first">Edit <span class="file">C:\Apache24\conf\httpd.conf</span> and change the following line to your installation directory:</p>
+<div class="highlight"><pre><span></span>Define SRVROOT &quot;C:/Apache24&quot;
+</pre></div>
+</li>
+<li><p class="first">Start Git bash</p>
+</li>
+<li><p class="first">Go to the installation directory:</p>
+<p><code class="cmd-host">$ cd C:\Apache24\bin</code></p>
+</li>
+<li><p class="first">Start Apache service</p>
+<p><code class="cmd-host">$ ./httpd.exe</code></p>
+<p>This is a temparory setup for Apache server. You may kill it with <span class="hotkey">Ctrl+C</span>.</p>
+<p>If you want to start it as a service, you need to install it with <code class="cmd-host">$ ./httpd.exe -k install</code>.
+And then start Windows <strong>Run</strong> box with <span class="hotkey">Windows+R</span> and type &quot;services.msc&quot;
+Search for Apache and click &quot;Start the service&quot;.</p>
+</li>
+<li><p class="first">Open network port 80 for Apache web services for Windows firewall (defender)</p>
+<p>If you use other Firewall software (or any Antivirus), you should consult the software's manual or search web on how to setup a port.</p>
+<p>Please follow <a class="reference external" href="https://jimirobot.tw/esp32-mosquitto-windows-mqtt-tutorial/#3_設定_window_防火牆">設定Window防火牆</a>
+or <a class="reference external" href="https://bytesofgigabytes.com/networking/how-to-open-port-in-windows/">Setup port for Windows</a></p>
+<ol class="arabic simple">
+<li>Press Windows+R</li>
+<li>Type firewall.cpl in Open field and Click OK.</li>
+<li>Click on <strong>Advanced settings</strong></li>
+<li>First click on <strong>Inbound Rules</strong> and then Click on <strong>New Rule</strong></li>
+<li>To open port, Please select Rule Type as <strong>Port</strong> and click <strong>Next</strong>.</li>
+<li>Select TCP. Set &quot;<strong>Specify local ports</strong>&quot; as 80. Click on Next.</li>
+<li>Select Allow the connection and click Next</li>
+<li>Check &quot;Private&quot; and click on Next</li>
+<li>Enter the name for opening port rule, e.g., &quot;Web Service Input Port&quot;.</li>
+<li>Repeat above again for <strong>Outbound Rules</strong></li>
+<li>First click on <strong>Outbound Rules</strong> and then Click on <strong>New Rule</strong></li>
+<li>To open port, Please select Rule Type as <strong>Port</strong> and click <strong>Next</strong>.</li>
+<li>Select TCP. Set &quot;<strong>Specify local ports</strong>&quot; as 80. Click on Next.</li>
+<li>Select Allow the connection and click Next</li>
+<li>Check &quot;Private&quot; and click on Next</li>
+<li>Enter the name for opening port rule, e.g., &quot;Web Service Output Port&quot;.</li>
+</ol>
+</li>
+<li><p class="first">Copy the following <span class="file">index.html</span> to the directory of &quot;DocumentRoot&quot; set in &quot;C:\Apache24\conf\httpd.conf&quot;.
+For example, it's in &quot;&lt;SRVRoot&gt;\htdocs&quot;, e.g., &quot;C:\Apache24\htdocs&quot;.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">&lt;!DOCTYPE doctype PUBLIC &quot;-//w3c//dtd html 4.0 transitional//en&quot;&gt;</span>
+<span class="lineno"> 2 </span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="lineno"> 3 </span><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="lineno"> 4 </span>        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;text/html; charset=ISO-8859-1&quot;</span><span class="p">&gt;</span>
+<span class="lineno"> 5 </span>        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>A Test Web Page<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="lineno"> 6 </span>        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;author&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;jj&quot;</span><span class="p">&gt;</span>
+<span class="lineno"> 7 </span><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="p">&lt;</span><span class="nt">body</span> <span class="na">bgcolor</span><span class="o">=</span><span class="s">&quot;#ffffcc&quot;</span> <span class="na">dir</span><span class="o">=</span><span class="s">&quot;ltr&quot;</span> <span class="na">link</span><span class="o">=</span><span class="s">&quot;#000000&quot;</span> <span class="na">text</span><span class="o">=</span><span class="s">&quot;#000000&quot;</span> <span class="na">vlink</span><span class="o">=</span><span class="s">&quot;#3333ff&quot;</span><span class="p">&gt;</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;#000099&quot;</span><span class="p">&gt;</span>EE2405 Lab<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span><span class="ni">&amp;nbsp;</span><span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="lineno">12 </span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Test web page for Apache<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span><span class="p">&lt;</span><span class="nt">hr</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="lineno">17 </span>You may modify this page and add additional contents.
+<span class="lineno">18 </span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="lineno">21 </span><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</li>
+<li><p class="first">Use web browser to open the URL on the host. For example, if PC's IP is 192.168.1.3, and then type URL as &quot;192.168.1.3/index.html&quot;.
+You should see the light yellow background with &quot;Test web page for Apache&quot;.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">For Mac OS:</p>
+<p>Apache is pre-installed on Mac OS. We just need to start it as a service.</p>
+<ol class="arabic">
+<li><p class="first">Start a Terminal app</p>
+</li>
+<li><p class="first">Start the Apache service</p>
+<p><code class="cmd-host">$ sudo apachectl start</code></p>
+<p>If you want to stop Apache, type <code class="cmd-host">$ sudo apachectl stop</code>.</p>
+</li>
+<li><p class="first">By default, Mac OS does not start a network firewall.
+If you setup a firewall, please allow port 80 in the configuration.
+Please refer to <a class="reference external" href="https://www.lifewire.com/open-a-port-on-a-routers-or-computers-firewall-5072435">the tutorial</a>
+for opening a port in Mac OS (scroll down to skip Windows part):</p>
+</li>
+<li><p class="first">Copy the following &quot;index.html&quot; to the directory of &quot;DocumentRoot&quot; set in <span class="file">/etc/apache2/httpd.conf</span>.
+For example, the default directory in Mac OS is <span class="file">/Library/WebServer/Documents</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">&lt;!DOCTYPE doctype PUBLIC &quot;-//w3c//dtd html 4.0 transitional//en&quot;&gt;</span>
+<span class="lineno"> 2 </span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="lineno"> 3 </span><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="lineno"> 4 </span>        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;text/html; charset=ISO-8859-1&quot;</span><span class="p">&gt;</span>
+<span class="lineno"> 5 </span>        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>A Test Web Page<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="lineno"> 6 </span>        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;author&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;jj&quot;</span><span class="p">&gt;</span>
+<span class="lineno"> 7 </span><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="p">&lt;</span><span class="nt">body</span> <span class="na">bgcolor</span><span class="o">=</span><span class="s">&quot;#ffffcc&quot;</span> <span class="na">dir</span><span class="o">=</span><span class="s">&quot;ltr&quot;</span> <span class="na">link</span><span class="o">=</span><span class="s">&quot;#000000&quot;</span> <span class="na">text</span><span class="o">=</span><span class="s">&quot;#000000&quot;</span> <span class="na">vlink</span><span class="o">=</span><span class="s">&quot;#3333ff&quot;</span><span class="p">&gt;</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;#000099&quot;</span><span class="p">&gt;</span>EE2405 Lab<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span><span class="ni">&amp;nbsp;</span><span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="lineno">12 </span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Test web page for Apache<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span><span class="p">&lt;</span><span class="nt">hr</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="lineno">17 </span>You may modify this page and add additional contents.
+<span class="lineno">18 </span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="lineno">21 </span><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</li>
+<li><p class="first">Use web browser to open the URL on the host. For example, if PC's IP is 192.168.1.3, and then type URL as &quot;192.168.1.3/index.html&quot;.
+You should see the light yellow background with &quot;Test web page for Apache&quot;.</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="setup-mbed-ethernet-example">
+<h4><a class="toc-backref" href="#id8">4.2.2&nbsp;&nbsp;&nbsp;Setup mbed Ethernet Example</a></h4>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>Import Program....</strong></p>
+</li>
+<li><p class="first">Copy &quot;<a class="reference external" href="https://github.com/ARMmbed/mbed-os-example-sockets.git">https://github.com/ARMmbed/mbed-os-example-sockets.git</a>&quot; in URL.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">The original code should run without problem, but to connect to your PC server, understand and modify the codes in <span class="file">main.cpp</span>.</p>
+<p>You will need to change the following HOST_IP to match your PC IP.</p>
+<ol class="arabic">
+<li><p class="first">Revise the &quot;HOST_IP&quot; in <span class="file">main.cpp</span> to the IP of your PC. For example, my IP is 192.168.1.3:</p>
+<p>line 8:</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="k">constexpr</span> <span class="kt">char</span><span class="o">*</span>  <span class="n">HOST_IP</span><span class="o">=</span><span class="s">&quot;192.168.1.3&quot;</span><span class="p">;</span>
+</pre></div>
+<p>line 82:</p>
+<div class="highlight"><pre><span></span><span class="k">const</span> <span class="kt">char</span> <span class="n">buffer</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;GET / HTTP/1.1</span><span class="se">\r\n</span><span class="s">&quot;</span> <span class="s">&quot;Host: 192.168.1.3</span><span class="se">\r\n</span><span class="s">&quot;</span> <span class="s">&quot;Connection: close</span><span class="se">\r\n</span><span class="s">&quot;</span> <span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">;</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="lineno">  1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno">  2 </span><span class="cp">#include</span> <span class="cpf">&quot;wifi_helper.h&quot;</span><span class="cp"></span>
+<span class="lineno">  3 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed-trace/mbed_trace.h&quot;</span><span class="cp"></span>
+<span class="lineno">  4 </span>
+<span class="lineno">  5 </span><span class="k">class</span> <span class="nc">SocketDemo</span> <span class="p">{</span>
+<span class="lineno">  6 </span>    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">MAX_NUMBER_OF_ACCESS_POINTS</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="lineno">  7 </span>    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">MAX_MESSAGE_RECEIVED_LENGTH</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="lineno">  8 </span>    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">char</span><span class="o">*</span>  <span class="n">HOST_IP</span><span class="o">=</span><span class="s">&quot;192.168.1.3&quot;</span><span class="p">;</span>
+<span class="lineno">  9 </span>    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">REMOTE_PORT</span> <span class="o">=</span> <span class="mi">80</span><span class="p">;</span> <span class="c1">// standard HTTP port</span>
+<span class="lineno"> 10 </span>
+<span class="lineno"> 11 </span><span class="k">public</span><span class="o">:</span>
+<span class="lineno"> 12 </span>    <span class="n">SocketDemo</span><span class="p">()</span> <span class="o">:</span> <span class="n">_net</span><span class="p">(</span><span class="n">NetworkInterface</span><span class="o">::</span><span class="n">get_default_instance</span><span class="p">())</span> <span class="p">{}</span>
+<span class="lineno"> 13 </span>
+<span class="lineno"> 14 </span>    <span class="o">~</span><span class="n">SocketDemo</span><span class="p">()</span>
+<span class="lineno"> 15 </span>    <span class="p">{</span>
+<span class="lineno"> 16 </span>        <span class="k">if</span> <span class="p">(</span><span class="n">_net</span><span class="p">)</span>
+<span class="lineno"> 17 </span>            <span class="n">_net</span><span class="o">-&gt;</span><span class="n">disconnect</span><span class="p">();</span>
+<span class="lineno"> 18 </span>    <span class="p">}</span>
+<span class="lineno"> 19 </span>
+<span class="lineno"> 20 </span>    <span class="kt">void</span> <span class="n">run</span><span class="p">()</span>
+<span class="lineno"> 21 </span>    <span class="p">{</span>
+<span class="lineno"> 22 </span>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_net</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 23 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error! No network interface found.</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 24 </span>            <span class="k">return</span><span class="p">;</span>
+<span class="lineno"> 25 </span>        <span class="p">}</span>
+<span class="lineno"> 26 </span>
+<span class="lineno"> 27 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connecting to the network...</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 28 </span>
+<span class="lineno"> 29 </span>        <span class="n">nsapi_size_or_error_t</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_net</span><span class="o">-&gt;</span><span class="n">connect</span><span class="p">();</span>
+<span class="lineno"> 30 </span>        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 31 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error! _net-&gt;connect() returned: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+<span class="lineno"> 32 </span>            <span class="k">return</span><span class="p">;</span>
+<span class="lineno"> 33 </span>        <span class="p">}</span>
+<span class="lineno"> 34 </span>
+<span class="lineno"> 35 </span>        <span class="n">print_network_info</span><span class="p">();</span>
+<span class="lineno"> 36 </span>
+<span class="lineno"> 37 </span>        <span class="n">result</span> <span class="o">=</span> <span class="n">_socket</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="n">_net</span><span class="p">);</span>
+<span class="lineno"> 38 </span>        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 39 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error! _socket.open() returned: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+<span class="lineno"> 40 </span>            <span class="k">return</span><span class="p">;</span>
+<span class="lineno"> 41 </span>        <span class="p">}</span>
+<span class="lineno"> 42 </span>
+<span class="lineno"> 43 </span>        <span class="n">SocketAddress</span> <span class="n">address</span><span class="p">(</span><span class="n">HOST_IP</span><span class="p">,</span> <span class="n">REMOTE_PORT</span><span class="p">);</span> <span class="c1">//Set IP and port directly</span>
+<span class="lineno"> 44 </span>
+<span class="lineno"> 45 </span>        <span class="c1">//if (!resolve_hostname(address)) return;</span>
+<span class="lineno"> 46 </span>        <span class="c1">//address.set_port(REMOTE_PORT);</span>
+<span class="lineno"> 47 </span>
+<span class="lineno"> 48 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Opening connection to remote port %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">REMOTE_PORT</span><span class="p">);</span>
+<span class="lineno"> 49 </span>
+<span class="lineno"> 50 </span>        <span class="n">result</span> <span class="o">=</span> <span class="n">_socket</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">address</span><span class="p">);</span>
+<span class="lineno"> 51 </span>        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 52 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error! _socket.connect() returned: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+<span class="lineno"> 53 </span>            <span class="k">return</span><span class="p">;</span>
+<span class="lineno"> 54 </span>        <span class="p">}</span>
+<span class="lineno"> 55 </span>
+<span class="lineno"> 56 </span>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">send_http_request</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">receive_http_response</span><span class="p">())</span>
+<span class="lineno"> 57 </span>            <span class="k">return</span><span class="p">;</span>
+<span class="lineno"> 58 </span>
+<span class="lineno"> 59 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Demo concluded successfully </span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 60 </span>    <span class="p">}</span>
+<span class="lineno"> 61 </span>
+<span class="lineno"> 62 </span><span class="k">private</span><span class="o">:</span>
+<span class="lineno"> 63 </span>    <span class="kt">bool</span> <span class="n">resolve_hostname</span><span class="p">(</span><span class="n">SocketAddress</span> <span class="o">&amp;</span><span class="n">address</span><span class="p">)</span>
+<span class="lineno"> 64 </span>    <span class="p">{</span>
+<span class="lineno"> 65 </span>        <span class="k">const</span> <span class="kt">char</span> <span class="n">hostname</span><span class="p">[]</span> <span class="o">=</span> <span class="n">MBED_CONF_APP_HOSTNAME</span><span class="p">;</span>
+<span class="lineno"> 66 </span>
+<span class="lineno"> 67 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">Resolve hostname %s</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hostname</span><span class="p">);</span>
+<span class="lineno"> 68 </span>        <span class="n">nsapi_size_or_error_t</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_net</span><span class="o">-&gt;</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">address</span><span class="p">);</span>
+<span class="lineno"> 69 </span>        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 70 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error! gethostbyname(%s) returned: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+<span class="lineno"> 71 </span>            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="lineno"> 72 </span>        <span class="p">}</span>
+<span class="lineno"> 73 </span>
+<span class="lineno"> 74 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s address is %s</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="p">(</span><span class="n">address</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">?</span> <span class="n">address</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">:</span> <span class="s">&quot;None&quot;</span><span class="p">)</span> <span class="p">);</span>
+<span class="lineno"> 75 </span>
+<span class="lineno"> 76 </span>        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="lineno"> 77 </span>    <span class="p">}</span>
+<span class="lineno"> 78 </span>
+<span class="lineno"> 79 </span>    <span class="kt">bool</span> <span class="n">send_http_request</span><span class="p">()</span>
+<span class="lineno"> 80 </span>    <span class="p">{</span>
+<span class="lineno"> 81 </span>        <span class="cm">/* loop until whole request sent */</span>
+<span class="lineno"> 82 </span>        <span class="k">const</span> <span class="kt">char</span> <span class="n">buffer</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;GET / HTTP/1.1</span><span class="se">\r\n</span><span class="s">&quot;</span> <span class="s">&quot;Host: HOST_IP</span><span class="se">\r\n</span><span class="s">&quot;</span> <span class="s">&quot;Connection: close</span><span class="se">\r\n</span><span class="s">&quot;</span> <span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="lineno"> 83 </span>
+<span class="lineno"> 84 </span>        <span class="n">nsapi_size_t</span> <span class="n">bytes_to_send</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+<span class="lineno"> 85 </span>        <span class="n">nsapi_size_or_error_t</span> <span class="n">bytes_sent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 86 </span>
+<span class="lineno"> 87 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r\n</span><span class="s">Sending message: </span><span class="se">\r\n</span><span class="s">%s&quot;</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
+<span class="lineno"> 88 </span>
+<span class="lineno"> 89 </span>        <span class="k">while</span> <span class="p">(</span><span class="n">bytes_to_send</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 90 </span>            <span class="n">bytes_sent</span> <span class="o">=</span> <span class="n">_socket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">buffer</span> <span class="o">+</span> <span class="n">bytes_sent</span><span class="p">,</span> <span class="n">bytes_to_send</span><span class="p">);</span>
+<span class="lineno"> 91 </span>            <span class="k">if</span> <span class="p">(</span><span class="n">bytes_sent</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 92 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error! _socket.send() returned: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">bytes_sent</span><span class="p">);</span>
+<span class="lineno"> 93 </span>                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="lineno"> 94 </span>            <span class="p">}</span> <span class="k">else</span>
+<span class="lineno"> 95 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;sent %d bytes</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">bytes_sent</span><span class="p">);</span>
+<span class="lineno"> 96 </span>
+<span class="lineno"> 97 </span>            <span class="n">bytes_to_send</span> <span class="o">-=</span> <span class="n">bytes_sent</span><span class="p">;</span>
+<span class="lineno"> 98 </span>        <span class="p">}</span>
+<span class="lineno"> 99 </span>
+<span class="lineno">100 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Complete message sent</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">101 </span>
+<span class="lineno">102 </span>        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="lineno">103 </span>    <span class="p">}</span>
+<span class="lineno">104 </span>
+<span class="lineno">105 </span>    <span class="kt">bool</span> <span class="n">receive_http_response</span><span class="p">()</span>
+<span class="lineno">106 </span>    <span class="p">{</span>
+<span class="lineno">107 </span>        <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">MAX_MESSAGE_RECEIVED_LENGTH</span><span class="p">];</span>
+<span class="lineno">108 </span>        <span class="kt">int</span> <span class="n">remaining_bytes</span> <span class="o">=</span> <span class="n">MAX_MESSAGE_RECEIVED_LENGTH</span><span class="p">;</span>
+<span class="lineno">109 </span>        <span class="kt">int</span> <span class="n">received_bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">110 </span>
+<span class="lineno">111 </span>        <span class="cm">/* loop until there is nothing received or we&#39;ve ran out of buffer space */</span>
+<span class="lineno">112 </span>        <span class="n">nsapi_size_or_error_t</span> <span class="n">result</span> <span class="o">=</span> <span class="n">remaining_bytes</span><span class="p">;</span>
+<span class="lineno">113 </span>        <span class="k">while</span> <span class="p">(</span><span class="n">result</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">remaining_bytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">114 </span>            <span class="n">nsapi_size_or_error_t</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_socket</span><span class="p">.</span><span class="n">recv</span><span class="p">(</span><span class="n">buffer</span> <span class="o">+</span> <span class="n">received_bytes</span><span class="p">,</span> <span class="n">remaining_bytes</span><span class="p">);</span>
+<span class="lineno">115 </span>            <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">116 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error! _socket.recv() returned: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+<span class="lineno">117 </span>                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="lineno">118 </span>            <span class="p">}</span>
+<span class="lineno">119 </span>
+<span class="lineno">120 </span>            <span class="n">received_bytes</span> <span class="o">+=</span> <span class="n">result</span><span class="p">;</span>
+<span class="lineno">121 </span>            <span class="n">remaining_bytes</span> <span class="o">-=</span> <span class="n">result</span><span class="p">;</span>
+<span class="lineno">122 </span>        <span class="p">}</span>
+<span class="lineno">123 </span>
+<span class="lineno">124 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;received %d bytes:</span><span class="se">\r\n</span><span class="s">%.*s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">received_bytes</span><span class="p">,</span> <span class="n">strstr</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
+<span class="lineno">125 </span>
+<span class="lineno">126 </span>        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="lineno">127 </span>    <span class="p">}</span>
+<span class="lineno">128 </span>
+<span class="lineno">129 </span>    <span class="kt">void</span> <span class="n">print_network_info</span><span class="p">()</span>
+<span class="lineno">130 </span>    <span class="p">{</span>
+<span class="lineno">131 </span>        <span class="n">SocketAddress</span> <span class="n">a</span><span class="p">;</span>
+<span class="lineno">132 </span>        <span class="n">_net</span><span class="o">-&gt;</span><span class="n">get_ip_address</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+<span class="lineno">133 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;IP address: %s</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">?</span> <span class="n">a</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">:</span> <span class="s">&quot;None&quot;</span><span class="p">);</span>
+<span class="lineno">134 </span>        <span class="n">_net</span><span class="o">-&gt;</span><span class="n">get_netmask</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+<span class="lineno">135 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Netmask: %s</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">?</span> <span class="n">a</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">:</span> <span class="s">&quot;None&quot;</span><span class="p">);</span>
+<span class="lineno">136 </span>        <span class="n">_net</span><span class="o">-&gt;</span><span class="n">get_gateway</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+<span class="lineno">137 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Gateway: %s</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">?</span> <span class="n">a</span><span class="p">.</span><span class="n">get_ip_address</span><span class="p">()</span> <span class="o">:</span> <span class="s">&quot;None&quot;</span><span class="p">);</span>
+<span class="lineno">138 </span>    <span class="p">}</span>
+<span class="lineno">139 </span>
+<span class="lineno">140 </span><span class="k">private</span><span class="o">:</span>
+<span class="lineno">141 </span>    <span class="n">NetworkInterface</span> <span class="o">*</span><span class="n">_net</span><span class="p">;</span>
+<span class="lineno">142 </span>    <span class="n">TCPSocket</span> <span class="n">_socket</span><span class="p">;</span>
+<span class="lineno">143 </span><span class="p">};</span>
+<span class="lineno">144 </span>
+<span class="lineno">145 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">146 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r\n</span><span class="s">Starting socket demo</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">147 </span>
+<span class="lineno">148 </span><span class="cp">#ifdef MBED_CONF_MBED_TRACE_ENABLE</span>
+<span class="lineno">149 </span>    <span class="n">mbed_trace_init</span><span class="p">();</span>
+<span class="lineno">150 </span><span class="cp">#endif</span>
+<span class="lineno">151 </span>
+<span class="lineno">152 </span>    <span class="n">SocketDemo</span> <span class="o">*</span><span class="n">example</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SocketDemo</span><span class="p">();</span>
+<span class="lineno">153 </span>    <span class="n">MBED_ASSERT</span><span class="p">(</span><span class="n">example</span><span class="p">);</span>
+<span class="lineno">154 </span>    <span class="n">example</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">();</span>
+<span class="lineno">155 </span>
+<span class="lineno">156 </span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">157 </span><span class="p">}</span>
+</pre></div>
+</li>
+</ol>
+</li>
+<li><p class="first">Revise the &quot;HOST_IP&quot; in <span class="file">mbed_app.json</span> to the IP of your PC.  For example, PC's IP is 192.168.1.3:</p>
+<p>line 5:</p>
+<div class="highlight"><pre><span></span><span class="s">&quot;value&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">192.168.1.3</span><span class="se">\&quot;</span><span class="s">&quot;</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s">&quot;config&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;hostname&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s">&quot;help&quot;</span><span class="o">:</span> <span class="s">&quot;The demo will try to connect to this web address on port 80 (or port 443 when using tls).&quot;</span><span class="p">,</span>
+            <span class="s">&quot;value&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">HOST_IP</span><span class="se">\&quot;</span><span class="s">&quot;</span>
+        <span class="p">},</span>
+        <span class="s">&quot;use-tls-socket&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s">&quot;value&quot;</span><span class="o">:</span> <span class="nb">false</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+
+<span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Change the SSID and PASSWORD below to match the ones of your WiFi access point in <span class="file">mbed_app.json</span>.</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s">&quot;target_overrides&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;*&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s">&quot;nsapi.default-wifi-security&quot;</span><span class="o">:</span> <span class="s">&quot;WPA_WPA2&quot;</span><span class="p">,</span>
+            <span class="s">&quot;nsapi.default-wifi-ssid&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">SSID</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="s">&quot;nsapi.default-wifi-password&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">PASSWORD</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="s">&quot;platform.stdio-baud-rate&quot;</span><span class="o">:</span> <span class="mi">9600</span><span class="p">,</span>
+            <span class="s">&quot;mbed-trace.enable&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+            <span class="s">&quot;mbed-trace.max-level&quot;</span><span class="o">:</span> <span class="s">&quot;TRACE_LEVEL_DEBUG&quot;</span><span class="p">,</span>
+            <span class="s">&quot;rtos.main-thread-stack-size&quot;</span><span class="o">:</span> <span class="mi">8192</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">In <span class="file">mbed_app.json</span>,
+add the following <strong>&quot;B_L4S5I_IOT01A&quot;:</strong> section after the <strong>&quot;*&quot;:</strong> in <strong>&quot;target_overrides&quot;</strong>:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s">&quot;target_overrides&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;*&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s">&quot;nsapi.default-wifi-security&quot;</span><span class="o">:</span> <span class="s">&quot;WPA_WPA2&quot;</span><span class="p">,</span>
+            <span class="s">&quot;nsapi.default-wifi-ssid&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">SSID</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="s">&quot;nsapi.default-wifi-password&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">PASSWORD</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="s">&quot;platform.stdio-baud-rate&quot;</span><span class="o">:</span> <span class="mi">9600</span><span class="p">,</span>
+            <span class="s">&quot;mbed-trace.enable&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+            <span class="s">&quot;mbed-trace.max-level&quot;</span><span class="o">:</span> <span class="s">&quot;TRACE_LEVEL_DEBUG&quot;</span><span class="p">,</span>
+            <span class="s">&quot;rtos.main-thread-stack-size&quot;</span><span class="o">:</span> <span class="mi">8192</span>
+        <span class="p">},</span>
+        <span class="s">&quot;B_L4S5I_IOT01A&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s">&quot;target.components_add&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s">&quot;ism43362&quot;</span><span class="p">],</span>
+            <span class="s">&quot;ism43362.provide-default&quot;</span><span class="o">:</span> <span class="nb">true</span><span class="p">,</span>
+            <span class="s">&quot;target.network-default-interface-type&quot;</span><span class="o">:</span> <span class="s">&quot;WIFI&quot;</span><span class="p">,</span>
+            <span class="s">&quot;target.macros_add&quot;</span> <span class="o">:</span> <span class="p">[</span><span class="s">&quot;MBEDTLS_SHA1_C&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="warning docutils container">
+<p>Be ware of the config format in JSON. The string value is enclosed by <span class="hl">&quot;\&quot;</span> and <span class="hl">\&quot;&quot;</span>.</p>
+<p>Change the SSID and PASSWORD below to match the ones of your WiFi access point.</p>
+</div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Screenshot the information of this WiFi demo on the screen. (It may take a while).</p>
+</li>
+<li><p class="first">Push the main.cc code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="mqtt-broker-and-client">
+<h3><a class="toc-backref" href="#id9">4.3&nbsp;&nbsp;&nbsp;MQTT Broker and Client</a></h3>
+<div class="instruct docutils container">
+In this part, we implement a MQTT server to deliver informations between B_L4S5I_IOT01A and a Ubuntu PC.</div>
+<div class="instruct docutils container">
+<p>What is MQTT?</p>
+<p>MQTT (Message Queue Telemetry Transport) is a simple and ‘lightweight’ way for internet-connected devices to send each other messages. Devices using MQTT communicate by publishing data to topics. MQTT devices subscribe to a topic, and when data is published to that topic it is pushed to all the subscribers.</p>
+<p>For more details, please visit <a class="reference external" href="https://www.youtube.com/watch?v=EIxdz-2rhLs">What is MQTT and How It Works</a>.</p>
+<p>The example we used is to publish message by pressing the button on B_L4S5I_IOT01A, and receive it from python client on pc.</p>
+</div>
+<div class="section" id="mqtt-broker">
+<h4><a class="toc-backref" href="#id10">4.3.1&nbsp;&nbsp;&nbsp;MQTT Broker</a></h4>
+<ol class="arabic">
+<li><p class="first">Install the MQTT broker service.</p>
+<div class="instruct docutils container">
+<p>What is MQTT broker?</p>
+<p>Mosquitto is an open source (EPL/EDL licensed) message broker that implements the MQTT protocol versions 3.1 and 3.1.1. Mosquitto is lightweight and is suitable for use on all devices from low power single board computers to full servers.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">For Windows:</p>
+<ol class="arabic">
+<li><p class="first">Download and install <a class="reference external" href="https://mosquitto.org/files/binary/win64/mosquitto-2.0.14-install-windows-x64.exe">mosquitto-2.0.14-install-windows-x64.exe</a></p>
+<p>If you don't need to install &quot;Visual Studio Runtime&quot;, please uncheck the selection.
+Also we probably don't need to install Windows Service, please uncheck the &quot;Service&quot; selection.</p>
+</li>
+<li><p class="first">Open network port 1883 for Mosquitto services for Windows firewall (defender)</p>
+<p>Please follow <a class="reference external" href="https://jimirobot.tw/esp32-mosquitto-windows-mqtt-tutorial/#3_設定_window_防火牆">設定Window防火牆 MQTT 1883</a>
+or <a class="reference external" href="https://bytesofgigabytes.com/networking/how-to-open-port-in-windows/">Setup MQTT 1883 port for Windows</a></p>
+<ol class="arabic simple">
+<li>Press Windows+R</li>
+<li>Type firewall.cpl in Open field and Click OK.</li>
+<li>Click on <strong>Advanced settings</strong></li>
+<li>First click on <strong>Inbound Rules</strong> and then Click on <strong>New Rule</strong></li>
+<li>To open port, Please select Rule Type as <strong>Port</strong> and click <strong>Next</strong>.</li>
+<li>Select TCP. Set &quot;<strong>Specify local ports</strong>&quot; as 1883. Click on Next.</li>
+<li>Select Allow the connection and click Next</li>
+<li>Check &quot;Private&quot; and click on Next</li>
+<li>Enter the name for opening port rule, e.g., &quot;MQTT Service Input Port&quot;.</li>
+<li>Repeat above again for <strong>Outbound Rules</strong></li>
+<li>First click on <strong>Outbound Rules</strong> and then Click on <strong>New Rule</strong></li>
+<li>To open port, Please select Rule Type as <strong>Port</strong> and click <strong>Next</strong>.</li>
+<li>Select TCP. Set &quot;<strong>Specify local ports</strong>&quot; as 1883. Click on Next.</li>
+<li>Select Allow the connection and click Next</li>
+<li>Check &quot;Private&quot; and click on Next</li>
+<li>Enter the name for opening port rule, e.g., &quot;MQTT Service Output Port&quot;.</li>
+</ol>
+</li>
+<li><p class="first">Edit <span class="file">mosquitto.conf</span> in <span class="file">C:\Program  Files\mosquitto</span>.</p>
+<ol class="arabic">
+<li><p class="first">Search for &quot;# listener port-number&quot; add the following line:</p>
+<div class="highlight"><pre><span></span>listener 1883
+</pre></div>
+</li>
+<li><p class="first">Search for &quot;# allow_anonymous false&quot; add the following line:</p>
+<div class="highlight"><pre><span></span>allow_anonymous true
+</pre></div>
+</li>
+</ol>
+</li>
+<li><p class="first">Start a Git Bash and start Mosquitto service</p>
+<p>We can start Mosquitto manually as follows. To stop the service, simply type <span class="hotkey">Ctrl+C</span>.</p>
+<p>Go to the Mosquitto directory:</p>
+<p><code class="cmd-host">$ cd /c/Program\ Files/mosquitto</code></p>
+<p>Start Mosquitto:</p>
+<p><code class="cmd-host">$ ./mosquitto.exe -c mosquitto.conf -v</code></p>
+</li>
+<li><p class="first">Test Mosquitto service</p>
+<ol class="arabic">
+<li><p class="first">Start a Git Bash and use a client to subscribe to a topic &quot;test&quot;</p>
+<p>Replace the following &quot;HOST IP&quot; with your actual PC server IP.</p>
+<p>Go to the Mosquitto directory:</p>
+<p><code class="cmd-host">$ cd /c/Program\ Files/mosquitto</code></p>
+<p>Subscribe:</p>
+<p><code class="cmd-host">$ ./mosquitto_sub.exe -h &quot;HOST IP&quot; -t test</code></p>
+</li>
+<li><p class="first">Start another Git Bash and publish a message &quot;Hello&quot; to the topic &quot;test&quot;</p>
+<p>Replace the following &quot;HOST IP&quot; with your actual PC server IP.</p>
+<p>Go to the Mosquitto directory:</p>
+<p><code class="cmd-host">$ cd /c/Program\ Files/mosquitto</code></p>
+<p>Publish:</p>
+<p><code class="cmd-host">$ ./mosquitto_pub.exe -h &quot;HOST IP&quot; -t test -m &quot;Hello”</code></p>
+<p>The &quot;Hello&quot; message should show at the first terminal.
+If the message did not show up, you may try to publish again with another message.
+You should also see connection messages at the Mosquitto service terminal.</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p class="first">For Mac OS:</p>
+<ol class="arabic">
+<li><p class="first">Install Brew:
+<a class="reference external" href="https://brew.sh/index_zh-tw">Homebrew</a></p>
+<p><code class="cmd-host">$ /bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;</code></p>
+</li>
+<li><p class="first">Install Mosquitto</p>
+<p><code class="cmd-host">$ brew install mosquitto</code></p>
+</li>
+<li><p class="first">Edit <span class="file">/usr/local/etc/mosquitto/mosquitto.conf</span></p>
+<ol class="arabic">
+<li><p class="first">Search for &quot;# listener port-number&quot; add the following line:</p>
+<div class="highlight"><pre><span></span>listener 1883
+</pre></div>
+</li>
+<li><p class="first">Search for &quot;#allow_anonymous false&quot; add the following line:</p>
+<div class="highlight"><pre><span></span>allow_anonymous true
+</pre></div>
+</li>
+</ol>
+</li>
+<li><p class="first">By default, Mac OS does not start a network firewall.
+If you setup a firewall, please allow port 1883 in the configuration.
+Please refer to <a class="reference external" href="https://www.lifewire.com/open-a-port-on-a-routers-or-computers-firewall-5072435">the tutorial</a>
+for opening a port in Mac OS (scroll down to skip Windows part):</p>
+</li>
+<li><p class="first">Start a Terminal and start Mosquitto service</p>
+<p>We can start Mosquitto manually as follows. To stop the service, simply type <span class="hotkey">Ctrl+C</span>.</p>
+<p><code class="cmd-host">$ /usr/local/opt/mosquitto/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf</code></p>
+</li>
+<li><p class="first">Test Mosquitto service</p>
+<p>Replace the following &quot;HOST IP&quot; with your actual PC server IP.</p>
+<ol class="arabic">
+<li><p class="first">Start a Terminal app and use a client to subscribe to a topic &quot;test&quot;</p>
+<p><code class="cmd-host">$ mosquitto_sub -h &quot;HOST IP&quot; -t test</code></p>
+</li>
+<li><p class="first">Start another Terminal app and publish a message &quot;Hello&quot; to the topic &quot;test&quot;</p>
+<p><code class="cmd-host">$ mosquitto_pub -h &quot;HOST IP&quot; -t test -m &quot;Hello”</code></p>
+<p>The &quot;Hello&quot; message should show at the first terminal.
+If the message did not show up, you may try to publish again with another message.
+You should also see connection messages at the Mosquitto service terminal.</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="mbed-mqtt-client">
+<h4><a class="toc-backref" href="#id11">4.3.2&nbsp;&nbsp;&nbsp;mbed MQTT Client</a></h4>
+<ol class="arabic">
+<li><p class="first">Start a Terminal app in Mac OS or Git Bash in Windows.</p>
+</li>
+<li><p class="first">Install MQTT libraries for Python.</p>
+<p><code class="cmd-host">$ python3 -m pip install paho-mqtt</code></p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>10_2_MQTT</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Import ISM43362 library for WiFi.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://github.com/ARMmbed/wifi-ism43362">https://github.com/ARMmbed/wifi-ism43362</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;Master&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Import MQTT library</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/paho_mqtt.git">https://gitlab.larc-nthu.net/ee2405_2022/paho_mqtt.git</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;Master&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Create a file <span class="file">mbed_app.json</span>.</p>
+<div class="warning docutils container">
+<p>Be ware of the config format in JSON. The string value is enclosed by <span class="hl">&quot;\&quot;</span> and <span class="hl">\&quot;&quot;</span>.</p>
+<p>Please change the SSID and PASSWORD below to match the ones of your WiFi access point.</p>
+</div>
+<blockquote id="mbed-app-json">
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="p">{</span>
+<span class="lineno"> 2 </span>    <span class="s">&quot;config&quot;</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno"> 3 </span>    <span class="s">&quot;wifi-ssid&quot;</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno"> 4 </span>            <span class="s">&quot;help&quot;</span><span class="o">:</span> <span class="s">&quot;WiFi SSID&quot;</span><span class="p">,</span>
+<span class="lineno"> 5 </span>            <span class="s">&quot;value&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">SSID</span><span class="se">\&quot;</span><span class="s">&quot;</span>
+<span class="lineno"> 6 </span>    <span class="p">},</span>
+<span class="lineno"> 7 </span>    <span class="s">&quot;wifi-password&quot;</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno"> 8 </span>            <span class="s">&quot;help&quot;</span><span class="o">:</span> <span class="s">&quot;WiFi Password&quot;</span><span class="p">,</span>
+<span class="lineno"> 9 </span>            <span class="s">&quot;value&quot;</span><span class="o">:</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">PASSWORD</span><span class="se">\&quot;</span><span class="s">&quot;</span>
+<span class="lineno">10 </span>    <span class="p">}</span>
+<span class="lineno">11 </span>    <span class="p">},</span>
+<span class="lineno">12 </span>    <span class="s">&quot;target_overrides&quot;</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno">13 </span>        <span class="s">&quot;B_L4S5I_IOT01A&quot;</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno">14 </span>            <span class="s">&quot;target.components_add&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s">&quot;ism43362&quot;</span><span class="p">],</span>
+<span class="lineno">15 </span>            <span class="s">&quot;ism43362.provide-default&quot;</span><span class="o">:</span> <span class="nb">true</span><span class="p">,</span>
+<span class="lineno">16 </span>            <span class="s">&quot;target.network-default-interface-type&quot;</span><span class="o">:</span> <span class="s">&quot;WIFI&quot;</span><span class="p">,</span>
+<span class="lineno">17 </span>            <span class="s">&quot;target.macros_add&quot;</span> <span class="o">:</span> <span class="p">[</span><span class="s">&quot;MBEDTLS_SHA1_C&quot;</span><span class="p">]</span>
+<span class="lineno">18 </span>        <span class="p">}</span>
+<span class="lineno">19 </span>    <span class="p">}</span>
+<span class="lineno">20 </span><span class="p">}</span>
+</pre></div>
+</blockquote>
+</li>
+<li><p class="first">Please revise the codes in <span class="file">main.cpp</span> as follows.</p>
+<p>This is a mbed program acts as a MQTT client to publish messages from B_L4S5I_IOT01A.</p>
+<p>Change the following <span class="hl">host</span> string in <span class="file">main.cpp</span> to your PC IP address, which run the Mosquitto server.</p>
+<div class="highlight"><pre><span></span><span class="c1">//TODO: revise host to your IP</span>
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">host</span> <span class="o">=</span> <span class="s">&quot;Your IP&quot;</span><span class="p">;</span>
+</pre></div>
+<p>The <span class="file">main.cpp</span> mbed program:</p>
+<div class="highlight"><pre><span></span><span class="lineno">  1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno">  2 </span><span class="cp">#include</span> <span class="cpf">&quot;MQTTNetwork.h&quot;</span><span class="cp"></span>
+<span class="lineno">  3 </span><span class="cp">#include</span> <span class="cpf">&quot;MQTTmbed.h&quot;</span><span class="cp"></span>
+<span class="lineno">  4 </span><span class="cp">#include</span> <span class="cpf">&quot;MQTTClient.h&quot;</span><span class="cp"></span>
+<span class="lineno">  5 </span>
+<span class="lineno">  6 </span><span class="c1">// GLOBAL VARIABLES</span>
+<span class="lineno">  7 </span><span class="n">WiFiInterface</span> <span class="o">*</span><span class="n">wifi</span><span class="p">;</span>
+<span class="lineno">  8 </span><span class="n">InterruptIn</span> <span class="nf">btn2</span><span class="p">(</span><span class="n">BUTTON1</span><span class="p">);</span>
+<span class="lineno">  9 </span><span class="c1">//InterruptIn btn3(SW3);</span>
+<span class="lineno"> 10 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">message_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 11 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">arrivedcount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 12 </span><span class="k">volatile</span> <span class="kt">bool</span> <span class="n">closed</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="lineno"> 13 </span>
+<span class="lineno"> 14 </span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">topic</span> <span class="o">=</span> <span class="s">&quot;Mbed&quot;</span><span class="p">;</span>
+<span class="lineno"> 15 </span>
+<span class="lineno"> 16 </span><span class="n">Thread</span> <span class="nf">mqtt_thread</span><span class="p">(</span><span class="n">osPriorityHigh</span><span class="p">);</span>
+<span class="lineno"> 17 </span><span class="n">EventQueue</span> <span class="n">mqtt_queue</span><span class="p">;</span>
+<span class="lineno"> 18 </span>
+<span class="lineno"> 19 </span><span class="kt">void</span> <span class="nf">messageArrived</span><span class="p">(</span><span class="n">MQTT</span><span class="o">::</span><span class="n">MessageData</span><span class="o">&amp;</span> <span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 20 </span>    <span class="n">MQTT</span><span class="o">::</span><span class="n">Message</span> <span class="o">&amp;</span><span class="n">message</span> <span class="o">=</span> <span class="n">md</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
+<span class="lineno"> 21 </span>    <span class="kt">char</span> <span class="n">msg</span><span class="p">[</span><span class="mi">300</span><span class="p">];</span>
+<span class="lineno"> 22 </span>    <span class="n">sprintf</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s">&quot;Message arrived: QoS%d, retained %d, dup %d, packetID %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">qos</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">retained</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">dup</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+<span class="lineno"> 23 </span>    <span class="n">printf</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="lineno"> 24 </span>    <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1000</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno"> 25 </span>    <span class="kt">char</span> <span class="n">payload</span><span class="p">[</span><span class="mi">300</span><span class="p">];</span>
+<span class="lineno"> 26 </span>    <span class="n">sprintf</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="s">&quot;Payload %.*s</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">payloadlen</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">message</span><span class="p">.</span><span class="n">payload</span><span class="p">);</span>
+<span class="lineno"> 27 </span>    <span class="n">printf</span><span class="p">(</span><span class="n">payload</span><span class="p">);</span>
+<span class="lineno"> 28 </span>    <span class="o">++</span><span class="n">arrivedcount</span><span class="p">;</span>
+<span class="lineno"> 29 </span><span class="p">}</span>
+<span class="lineno"> 30 </span>
+<span class="lineno"> 31 </span><span class="kt">void</span> <span class="nf">publish_message</span><span class="p">(</span><span class="n">MQTT</span><span class="o">::</span><span class="n">Client</span><span class="o">&lt;</span><span class="n">MQTTNetwork</span><span class="p">,</span> <span class="n">Countdown</span><span class="o">&gt;*</span> <span class="n">client</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 32 </span>    <span class="n">message_num</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno"> 33 </span>    <span class="n">MQTT</span><span class="o">::</span><span class="n">Message</span> <span class="n">message</span><span class="p">;</span>
+<span class="lineno"> 34 </span>    <span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+<span class="lineno"> 35 </span>    <span class="n">sprintf</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="s">&quot;QoS0 Hello, Python! #%d&quot;</span><span class="p">,</span> <span class="n">message_num</span><span class="p">);</span>
+<span class="lineno"> 36 </span>    <span class="n">message</span><span class="p">.</span><span class="n">qos</span> <span class="o">=</span> <span class="n">MQTT</span><span class="o">::</span><span class="n">QOS0</span><span class="p">;</span>
+<span class="lineno"> 37 </span>    <span class="n">message</span><span class="p">.</span><span class="n">retained</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="lineno"> 38 </span>    <span class="n">message</span><span class="p">.</span><span class="n">dup</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="lineno"> 39 </span>    <span class="n">message</span><span class="p">.</span><span class="n">payload</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">buff</span><span class="p">;</span>
+<span class="lineno"> 40 </span>    <span class="n">message</span><span class="p">.</span><span class="n">payloadlen</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">buff</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno"> 41 </span>    <span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">client</span><span class="o">-&gt;</span><span class="n">publish</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+<span class="lineno"> 42 </span>
+<span class="lineno"> 43 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;rc:  %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">rc</span><span class="p">);</span>
+<span class="lineno"> 44 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Puslish message: %s</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">buff</span><span class="p">);</span>
+<span class="lineno"> 45 </span><span class="p">}</span>
+<span class="lineno"> 46 </span>
+<span class="lineno"> 47 </span><span class="kt">void</span> <span class="nf">close_mqtt</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 48 </span>    <span class="n">closed</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="lineno"> 49 </span><span class="p">}</span>
+<span class="lineno"> 50 </span>
+<span class="lineno"> 51 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 52 </span>
+<span class="lineno"> 53 </span>    <span class="n">wifi</span> <span class="o">=</span> <span class="n">WiFiInterface</span><span class="o">::</span><span class="n">get_default_instance</span><span class="p">();</span>
+<span class="lineno"> 54 </span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">wifi</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 55 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;ERROR: No WiFiInterface found.</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 56 </span>            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="lineno"> 57 </span>    <span class="p">}</span>
+<span class="lineno"> 58 </span>
+<span class="lineno"> 59 </span>
+<span class="lineno"> 60 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">Connecting to %s...</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">MBED_CONF_APP_WIFI_SSID</span><span class="p">);</span>
+<span class="lineno"> 61 </span>    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">wifi</span><span class="o">-&gt;</span><span class="n">connect</span><span class="p">(</span><span class="n">MBED_CONF_APP_WIFI_SSID</span><span class="p">,</span> <span class="n">MBED_CONF_APP_WIFI_PASSWORD</span><span class="p">,</span> <span class="n">NSAPI_SECURITY_WPA_WPA2</span><span class="p">);</span>
+<span class="lineno"> 62 </span>    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 63 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">Connection error: %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+<span class="lineno"> 64 </span>            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="lineno"> 65 </span>    <span class="p">}</span>
+<span class="lineno"> 66 </span>
+<span class="lineno"> 67 </span>
+<span class="lineno"> 68 </span>    <span class="n">NetworkInterface</span><span class="o">*</span> <span class="n">net</span> <span class="o">=</span> <span class="n">wifi</span><span class="p">;</span>
+<span class="lineno"> 69 </span>    <span class="n">MQTTNetwork</span> <span class="n">mqttNetwork</span><span class="p">(</span><span class="n">net</span><span class="p">);</span>
+<span class="lineno"> 70 </span>    <span class="n">MQTT</span><span class="o">::</span><span class="n">Client</span><span class="o">&lt;</span><span class="n">MQTTNetwork</span><span class="p">,</span> <span class="n">Countdown</span><span class="o">&gt;</span> <span class="n">client</span><span class="p">(</span><span class="n">mqttNetwork</span><span class="p">);</span>
+<span class="lineno"> 71 </span>
+<span class="lineno"> 72 </span>    <span class="c1">//TODO: revise host to your IP</span>
+<span class="lineno"> 73 </span>    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">host</span> <span class="o">=</span> <span class="s">&quot;192.168.1.150&quot;</span><span class="p">;</span>
+<span class="lineno"> 74 </span>    <span class="k">const</span> <span class="kt">int</span> <span class="n">port</span><span class="o">=</span><span class="mi">1883</span><span class="p">;</span>
+<span class="lineno"> 75 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connecting to TCP network...</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 76 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;address is %s/%d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">);</span>
+<span class="lineno"> 77 </span>
+<span class="lineno"> 78 </span>    <span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">mqttNetwork</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">);</span><span class="c1">//(host, 1883);</span>
+<span class="lineno"> 79 </span>    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 80 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connection error.&quot;</span><span class="p">);</span>
+<span class="lineno"> 81 </span>            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="lineno"> 82 </span>    <span class="p">}</span>
+<span class="lineno"> 83 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Successfully connected!</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 84 </span>
+<span class="lineno"> 85 </span>    <span class="n">MQTTPacket_connectData</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MQTTPacket_connectData_initializer</span><span class="p">;</span>
+<span class="lineno"> 86 </span>    <span class="n">data</span><span class="p">.</span><span class="n">MQTTVersion</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="lineno"> 87 </span>    <span class="n">data</span><span class="p">.</span><span class="n">clientID</span><span class="p">.</span><span class="n">cstring</span> <span class="o">=</span> <span class="s">&quot;Mbed&quot;</span><span class="p">;</span>
+<span class="lineno"> 88 </span>
+<span class="lineno"> 89 </span>    <span class="k">if</span> <span class="p">((</span><span class="n">rc</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+<span class="lineno"> 90 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Fail to connect MQTT</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 91 </span>    <span class="p">}</span>
+<span class="lineno"> 92 </span>    <span class="k">if</span> <span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">MQTT</span><span class="o">::</span><span class="n">QOS0</span><span class="p">,</span> <span class="n">messageArrived</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+<span class="lineno"> 93 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Fail to subscribe</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 94 </span>    <span class="p">}</span>
+<span class="lineno"> 95 </span>
+<span class="lineno"> 96 </span>    <span class="n">mqtt_thread</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mqtt_queue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">EventQueue</span><span class="o">::</span><span class="n">dispatch_forever</span><span class="p">));</span>
+<span class="lineno"> 97 </span>    <span class="n">btn2</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="n">mqtt_queue</span><span class="p">.</span><span class="n">event</span><span class="p">(</span><span class="o">&amp;</span><span class="n">publish_message</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">client</span><span class="p">));</span>
+<span class="lineno"> 98 </span>    <span class="c1">//btn3.rise(&amp;close_mqtt);</span>
+<span class="lineno"> 99 </span>
+<span class="lineno">100 </span>    <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">101 </span>    <span class="k">while</span> <span class="p">(</span><span class="n">num</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">102 </span>            <span class="n">client</span><span class="p">.</span><span class="n">yield</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="lineno">103 </span>            <span class="o">++</span><span class="n">num</span><span class="p">;</span>
+<span class="lineno">104 </span>    <span class="p">}</span>
+<span class="lineno">105 </span>
+<span class="lineno">106 </span>    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">107 </span>            <span class="k">if</span> <span class="p">(</span><span class="n">closed</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+<span class="lineno">108 </span>            <span class="n">client</span><span class="p">.</span><span class="n">yield</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+<span class="lineno">109 </span>            <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">500</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">110 </span>    <span class="p">}</span>
+<span class="lineno">111 </span>
+<span class="lineno">112 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Ready to close MQTT Network......</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">113 </span>
+<span class="lineno">114 </span>    <span class="k">if</span> <span class="p">((</span><span class="n">rc</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">topic</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">115 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed: rc from unsubscribe was %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">rc</span><span class="p">);</span>
+<span class="lineno">116 </span>    <span class="p">}</span>
+<span class="lineno">117 </span>    <span class="k">if</span> <span class="p">((</span><span class="n">rc</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">disconnect</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">118 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed: rc from disconnect was %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">rc</span><span class="p">);</span>
+<span class="lineno">119 </span>    <span class="p">}</span>
+<span class="lineno">120 </span>
+<span class="lineno">121 </span>    <span class="n">mqttNetwork</span><span class="p">.</span><span class="n">disconnect</span><span class="p">();</span>
+<span class="lineno">122 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Successfully closed!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">123 </span>
+<span class="lineno">124 </span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">125 </span><span class="p">}</span>
+</pre></div>
+</li>
+</ol>
+</div>
+<div class="section" id="python-mqtt-client">
+<h4><a class="toc-backref" href="#id12">4.3.3&nbsp;&nbsp;&nbsp;Python MQTT Client</a></h4>
+<p>This is a python program acts as another MQTT client to receive messages from B_L4S5I_IOT01A.</p>
+<ol class="arabic">
+<li><p class="first">Please edit and revise the codes in <span class="file">mqtt_client.py</span> as follows.</p>
+<p>Change the following <span class="hl">host</span> string in <span class="file">mqtt_client.py</span> to your PC IP address.</p>
+<div class="highlight"><pre><span></span><span class="c1"># TODO: revise host to your IP</span>
+<span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;Your IP&quot;</span>
+</pre></div>
+<p>The <span class="file">mqtt_client.py</span> Python program:</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">paho.mqtt.client</span> <span class="k">as</span> <span class="nn">paho</span>
+<span class="lineno"> 2 </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="c1"># https://os.mbed.com/teams/mqtt/wiki/Using-MQTT#python-client</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="c1"># MQTT broker hosted on local machine</span>
+<span class="lineno"> 7 </span><span class="n">mqttc</span> <span class="o">=</span> <span class="n">paho</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="c1"># Settings for connection</span>
+<span class="lineno">10 </span><span class="c1"># TODO: revise host to your IP</span>
+<span class="lineno">11 </span><span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.150&quot;</span>
+<span class="lineno">12 </span><span class="n">topic</span> <span class="o">=</span> <span class="s2">&quot;Mbed&quot;</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span><span class="c1"># Callbacks</span>
+<span class="lineno">15 </span><span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mosq</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+<span class="lineno">16 </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connected rc: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rc</span><span class="p">))</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span><span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="n">mosq</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+<span class="lineno">19 </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Received] Topic: &quot;</span> <span class="o">+</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">+</span> <span class="s2">&quot;, Message: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="lineno">20 </span>
+<span class="lineno">21 </span><span class="k">def</span> <span class="nf">on_subscribe</span><span class="p">(</span><span class="n">mosq</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">granted_qos</span><span class="p">):</span>
+<span class="lineno">22 </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Subscribed OK&quot;</span><span class="p">)</span>
+<span class="lineno">23 </span>
+<span class="lineno">24 </span><span class="k">def</span> <span class="nf">on_unsubscribe</span><span class="p">(</span><span class="n">mosq</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">granted_qos</span><span class="p">):</span>
+<span class="lineno">25 </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unsubscribed OK&quot;</span><span class="p">)</span>
+<span class="lineno">26 </span>
+<span class="lineno">27 </span><span class="c1"># Set callbacks</span>
+<span class="lineno">28 </span><span class="n">mqttc</span><span class="o">.</span><span class="n">on_message</span> <span class="o">=</span> <span class="n">on_message</span>
+<span class="lineno">29 </span><span class="n">mqttc</span><span class="o">.</span><span class="n">on_connect</span> <span class="o">=</span> <span class="n">on_connect</span>
+<span class="lineno">30 </span><span class="n">mqttc</span><span class="o">.</span><span class="n">on_subscribe</span> <span class="o">=</span> <span class="n">on_subscribe</span>
+<span class="lineno">31 </span><span class="n">mqttc</span><span class="o">.</span><span class="n">on_unsubscribe</span> <span class="o">=</span> <span class="n">on_unsubscribe</span>
+<span class="lineno">32 </span>
+<span class="lineno">33 </span><span class="c1"># Connect and subscribe</span>
+<span class="lineno">34 </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connecting to &quot;</span> <span class="o">+</span> <span class="n">host</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">topic</span><span class="p">)</span>
+<span class="lineno">35 </span><span class="n">mqttc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">1883</span><span class="p">,</span> <span class="n">keepalive</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="lineno">36 </span><span class="n">mqttc</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="lineno">37 </span>
+<span class="lineno">38 </span><span class="c1"># Publish messages from Python</span>
+<span class="lineno">39 </span><span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="lineno">40 </span><span class="k">while</span> <span class="n">num</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">:</span>
+<span class="lineno">41 </span>    <span class="n">ret</span> <span class="o">=</span> <span class="n">mqttc</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="s2">&quot;Message from Python!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">qos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="lineno">42 </span>    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="lineno">43 </span>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Publish failed&quot;</span><span class="p">)</span>
+<span class="lineno">44 </span>    <span class="n">mqttc</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
+<span class="lineno">45 </span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="lineno">46 </span>    <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="lineno">47 </span>
+<span class="lineno">48 </span><span class="c1"># Loop forever, receiving messages</span>
+<span class="lineno">49 </span><span class="n">mqttc</span><span class="o">.</span><span class="n">loop_forever</span><span class="p">()</span>
+</pre></div>
+</li>
+</ol>
+</div>
+<div class="section" id="test-mqtt-client-and-server">
+<h4><a class="toc-backref" href="#id13">4.3.4&nbsp;&nbsp;&nbsp;Test MQTT Client and Server</a></h4>
+<ol class="arabic">
+<li><p class="first">Start your Mosquitto service.</p>
+<pre class="terminal literal-block">
+1643685626: mosquitto version 2.0.14 starting
+1643685626: Config loaded from /usr/local/etc/mosquitto/mosquitto.conf.
+1643685626: Opening ipv6 listen socket on port 1883.
+1643685626: Opening ipv4 listen socket on port 1883.
+1643685626: mosquitto version 2.0.14 running
+1643685629: New connection from 192.168.50.192:65147 on port 1883.
+1643685629: New client connected from 192.168.50.192:65147 as auto-6E6EAC05-2C6E-16DC-CBB0-36F045DC68E5 (p2, c1, k60).
+1643685994: New connection from 192.168.50.56:14645 on port 1883.
+1643685994: New client connected from 192.168.50.56:14645 as Mbed (p1, c1, k60).
+</pre>
+</li>
+<li><p class="first">Compile and run the mbed program.</p>
+</li>
+<li><p class="first">Run the Python script.</p>
+</li>
+<li><p class="first">Mbed should receive several messages from Python client.</p>
+<pre class="terminal literal-block">
+Connecting to SSID...
+Connecting to TCP network...
+address is 192.168.50.192/1883
+Successfully connected!
+Message arrived: QoS0, retained 0, dup 0, packetID 816
+Payload Message from Python!
+
+Message arrived: QoS0, retained 0, dup 0, packetID 816
+Payload Message from Python!
+
+Message arrived: QoS0, retained 0, dup 0, packetID 816
+Payload Message from Python!
+
+Message arrived: QoS0, retained 0, dup 0, packetID 816
+Payload Message from Python!
+
+Message arrived: QoS0, retained 0, dup 0, packetID 816
+Payload Message from Python!
+
+rc:  0
+Puslish message: QoS0 Hello, Python! #1
+Message arrived: QoS0, retained 0, dup 0, packetID 816
+Payload QoS0 Hello, Python! #1
+</pre>
+</li>
+<li><p class="first">Press the user button on B_L4S5I_IOT01A, you should see the messages received at the Python client.</p>
+<pre class="terminal literal-block">
+$ python3 mqtt_client.py
+Connecting to 192.168.50.192/Mbed
+Connected rc: 0
+Subscribed OK
+[Received] Topic: Mbed, Message: b'Message from Python!\n'
+
+[Received] Topic: Mbed, Message: b'Message from Python!\n'
+
+[Received] Topic: Mbed, Message: b'Message from Python!\n'
+
+[Received] Topic: Mbed, Message: b'Message from Python!\n'
+
+[Received] Topic: Mbed, Message: b'Message from Python!\n'
+
+[Received] Topic: Mbed, Message: b'QoS0 Hello, Python! #1\x00'
+</pre>
+</li>
+<li><p class="first">Push the codes to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id14">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>You need to know how to use ISM43362 on B-L4S5I-IOT01A to connect WiFi.</li>
+<li>You need to know what is MQTT and how it works.</li>
+<li>Use the resource from Lab 8, revise the project to send the data of accelerometer from B-L4S5I-IOT01A to pc host every 0.5 second using WiFi and MQTT.</li>
+<li>Show your git remote repository.</li>
+</ol>
+</div>
+<div class="section" id="faq">
+<h2><a class="toc-backref" href="#id15">6&nbsp;&nbsp;&nbsp;FAQ</a></h2>
+<ol class="arabic">
+<li><p class="first"><strong>No network interface found</strong> <a class="reference external" href="labs/img/Wifi_MQTT/No_WiFi_interface.png">screenshot</a></p>
+<p>This indicates that there is something wrong in the setting of mbed_app.json.</p>
+<ol class="arabic simple">
+<li>Double check mbed_app.json as described above. It must include a session for <strong>&quot;target_overrides&quot;: {&quot;B_L4S5I_IOT01A&quot;: {...}}</strong>.</li>
+<li>Check mbed_app.json is in the source directory</li>
+</ol>
+</li>
+<li><p class="first"><strong>_net-&gt;connect() returned: -3011</strong> <a class="reference external" href="labs/img/Wifi_MQTT/-3011.png">screenshot</a></p>
+<p>This means that your B-L4S5I-IOT01A cannot connect to a WiFi hotspot or router.</p>
+<ol class="arabic simple">
+<li>SSID and PASSWORD in mbed_app.json are not correct.</li>
+<li>Your hotspot signal is too weak or not stable. Please try another one.</li>
+<li>Your hotspot frequency band may be set to 5 GHz by default. Please change it to 2.4 GHz or try others.</li>
+<li>Too many devices are using the 2.4 GHz frequency band around you. There are too much noise for WiFi signal band.
+You can see the list in your WiFi hotspot list in Windows or Mac.</li>
+</ol>
+</li>
+<li><p class="first"><strong>_socket-&gt;connect() returned: -3012</strong> <a class="reference external" href="labs/img/Wifi_MQTT/-3012.png">screenshot</a></p>
+<p>This means that your B-L4S5I-IOT01A has connected to WiFi, but it cannot access to PC services (e.g., web server).
+Make sure your B-L4S5I-IOT01A and Ubuntu are under the same subnet. And check if the web or mqtt server is running.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="reference-list">
+<h2><a class="toc-backref" href="#id16">7&nbsp;&nbsp;&nbsp;Reference List</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://github.com/ARMmbed/wifi-ism43362">WIFI module ISM43362 Firmware Update</a></li>
+<li><a class="reference external" href="https://os.mbed.com/teams/Cloud-Hackathon/wiki/MQTT-Python-Broker-with-Mbed-Client">Mbed MQTT Example</a></li>
+<li><a class="reference external" href="https://os.mbed.com/teams/mqtt/wiki/Using-MQTT#python-client">Python MQTT Client</a></li>
+</ol>
+<div class="section" id="update-the-firmware-optional">
+<h3><a class="toc-backref" href="#id17">7.1&nbsp;&nbsp;&nbsp;Update the firmware (optional)</a></h3>
+<div class="warning docutils container">
+<p>Do <strong>NOT</strong> perform this part unless consulting with a TA.</p>
+<p>Because the firmware update procedures are complicated, you should come back to update the firmware only if you confront the related error.</p>
+<p>It's recommended to skip this part, try <a class="reference internal" href="#connect-b-l4s5i-iot01a-to-wifi">Connect B-L4S5I-IOT01A to WiFi</a> section directly.</p>
+</div>
+<div class="instruct docutils container">
+<p>We need to update the firmware on a Windows machine.
+If your notebook uses macOS or Linux, please use the desktop at your seat for this update.</p>
+<p>Do <strong>NOT</strong> connect your mbed board and start VMware.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Download firmware update tool.</p>
+<p>Firmware download link: <a class="reference external" href="labs/doc/mbed10/Lab10_firmware_update.zip">Lab10_firmware_update</a></p>
+</li>
+<li><p class="first">Unzip the firmware update tool.</p>
+</li>
+<li><p class="first">Move the whole sub-directory &quot;STMicroelectronics&quot;, i.e. &quot;C:\Users\USER\Downloads\Lab10_firmware_update\STMicroelectronics&quot; into &quot;C:\Program Files (x86)\&quot;.</p>
+</li>
+</ol>
+<p><strong>Install STM USB driver on your computer</strong></p>
+<ol class="arabic simple">
+<li>Open the folder &quot;C:\Program Files (x86)\STMicroelectronics\STM32 ST-LINK Utility\ST-LINK_USB_V2_1_Driver&quot;.</li>
+<li>Run <span class="file">stlink_winusb_install.bat</span>. Confirm the permission when asked by the Windows.</li>
+<li>Installation wizard will pops up. <a class="reference external" href="labs/img/Wifi_MQTT/Device_Driver_Installation.png">Step 1</a></li>
+<li>Continuously press 'Next' to complete the routines. <a class="reference external" href="labs/img/Wifi_MQTT/Completing_Device_Driver_Installation.png">Step 2</a></li>
+</ol>
+<p><strong>Install a new ST_LINK firmware</strong></p>
+<ol class="arabic simple">
+<li>Open the folder &quot;C:\Program Files (x86)\STMicroelectronics\STM32 ST-LINK Utility\ST-LINK Utility&quot;.</li>
+<li>Run <span class="file">STM32 ST-LINK Utility.exe</span>. The GUI of the utility will pops up: <a class="reference external" href="labs/img/Wifi_MQTT/STM32_ST-Link_Utility_Step_0.png">Step 0</a></li>
+<li>Plug in your B_L4S5I_IOT01A. Press the plug icon in the GUI to make your computer connected with B_L4S5I_IOT01A. <a class="reference external" href="labs/img/Wifi_MQTT/STM32_ST-Link_Utility_Step_1.png">Step 1</a></li>
+<li>Click ST_LINK/Firmware update. <a class="reference external" href="labs/img/Wifi_MQTT/STM32_ST-Link_Utility_Step_2.png">Step 2</a></li>
+<li>Click &quot;Device Connect&quot; <a class="reference external" href="labs/img/Wifi_MQTT/STM32_ST-Link_Utility_Step_3.png">Step 3</a></li>
+<li>Click &quot;YES&quot; to confirm the update. <a class="reference external" href="labs/img/Wifi_MQTT/STM32_ST-Link_Utility_Step_4.png">Step 4</a></li>
+<li>After the update is successful, press the reset button on B_L4S5I_IOT01A. <a class="reference external" href="labs/img/Wifi_MQTT/STM32_ST-Link_Utility_Step_5.png">Step 5</a></li>
+</ol>
+<p><strong>Update WiFi firmware</strong></p>
+<ol class="arabic">
+<li><p class="first">Open the folder &quot;C:\Users\USER\Downloads\Lab10_firmware_update\en.inventek_fw_updater\bin&quot;.</p>
+</li>
+<li><p class="first">Run <span class="file">STM32 ST-LINK Utility.exe</span>. Windows command line (cmd) will pops up and execute the file. <a class="reference external" href="labs/img/Wifi_MQTT/cmd_exe_Step_0_.png">Step 0</a></p>
+</li>
+<li><p class="first">The utility should run automatically after your click it.</p>
+<p>If &quot;No ST_LINK&quot; / &quot;No target&quot; message shows up, please make sure that you
+didn't start VMware and connect the mbed board.
+In this case, please terminate VMWare and try to press and hold the reset button when you execute <span class="file">STM32 ST-LINK
+Utility.exe</span> again. After you release the reset button, the screen should show messages like Step_1: <a class="reference external" href="labs/img/Wifi_MQTT/cmd_exe_Step_1_.png">Step 1</a></p>
+</li>
+<li><p class="first">It will automatically ended after downloading and verifying all 10 firmware sectors. <a class="reference external" href="labs/img/Wifi_MQTT/cmd_exe_Step_2_.png">Step 2</a></p>
+</li>
+</ol>
+</div>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

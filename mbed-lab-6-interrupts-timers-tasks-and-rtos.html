@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 6 Interrupts, timers, tasks and RTOS</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-6-interrupts-timers-tasks-and-rtos.html" rel="bookmark"
+                   title="Permalink to mbed Lab 6 Interrupts, timers, tasks and RTOS">mbed Lab 6 Interrupts, timers, tasks and RTOS</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-03-16T15:00:00+08:00">
+                Mar 16, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#interrupt" id="id6">4.2&nbsp;&nbsp;&nbsp;Interrupt</a></li>
+<li><a class="reference internal" href="#simple-timer" id="id7">4.3&nbsp;&nbsp;&nbsp;Simple Timer</a></li>
+<li><a class="reference internal" href="#multiple-timer" id="id8">4.4&nbsp;&nbsp;&nbsp;Multiple Timer</a></li>
+<li><a class="reference internal" href="#simple-timeout" id="id9">4.5&nbsp;&nbsp;&nbsp;Simple Timeout</a></li>
+<li><a class="reference internal" href="#simple-ticker" id="id10">4.6&nbsp;&nbsp;&nbsp;Simple Ticker</a></li>
+<li><a class="reference internal" href="#application-debounce" id="id11">4.7&nbsp;&nbsp;&nbsp;Application -- Debounce</a></li>
+<li><a class="reference internal" href="#multi-thread-example" id="id12">4.8&nbsp;&nbsp;&nbsp;Multi-Thread Example</a></li>
+<li><a class="reference internal" href="#eventqueue-example" id="id13">4.9&nbsp;&nbsp;&nbsp;EventQueue Example</a></li>
+<li><a class="reference internal" href="#eventqueue-in-a-thread" id="id14">4.10&nbsp;&nbsp;&nbsp;EventQueue in a Thread</a></li>
+<li><a class="reference internal" href="#scheduling-of-eventqueue-calls" id="id15">4.11&nbsp;&nbsp;&nbsp;Scheduling of EventQueue Calls</a></li>
+<li><a class="reference internal" href="#two-threads-of-eventqueue-with-different-priorities" id="id16">4.12&nbsp;&nbsp;&nbsp;Two Threads of EventQueue with Different Priorities</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id17">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+<li><a class="reference internal" href="#reference-list" id="id18">6&nbsp;&nbsp;&nbsp;Reference List</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>Schedule a timed function (periodic or nonperiodic)</li>
+<li>Process an interrupt input</li>
+<li>Threads and EventQueue</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>Mar. 16, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>External interrupt signal is often triggered by an external event (e.g., input data waiting for processing).
+Interrupt signals happen at unexpected time (or asynchronous to the processor timing). Therefore, depending on
+the preset priority of the interrupt signals, we context-switch from the current running application to handle
+the request of interrupt signals (by an interrupt service routine; a function designed to process a specific
+interrupt signal). The implementation of interrupt scheme is important to relieve processor (or software) to
+constantly polling external devices (usually waste of time and power).</p>
+<p>In the second part, we learn how to schedule functions to be executed at a fixed time or repeated at an interval.
+We use timer or ticker to achieve the scheduled event. This is useful in control process. For example, we can
+send a periodical beacon to neighbor nodes to make sure that the interconnected system is well and alive.</p>
+<p>For the last part, we introduce <strong>Thread</strong> and <strong>EventQueue</strong> (both are mbed RTOS classes). These classes can be used
+to execute multiple tasks (independently) and to schedule ISR functions at designed times and with preset priorities.
+They are more flexible than a simple timer and ticker.</p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B_L4S5I_IOT01A * 1</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 7:Interrupts, Timers and Tasks <a class="reference external" href="notes/ch7_task.pdf">ch7_task.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="interrupt">
+<h3><a class="toc-backref" href="#id6">4.2&nbsp;&nbsp;&nbsp;Interrupt</a></h3>
+<p>This program use the button to trigger an interrupt signal and
+run flip() function, when an infinite loop is running (blinking an LED).</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_1_Interrupt</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">InterruptIn</span> <span class="nf">button</span><span class="p">(</span><span class="n">BUTTON1</span><span class="p">);</span>
+<span class="lineno"> 4 </span><span class="n">DigitalOut</span> <span class="nf">led</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 5 </span><span class="n">DigitalOut</span> <span class="nf">flash</span><span class="p">(</span><span class="n">LED2</span><span class="p">);</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kt">void</span> <span class="nf">flip</span><span class="p">()</span>
+<span class="lineno"> 8 </span><span class="p">{</span>
+<span class="lineno"> 9 </span>   <span class="n">led</span> <span class="o">=</span> <span class="o">!</span><span class="n">led</span><span class="p">;</span>
+<span class="lineno">10 </span><span class="p">}</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">13 </span><span class="p">{</span>
+<span class="lineno">14 </span>   <span class="n">button</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="o">&amp;</span><span class="n">flip</span><span class="p">);</span> <span class="c1">// attach the address of the flip function to the rising edge</span>
+<span class="lineno">15 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">16 </span>   <span class="p">{</span> <span class="c1">// wait around, interrupts will interrupt this!</span>
+<span class="lineno">17 </span>      <span class="n">flash</span> <span class="o">=</span> <span class="o">!</span><span class="n">flash</span><span class="p">;</span>
+<span class="lineno">18 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">250</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">19 </span>   <span class="p">}</span>
+<span class="lineno">20 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="simple-timer">
+<h3><a class="toc-backref" href="#id7">4.3&nbsp;&nbsp;&nbsp;Simple Timer</a></h3>
+<p>This program shows how to measure the time duration with a Timer object.
+It also introduces an API to convert from Timer object to s, ms, or us.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_2_Simple_Timer</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">Timer</span> <span class="n">t</span><span class="p">;</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 8 </span><span class="p">{</span>
+<span class="lineno"> 9 </span>   <span class="n">t</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="lineno">10 </span>   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">11 </span>   <span class="n">t</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="lineno">12 </span>   <span class="k">auto</span> <span class="n">s</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">elapsed_time</span><span class="p">()).</span><span class="n">count</span><span class="p">();</span>
+<span class="lineno">13 </span>   <span class="k">auto</span> <span class="n">ms</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">elapsed_time</span><span class="p">()).</span><span class="n">count</span><span class="p">();</span>
+<span class="lineno">14 </span>   <span class="k">auto</span> <span class="n">us</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">elapsed_time</span><span class="p">().</span><span class="n">count</span><span class="p">();</span>
+<span class="lineno">15 </span>   <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;Timer time: %llu s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+<span class="lineno">16 </span>   <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;Timer time: %llu ms</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="p">);</span>
+<span class="lineno">17 </span>   <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;Timer time: %llu us</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">us</span><span class="p">);</span>
+<span class="lineno">18 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="multiple-timer">
+<h3><a class="toc-backref" href="#id8">4.4&nbsp;&nbsp;&nbsp;Multiple Timer</a></h3>
+<p>This program creates two Timers, <strong>timer_fast</strong> and <strong>timer_slow</strong>. The main
+program starts these running, and tests when each exceeds a certain number.
+When the time value is exceeded, a function is called, which flips the
+associated led.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_3_Multiple_Timer</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">Timer</span> <span class="n">timer_fast</span><span class="p">,</span> <span class="n">timer_slow</span><span class="p">;</span>
+<span class="lineno"> 6 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 7 </span><span class="n">DigitalOut</span> <span class="nf">led2</span><span class="p">(</span><span class="n">LED2</span><span class="p">);</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+<span class="lineno">10 </span>    <span class="n">timer_fast</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="lineno">11 </span>    <span class="n">timer_slow</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span>    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="lineno">14 </span>        <span class="k">if</span><span class="p">(</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">timer_fast</span><span class="p">.</span><span class="n">elapsed_time</span><span class="p">()).</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">){</span>
+<span class="lineno">15 </span>            <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">16 </span>            <span class="n">timer_fast</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="lineno">17 </span>        <span class="p">}</span>
+<span class="lineno">18 </span>        <span class="k">if</span><span class="p">(</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">timer_slow</span><span class="p">.</span><span class="n">elapsed_time</span><span class="p">()).</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">){</span>
+<span class="lineno">19 </span>            <span class="n">led2</span> <span class="o">=</span> <span class="o">!</span><span class="n">led2</span><span class="p">;</span>
+<span class="lineno">20 </span>            <span class="n">timer_slow</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="lineno">21 </span>        <span class="p">}</span>
+<span class="lineno">22 </span>    <span class="p">}</span>
+<span class="lineno">23 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="simple-timeout">
+<h3><a class="toc-backref" href="#id9">4.5&nbsp;&nbsp;&nbsp;Simple Timeout</a></h3>
+<p>This Program Example causes an action to be triggered a fixed period after
+an external event. If the button is pressed, the <strong>blink()</strong> function gets
+attached to the <strong>Response</strong> Timeout. The program is a microcosm of many
+embedded systems - a time-triggered task needs to keep going, while an
+event-triggered task takes place at unpredictable times.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_4_Simple_Timeout</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">Timeout</span> <span class="n">flipper</span><span class="p">;</span>
+<span class="lineno"> 5 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">DigitalOut</span> <span class="nf">led2</span><span class="p">(</span><span class="n">LED2</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">void</span> <span class="nf">flip</span><span class="p">()</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>   <span class="n">led2</span> <span class="o">=</span> <span class="o">!</span><span class="n">led2</span><span class="p">;</span>
+<span class="lineno">11 </span><span class="p">}</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">14 </span><span class="p">{</span>
+<span class="lineno">15 </span>   <span class="n">led2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno">16 </span>   <span class="n">flipper</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="o">&amp;</span><span class="n">flip</span><span class="p">,</span> <span class="mi">2</span><span class="n">s</span><span class="p">);</span> <span class="c1">// setup flipper to call flip after 2 seconds</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span>   <span class="c1">// spin in a main loop. flipper will interrupt it to call flip</span>
+<span class="lineno">19 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">20 </span>   <span class="p">{</span>
+<span class="lineno">21 </span>      <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">22 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">200</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">23 </span>   <span class="p">}</span>
+<span class="lineno">24 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="simple-ticker">
+<h3><a class="toc-backref" href="#id10">4.6&nbsp;&nbsp;&nbsp;Simple Ticker</a></h3>
+<p>Creating a periodic event is one of the most common requirements in an
+embedded system. This program switches the LED every 200 ms, using Timeout
+rather than a <strong>wait()</strong> function.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_5_Simple_Ticker</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">Ticker</span> <span class="n">flipper</span><span class="p">;</span>
+<span class="lineno"> 5 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">DigitalOut</span> <span class="nf">led2</span><span class="p">(</span><span class="n">LED2</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">void</span> <span class="nf">flip</span><span class="p">()</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>   <span class="n">led2</span> <span class="o">=</span> <span class="o">!</span><span class="n">led2</span><span class="p">;</span>
+<span class="lineno">11 </span><span class="p">}</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">14 </span><span class="p">{</span>
+<span class="lineno">15 </span>   <span class="n">led2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno">16 </span>   <span class="n">flipper</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="o">&amp;</span><span class="n">flip</span><span class="p">,</span> <span class="mi">2</span><span class="n">s</span><span class="p">);</span> <span class="c1">// the address of the function to be attached (flip) and the interval (2 seconds)</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span>   <span class="c1">// spin in a main loop. flipper will interrupt it to call flip</span>
+<span class="lineno">19 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">20 </span>   <span class="p">{</span>
+<span class="lineno">21 </span>      <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">22 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">200</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">23 </span>   <span class="p">}</span>
+<span class="lineno">24 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="application-debounce">
+<h3><a class="toc-backref" href="#id11">4.7&nbsp;&nbsp;&nbsp;Application -- Debounce</a></h3>
+<p>This program solves the switch bounce issue by starting a timer on a switch
+event, and ensuring that 10 ms has elapsed before allowing a second event to be
+processed.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_6_Debounce</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">Timer</span> <span class="n">debounce</span><span class="p">;</span>                  <span class="c1">//define debounce timer</span>
+<span class="lineno"> 5 </span><span class="n">InterruptIn</span> <span class="nf">button</span><span class="p">(</span><span class="n">BUTTON1</span><span class="p">);</span> <span class="c1">//Interrupt on digital push button input SW2</span>
+<span class="lineno"> 6 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">void</span> <span class="nf">toggle</span><span class="p">()</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>   <span class="k">if</span> <span class="p">(</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">debounce</span><span class="p">.</span><span class="n">elapsed_time</span><span class="p">()).</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="lineno">11 </span>   <span class="p">{</span>
+<span class="lineno">12 </span>      <span class="c1">//only allow toggle if debounce timer has passed 1s</span>
+<span class="lineno">13 </span>      <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">14 </span>      <span class="n">debounce</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span> <span class="c1">//restart timer when the toggle is performed</span>
+<span class="lineno">15 </span>   <span class="p">}</span>
+<span class="lineno">16 </span><span class="p">}</span>
+<span class="lineno">17 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">18 </span><span class="p">{</span>
+<span class="lineno">19 </span>   <span class="n">debounce</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="lineno">20 </span>   <span class="n">button</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="o">&amp;</span><span class="n">toggle</span><span class="p">);</span> <span class="c1">// attach the address of the toggle</span>
+<span class="lineno">21 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">22 </span>      <span class="p">;</span>
+<span class="lineno">23 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="multi-thread-example">
+<h3><a class="toc-backref" href="#id12">4.8&nbsp;&nbsp;&nbsp;Multi-Thread Example</a></h3>
+<p>A thread is a single sequential flow of control within a program.  Threads
+allow defining, creating and controlling <strong>''parallel tasks''</strong>.  Using
+multiple threads running at the same time can simultaneously perform different
+tasks in a single program.  This helps an embedded system programmer to avoid
+long super-loops.  In the following example, we have two threads executing in
+parallel to turn on/off two LEDs at two different periods.</p>
+<p>Note that main() is a special thread function that is started at system
+initialization. (main thread)</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_7_Multi_Thread</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 5 </span><span class="n">DigitalOut</span> <span class="nf">led2</span><span class="p">(</span><span class="n">LED2</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">Thread</span> <span class="kr">thread</span><span class="p">;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">void</span> <span class="nf">led2_thread</span><span class="p">()</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>   <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+<span class="lineno">11 </span>   <span class="p">{</span>
+<span class="lineno">12 </span>      <span class="n">led2</span> <span class="o">=</span> <span class="o">!</span><span class="n">led2</span><span class="p">;</span>
+<span class="lineno">13 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">14 </span>   <span class="p">}</span>
+<span class="lineno">15 </span><span class="p">}</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">18 </span><span class="p">{</span>
+<span class="lineno">19 </span>   <span class="kr">thread</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">led2_thread</span><span class="p">);</span>
+<span class="lineno">20 </span>
+<span class="lineno">21 </span>   <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+<span class="lineno">22 </span>   <span class="p">{</span>
+<span class="lineno">23 </span>      <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">24 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">500</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">25 </span>   <span class="p">}</span>
+<span class="lineno">26 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="eventqueue-example">
+<h3><a class="toc-backref" href="#id13">4.9&nbsp;&nbsp;&nbsp;EventQueue Example</a></h3>
+<p>The EventQueue class provides a flexible queue for scheduling events.
+EventQueue is also thread-safe and ISR-safe, which means we can run EventQueue
+functions inside a thread or ISR.  Note that functions called in
+Timer/Timeout/Ticker should be ISR-safe, too.  It is <strong>recommended to use
+EventQueue</strong> to schedule periodic or timer tasks instead of
+Timer/Timeout/Ticker (except for very simple tasks).</p>
+<p>You can use the EventQueue class for synchronization between multiple threads,
+or to move events out of interrupt context (deferred execution of time
+consuming or non-ISR safe operations).  Note that some I/O classes are not
+allowed in ISR, e.g., printf(), DAC/ADC, etc.  Therefore, when we get an
+interrupt, we usually run a simple ISR to (1) handle the interrupt, (2)
+schedule an task in an EventQueue (maybe at a designed time or with a
+priority), (3) return from the ISR.</p>
+<p>You can use the dispatch() and dispatch_forever() APIs to execute pending events.
+&quot;break_dispatch()&quot; can be used to terminate the execution of events in the
+specified EventQueue.</p>
+<p>In the following example, we show function calls to be executed immediately, at
+a designed time, or periodically with an event queue.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_8_EventQueue</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 5 </span><span class="p">{</span>
+<span class="lineno"> 6 </span>   <span class="c1">// creates a queue with the default size</span>
+<span class="lineno"> 7 </span>   <span class="n">EventQueue</span> <span class="n">queue</span><span class="p">;</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span>   <span class="c1">// printf will be put into queue and execute immediately</span>
+<span class="lineno">10 </span>   <span class="n">queue</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">printf</span><span class="p">,</span> <span class="s">&quot;called immediately</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">11 </span>   <span class="c1">// Replace Timeout</span>
+<span class="lineno">12 </span>   <span class="n">queue</span><span class="p">.</span><span class="n">call_in</span><span class="p">(</span><span class="mi">2</span><span class="n">s</span><span class="p">,</span> <span class="n">printf</span><span class="p">,</span> <span class="s">&quot;called in 2 seconds</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">13 </span>   <span class="c1">// Replace Ticker</span>
+<span class="lineno">14 </span>   <span class="n">queue</span><span class="p">.</span><span class="n">call_every</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">,</span> <span class="n">printf</span><span class="p">,</span> <span class="s">&quot;called every 1 seconds</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span>   <span class="c1">// events are executed by the dispatch method</span>
+<span class="lineno">17 </span>   <span class="n">queue</span><span class="p">.</span><span class="n">dispatch</span><span class="p">();</span>
+<span class="lineno">18 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="eventqueue-in-a-thread">
+<h3><a class="toc-backref" href="#id14">4.10&nbsp;&nbsp;&nbsp;EventQueue in a Thread</a></h3>
+<p>In this part, we show an example to put an EventQueue in the context of a Thread.
+Therefore, we can independently schedule calls of an EventQueue.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_9_Single_Thread_EventQueue</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 5 </span><span class="n">InterruptIn</span> <span class="nf">sw2</span><span class="p">(</span><span class="n">BUTTON1</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">EventQueue</span> <span class="nf">queue</span><span class="p">(</span><span class="mi">32</span> <span class="o">*</span> <span class="n">EVENTS_EVENT_SIZE</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="n">Thread</span> <span class="n">t</span><span class="p">;</span>
+<span class="lineno"> 9 </span>
+<span class="lineno">10 </span><span class="kt">void</span> <span class="nf">led1_info</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">11 </span>   <span class="c1">// Note that printf is deferred with a call in the queue</span>
+<span class="lineno">12 </span>   <span class="c1">// It is not executed in the interrupt context</span>
+<span class="lineno">13 </span>   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;led1 is triggered! </span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">14 </span><span class="p">}</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span><span class="kt">void</span> <span class="nf">Trig_led1</span><span class="p">()</span>  <span class="p">{</span>
+<span class="lineno">17 </span>   <span class="c1">// Execute the time critical part first</span>
+<span class="lineno">18 </span>   <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span>   <span class="c1">// Ask the queue to schedule led1_info() immediately</span>
+<span class="lineno">21 </span>   <span class="n">queue</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">led1_info</span><span class="p">);</span>
+<span class="lineno">22 </span><span class="p">}</span>
+<span class="lineno">23 </span>
+<span class="lineno">24 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">25 </span>   <span class="c1">// callback() is used to wrap a API call to a queue object.</span>
+<span class="lineno">26 </span>   <span class="c1">// So, t will call queue.dispatch_forever(),</span>
+<span class="lineno">27 </span>   <span class="c1">// and it will start and run the queue scheduler of the EventQueue</span>
+<span class="lineno">28 </span>   <span class="n">t</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">EventQueue</span><span class="o">::</span><span class="n">dispatch_forever</span><span class="p">));</span>
+<span class="lineno">29 </span>
+<span class="lineno">30 </span>   <span class="c1">// &#39;Trig_led1&#39; will execute in IRQ context</span>
+<span class="lineno">31 </span>   <span class="n">sw2</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="n">Trig_led1</span><span class="p">);</span>
+<span class="lineno">32 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="scheduling-of-eventqueue-calls">
+<h3><a class="toc-backref" href="#id15">4.11&nbsp;&nbsp;&nbsp;Scheduling of EventQueue Calls</a></h3>
+<p>The following steps are adapted from mbed <a class="reference external" href="https://os.mbed.com/docs/mbed-os/v6.15/apis/scheduling-tutorials.html">EventQueue tutorial</a></p>
+<p>Let's consider an example of a program that attaches two interrupt handlers for
+an InterruptIn object, using the InterruptIn rise and fall functions. The rise
+handler will run in interrupt context, and the fall handler will run in user
+context (more specifically, in the context of the event loop's thread).</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_10_Multi_Thread_EventQueue</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">/*</span>
+<span class="lineno"> 2 </span><span class="cm"> * Copyright (c) 2020 Arm Limited and affiliates.</span>
+<span class="lineno"> 3 </span><span class="cm"> * SPDX-License-Identifier: Apache-2.0</span>
+<span class="lineno"> 4 </span><span class="cm"> */</span>
+<span class="lineno"> 5 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 8 </span><span class="n">InterruptIn</span> <span class="nf">sw</span><span class="p">(</span><span class="n">BUTTON1</span><span class="p">);</span>
+<span class="lineno"> 9 </span><span class="n">EventQueue</span> <span class="nf">queue</span><span class="p">(</span><span class="mi">32</span> <span class="o">*</span> <span class="n">EVENTS_EVENT_SIZE</span><span class="p">);</span>
+<span class="lineno">10 </span><span class="n">Thread</span> <span class="n">t</span><span class="p">;</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="kt">void</span> <span class="nf">rise_handler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="lineno">14 </span><span class="p">{</span>
+<span class="lineno">15 </span>    <span class="n">queue</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">printf</span><span class="p">,</span> <span class="s">&quot;rise_handler in context %p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ThisThread</span><span class="o">::</span><span class="n">get_id</span><span class="p">());</span>
+<span class="lineno">16 </span>    <span class="c1">// Toggle LED</span>
+<span class="lineno">17 </span>    <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">18 </span><span class="p">}</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span><span class="kt">void</span> <span class="nf">fall_handler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="lineno">21 </span><span class="p">{</span>
+<span class="lineno">22 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;fall_handler in context %p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ThisThread</span><span class="o">::</span><span class="n">get_id</span><span class="p">());</span>
+<span class="lineno">23 </span>    <span class="c1">// Toggle LED</span>
+<span class="lineno">24 </span>    <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">25 </span><span class="p">}</span>
+<span class="lineno">26 </span>
+<span class="lineno">27 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">28 </span><span class="p">{</span>
+<span class="lineno">29 </span>    <span class="c1">// Start the event queue</span>
+<span class="lineno">30 </span>    <span class="n">t</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">EventQueue</span><span class="o">::</span><span class="n">dispatch_forever</span><span class="p">));</span>
+<span class="lineno">31 </span>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Starting in context %p</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ThisThread</span><span class="o">::</span><span class="n">get_id</span><span class="p">());</span>
+<span class="lineno">32 </span>    <span class="c1">// The &#39;rise&#39; handler will execute in IRQ context</span>
+<span class="lineno">33 </span>    <span class="n">sw</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="n">rise_handler</span><span class="p">);</span>
+<span class="lineno">34 </span>    <span class="c1">// The &#39;fall&#39; handler will execute in the context of thread &#39;t&#39;</span>
+<span class="lineno">35 </span>    <span class="n">sw</span><span class="p">.</span><span class="n">fall</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">event</span><span class="p">(</span><span class="n">fall_handler</span><span class="p">));</span>
+<span class="lineno">36 </span><span class="p">}</span>
+</pre></div>
+<p>The above code executes two handler functions (rise_handler and fall_handler) in two different contexts:</p>
+<ol class="arabic simple">
+<li>In interrupt context when a rising edge is detected on SW2
+(rise_handler).</li>
+<li>In the context of the event loop's thread function when a falling edge is
+detected on SW2 (fall_handler). queue.event() is called with fall_handler as
+an argument to specify that fall_handler will run in user context instead of
+interrupt context.</li>
+</ol>
+</li>
+<li><p class="first">Compile and run the program.</p>
+<p>We reset the board and pressed the SW2 button twice.
+You should see a similar output as following print out:</p>
+<pre class="terminal literal-block">
+Starting in context 20001fe0
+fall_handler in context 20000b1c
+rise_handler in context 00000000
+fall_handler in context 20000b1c
+rise_handler in context 00000000
+</pre>
+<p>The program starts in the context of the thread that runs the main function
+(20001fe0). When the user presses SW2, fall_handler is automatically queued
+in the event queue, and it runs later in the context of thread t (20000b1c).
+When the user releases the button, rise_handler is executed immediately, and
+it displays 00000000, indicating that the code ran in interrupt context.</p>
+</li>
+<li><p class="first">Make the interrupt handler thread-safe</p>
+<p>The code for rise_handler is problematic because it calls printf in
+interrupt context, which is a potentially unsafe operation. Fortunately,
+this is exactly the kind of problem that event queues can solve. We can make
+the code safe by running rise_handler in user context (like we already do
+with fall_handler) by replacing this line:</p>
+<div class="highlight"><pre><span></span><span class="n">sw</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="n">rise_handler</span><span class="p">);</span>
+</pre></div>
+<p>with this line:</p>
+<div class="highlight"><pre><span></span><span class="n">sw</span><span class="p">.</span><span class="n">rise</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">event</span><span class="p">(</span><span class="n">rise_handler</span><span class="p">));</span>
+</pre></div>
+<p>Please run the program again.</p>
+</li>
+<li><p class="first">Refactor ISR codes</p>
+<p>The code is safe now, but we may have introduced another problem: latency.
+After the change above, the call to rise_handler will be queued, which means
+that it no longer runs immediately after the interrupt is raised. For this
+example code, this isn't a problem, but some applications might need the
+code to respond as fast as possible to an interrupt.</p>
+<p>Let's assume that rise_handler must toggle the LED as quickly as possible in
+response to the user's action on SW2. To do that, it must run in interrupt
+context. However, rise_handler still needs to print a message indicating
+that the handler was called; that's problematic because it's not safe to
+call printf from an interrupt context.</p>
+<p>The solution is to split rise_handler into two parts: the time critical part
+will run in interrupt context, while the non-critical part (displaying the
+message) will run in user context. This is easily doable using queue.call:</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">rise_handler_user_context</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;rise_handler_user_context in context %p</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">Thread</span><span class="o">::</span><span class="n">gettid</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">rise_handler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Execute the time critical part first</span>
+    <span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+    <span class="c1">// The rest can execute later in user context (and can contain code that&#39;s not interrupt safe).</span>
+    <span class="c1">// We use the &#39;queue.call&#39; function to add an event (the call to &#39;rise_handler_user_context&#39;) to the queue.</span>
+    <span class="n">queue</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">rise_handler_user_context</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>After replacing the code for rise_handler as above, please run the program again.
+And the output will be like the following:</p>
+<pre class="terminal literal-block">
+Starting in context 0x20002c50
+fall_handler in context 0x20002c90
+rise_handler_user_context in context 0x20002c90
+fall_handler in context 0x20002c90
+rise_handler_user_context in context 0x20002c90
+</pre>
+<p>The scenario above (splitting an interrupt handler's code into time critical
+code and non-time critical code) is another common pattern that you can
+easily implement with event queues; queuing code that's not interrupt safe
+is not the only thing you can use event queues for. Any kind of code can be
+queued and deferred for later execution.</p>
+<p>We used InterruptIn for the example above, but the same kind of code can be
+used with any attach()-like functions in the SDK. Examples include
+Serial::attach(), Ticker::attach(), Ticker::attach_us(), Timeout::attach().</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="two-threads-of-eventqueue-with-different-priorities">
+<h3><a class="toc-backref" href="#id16">4.12&nbsp;&nbsp;&nbsp;Two Threads of EventQueue with Different Priorities</a></h3>
+<p>We can differentiate between the importance of events by using multiple threads
+that run with different priorities.  For more priority values detail, please
+check Mbed OS Thread-APIs.</p>
+<p>In this section, we add a Ticker to the program which toggles LED2 every
+second, which runs with a higher priority than the printf calls by creating a
+second event queue.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>6_11_OS_Priority</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed_events.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="p">;</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">DigitalOut</span> <span class="nf">led2</span><span class="p">(</span><span class="n">LED2</span><span class="p">);</span>
+<span class="lineno"> 7 </span><span class="n">InterruptIn</span> <span class="nf">btn</span><span class="p">(</span><span class="n">BUTTON1</span><span class="p">);</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">EventQueue</span> <span class="n">printfQueue</span><span class="p">;</span>
+<span class="lineno">10 </span><span class="n">EventQueue</span> <span class="n">eventQueue</span><span class="p">;</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="kt">void</span> <span class="nf">blink_led2</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">13 </span><span class="c1">// this runs in the normal priority thread</span>
+<span class="lineno">14 </span><span class="n">led2</span> <span class="o">=</span> <span class="o">!</span><span class="n">led2</span><span class="p">;</span>
+<span class="lineno">15 </span><span class="p">}</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span><span class="kt">void</span> <span class="nf">print_toggle_led</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">18 </span><span class="c1">// this runs in the lower priority thread</span>
+<span class="lineno">19 </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Toggle LED!</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">20 </span><span class="p">}</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span><span class="kt">void</span> <span class="nf">btn_fall_irq</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">23 </span><span class="n">led1</span> <span class="o">=</span> <span class="o">!</span><span class="n">led1</span><span class="p">;</span>
+<span class="lineno">24 </span><span class="c1">// defer the printf call to the low priority thread</span>
+<span class="lineno">25 </span><span class="n">printfQueue</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">print_toggle_led</span><span class="p">);</span>
+<span class="lineno">26 </span><span class="p">}</span>
+<span class="lineno">27 </span>
+<span class="lineno">28 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">29 </span>
+<span class="lineno">30 </span><span class="c1">// low priority thread for calling printf()</span>
+<span class="lineno">31 </span><span class="n">Thread</span> <span class="n">printfThread</span><span class="p">(</span><span class="n">osPriorityLow</span><span class="p">);</span>
+<span class="lineno">32 </span><span class="n">printfThread</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="o">&amp;</span><span class="n">printfQueue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">EventQueue</span><span class="o">::</span><span class="n">dispatch_forever</span><span class="p">));</span>
+<span class="lineno">33 </span>
+<span class="lineno">34 </span><span class="c1">// normal priority thread for other events</span>
+<span class="lineno">35 </span><span class="n">Thread</span> <span class="n">eventThread</span><span class="p">(</span><span class="n">osPriorityNormal</span><span class="p">);</span>
+<span class="lineno">36 </span><span class="n">eventThread</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventQueue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">EventQueue</span><span class="o">::</span><span class="n">dispatch_forever</span><span class="p">));</span>
+<span class="lineno">37 </span>
+<span class="lineno">38 </span><span class="c1">// call blink_led2 every second, automatically defering to the eventThread</span>
+<span class="lineno">39 </span><span class="n">Ticker</span> <span class="n">ledTicker</span><span class="p">;</span>
+<span class="lineno">40 </span><span class="n">ledTicker</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">eventQueue</span><span class="p">.</span><span class="n">event</span><span class="p">(</span><span class="o">&amp;</span><span class="n">blink_led2</span><span class="p">),</span> <span class="mi">1</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">41 </span>
+<span class="lineno">42 </span><span class="c1">// button fall still runs in the ISR</span>
+<span class="lineno">43 </span><span class="n">btn</span><span class="p">.</span><span class="n">fall</span><span class="p">(</span><span class="o">&amp;</span><span class="n">btn_fall_irq</span><span class="p">);</span>
+<span class="lineno">44 </span>
+<span class="lineno">45 </span><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span><span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">);}</span>
+<span class="lineno">46 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id17">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>You need to know how to write an interrupt service routine.</li>
+<li>You need to know how to run a function at a designated time.</li>
+<li>You need to know how to run a function periodically.</li>
+<li>You need to know how to measure the latency between an interrupt event and an output signal.</li>
+<li>You need to know how to process different tasks at the same time using thread and eventqueue.</li>
+<li>Show your git remote repository.</li>
+<li>Switch the blue LED every 500ms without using the sleep for function. (Hint: Maybe ticker will work.)</li>
+<li>Demo Two Threads of EventQueue with Different Priorities.</li>
+</ol>
+</div>
+<div class="section" id="reference-list">
+<h2><a class="toc-backref" href="#id18">6&nbsp;&nbsp;&nbsp;Reference List</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://www.embedded-knowhow.co.uk/Book%203_files/LN_PDFs/mbed_bk_Ed2_Ch_9.pdf">Fast and embedded systems design</a></li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

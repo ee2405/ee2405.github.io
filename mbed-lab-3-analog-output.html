@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 3 Analog Output</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-3-analog-output.html" rel="bookmark"
+                   title="Permalink to mbed Lab 3 Analog Output">mbed Lab 3 Analog Output</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-03-02T15:00:00+08:00">
+                Mar 02, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#how-to-use-picoscope" id="id6">4.2&nbsp;&nbsp;&nbsp;How to Use PicoScope</a></li>
+<li><a class="reference internal" href="#analog-output" id="id7">4.3&nbsp;&nbsp;&nbsp;Analog output</a></li>
+<li><a class="reference internal" href="#generate-a-sawtooth-waveform" id="id8">4.4&nbsp;&nbsp;&nbsp;Generate a sawtooth waveform</a></li>
+<li><a class="reference internal" href="#generate-a-sine-waveform" id="id9">4.5&nbsp;&nbsp;&nbsp;Generate a sine waveform</a></li>
+<li><a class="reference internal" href="#mbed-pwm-output" id="id10">4.6&nbsp;&nbsp;&nbsp;mbed PWM Output</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id11">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+<li><a class="reference internal" href="#reference-list" id="id12">6&nbsp;&nbsp;&nbsp;Reference List</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>Analog output of mbed</li>
+<li>PWM output of mbed</li>
+<li>Comparison between analog output and PWM</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>Mar. 2, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>Mbed has two interfaces to support non-digital outputs: AnalogOut and PwmOut.
+The AnalogOut Interface uses digital to analog converter (DAC) circuit on chip
+to generate desired voltage level at an analog output pin.  The voltage output
+of AnalogOut Interface has the characteristic of the DAC: voltage range between
+VSS and VCC, driving current, conversion speed and accuracy.</p>
+<p>The PwmOut interface can be used to set the frequency and duty-cycle ratio
+(percentage of voltage high in a cycle) of a digital pulse train.  PWM signals
+are often used to drive a motor servo. We will use PWM to control the Boe Bot
+Car at later lab.</p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B_L4S5I_IOT01A * 1</li>
+<li>Picoscope * 1</li>
+<li>Wire * 20</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 4: Analog Output <a class="reference external" href="notes/ch4_dac.pdf">ch4_dac.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="how-to-use-picoscope">
+<h3><a class="toc-backref" href="#id6">4.2&nbsp;&nbsp;&nbsp;How to Use PicoScope</a></h3>
+<ol class="arabic">
+<li><p class="first">Please read through chapter 4 of <a class="reference external" href="https://www.picotech.com/download/manuals/picoscope-6-users-guide.pdf">PicoScope 6 User's Guide</a>
+to get a general idea of picoscope's function.</p>
+<div class="instruct docutils container">
+<p>What is <a class="reference external" href="https://www.picotech.com/oscilloscope/2000/picoscope-2000-overview">Picoscope</a>?</p>
+<p>The PicoScope 2000 Series includes mixed signal models that include 16
+digital inputs so that you can <span class="hl">view digital and analog signals</span>
+simultaneously.</p>
+<p>The digital inputs can be displayed individually or in named groups with
+binary, decimal or hexadecimal values shown in a bus-style display. A separate
+logic threshold from –5 V to +5 V can be defined for each 8-bit input port. The
+digital trigger can be activated by any bit pattern combined with an optional
+transition on any input. Advanced logic triggers can be set on either the
+analog or digital input channels, or both to enable complex mixed-signal
+triggering.</p>
+<p>The digital inputs bring extra power to the serial decoding options.
+You can decode serial data on all analog and digital channels simultaneously,
+giving you up to 18 channels of data.  You can for example decode <span class="hl">multiple
+SPI, I²C, CAN bus, LIN bus and FlexRay signals</span> all at the same time!</p>
+</div>
+</li>
+<li><p class="first">Please go to <a class="reference external" href="https://www.picotech.com/downloads">Picoscope download site</a></p>
+</li>
+<li><p class="first">Select &quot;Picoscope 2000 Series&quot; --&gt; &quot;Picoscope 2204A&quot; --&gt; &quot;Software&quot; and select Windows or Mac version.
+Install the downloaded Picoscope 6 software.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="analog-output">
+<h3><a class="toc-backref" href="#id7">4.3&nbsp;&nbsp;&nbsp;Analog output</a></h3>
+<div class="warning docutils container">
+For all the following, please unplug B_L4S5I_IOT01A from power while wiring circuits.</div>
+<div class="instruct docutils container">
+For all Mbed programs, please push the source codes to your GitHub repo.</div>
+<ol class="arabic">
+<li><p class="first">Using the probe with picoscope to measure the voltage at <span class="hl">PA_4</span>.</p>
+<p>Connect the probe to the pin of PA_4 and the ground. <a class="reference external" href="labs/img/Analog_Output/lab2_PA_4.jpg">Screenshot</a></p>
+<img alt="Wiring for PicoScope probe" src="labs/img/Analog_Output/B_L4S5I_IOT01A_pico_probe_PA_4_new.jpg" />
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>3_1_Analog_Output</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">AnalogOut</span> <span class="nf">Aout</span><span class="p">(</span><span class="n">PA_4</span><span class="p">);</span>
+<span class="lineno"> 4 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+<span class="lineno"> 5 </span>  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="lineno"> 6 </span>    <span class="n">Aout</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">;</span>  <span class="c1">// 0.25 * 3.3 = 0.825 v</span>
+<span class="lineno"> 7 </span>    <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">2</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno"> 8 </span>    <span class="n">Aout</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>   <span class="c1">// 0.50 * 3.3 = 1.650 v</span>
+<span class="lineno"> 9 </span>    <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">2</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">10 </span>    <span class="n">Aout</span> <span class="o">=</span> <span class="mf">0.75</span><span class="p">;</span>  <span class="c1">// 0.75 * 3.3 = 2.475 v</span>
+<span class="lineno">11 </span>    <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">2</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">12 </span>  <span class="p">}</span>
+<span class="lineno">13 </span><span class="p">}</span>
+</pre></div>
+<p>AnalogOut is a class which is used for setting the voltage on a pin. We will show you where the PA_4 at the B_L4S5I_IOT01A is.</p>
+<div class="highlight"><pre><span></span><span class="n">AnalogOut</span> <span class="nf">Aout</span><span class="p">(</span><span class="n">PA_4</span><span class="p">);</span>
+</pre></div>
+<img alt="B_L4S5I_IOT01A PA_4" src="labs/img/Analog_Output/PA_4.jpg" />
+</li>
+<li><p class="first">Compile and run the program</p>
+</li>
+<li><p class="first">Start the picoscope app</p>
+</li>
+<li><p class="first">Select &quot;input range A&quot; as +-5 and collection time as 1 s/div</p>
+</li>
+<li><p class="first">The voltage will shows on the <a class="reference external" href="labs/img/Analog_Output/2_1_5.png">monitor</a>.</p>
+</li>
+<li><p class="first">Screenshot your result of picoscope.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="generate-a-sawtooth-waveform">
+<h3><a class="toc-backref" href="#id8">4.4&nbsp;&nbsp;&nbsp;Generate a sawtooth waveform</a></h3>
+<div class="warning docutils container">
+Since this circuit is as same as the previous circuit, there's no need to turn off the PicoScope and unplug B_L4S5I_IOT01A.</div>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>3_2_Sawtooth_Waveform</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="c1">// Initialize a pins to perform analog and digital output functions</span>
+<span class="lineno"> 4 </span><span class="c1">// Adjust analog output pin name to your board spec.</span>
+<span class="lineno"> 5 </span><span class="n">AnalogOut</span>  <span class="nf">aout</span><span class="p">(</span><span class="n">PA_4</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">DigitalOut</span> <span class="nf">dout</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">11 </span>      <span class="c1">// change the voltage on the digital output pin by 0.1 * VCC</span>
+<span class="lineno">12 </span>      <span class="c1">//  and print what the measured voltage should be (assuming VCC = 3.3v)</span>
+<span class="lineno">13 </span>      <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">i</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mf">1.0f</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mf">0.1f</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">14 </span>            <span class="n">aout</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+<span class="lineno">15 </span>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;aout = %f volts</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">aout</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">*</span> <span class="mf">3.3f</span><span class="p">);</span>
+<span class="lineno">16 </span>            <span class="c1">// turn on the led if the voltage is greater than 0.5f * VCC</span>
+<span class="lineno">17 </span>            <span class="n">dout</span> <span class="o">=</span> <span class="p">(</span><span class="n">aout</span> <span class="o">&gt;</span> <span class="mf">0.5f</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">18 </span>            <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">19 </span>      <span class="p">}</span>
+<span class="lineno">20 </span>   <span class="p">}</span>
+<span class="lineno">21 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program</p>
+</li>
+<li><p class="first">Switch to the picoscope application</p>
+<p>If you already left picoscope application, please start it again.</p>
+</li>
+<li><p class="first">Select collection time as 5 s/div</p>
+</li>
+<li><p class="first">Using the probe with picoscope to measure the voltage at <span class="hl">PA_4</span>.</p>
+</li>
+<li><p class="first">The voltage will shows on the <a class="reference external" href="labs/img/Analog_Output/2_2_Sawtooth_Waveform_wave.jpg">monitor</a>.</p>
+</li>
+<li><p class="first">Screenshot your result of picoscope.</p>
+</li>
+<li><p class="first">The Output terminal will show the Mbed printf output.</p>
+</li>
+<li><p class="first">Screenshot your result on the Output terminal.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="generate-a-sine-waveform">
+<h3><a class="toc-backref" href="#id9">4.5&nbsp;&nbsp;&nbsp;Generate a sine waveform</a></h3>
+<div class="warning docutils container">
+Since this circuit is as same as the previous circuit, there's no need to turn off the PicoScope and unplug B_L4S5I_IOT01A.</div>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>3_3_Sine_Waveform</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="k">const</span> <span class="kt">double</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.141592653589793238462</span><span class="p">;</span>
+<span class="lineno"> 4 </span><span class="k">const</span> <span class="kt">double</span> <span class="n">amplitude</span> <span class="o">=</span> <span class="mf">0.5f</span><span class="p">;</span>
+<span class="lineno"> 5 </span><span class="k">const</span> <span class="kt">double</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">65535</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="c1">// The sinewave is created on this pin</span>
+<span class="lineno"> 8 </span><span class="c1">// Adjust analog output pin name to your board spec.</span>
+<span class="lineno"> 9 </span><span class="n">AnalogOut</span> <span class="nf">aout</span><span class="p">(</span><span class="n">PA_4</span><span class="p">);</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">12 </span><span class="p">{</span>
+<span class="lineno">13 </span>   <span class="kt">double</span> <span class="n">rads</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="lineno">14 </span>   <span class="kt">uint16_t</span> <span class="n">sample</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">17 </span>      <span class="c1">// sinewave output</span>
+<span class="lineno">18 </span>      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">360</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">19 </span>            <span class="n">rads</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="mf">180.0f</span><span class="p">;</span>
+<span class="lineno">20 </span>            <span class="n">sample</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint16_t</span><span class="p">)(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="p">(</span><span class="n">offset</span> <span class="o">*</span> <span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">rads</span> <span class="o">+</span> <span class="n">pi</span><span class="p">)))</span> <span class="o">+</span> <span class="n">offset</span><span class="p">);</span>
+<span class="lineno">21 </span>            <span class="n">aout</span><span class="p">.</span><span class="n">write_u16</span><span class="p">(</span><span class="n">sample</span><span class="p">);</span>
+<span class="lineno">22 </span>      <span class="p">}</span>
+<span class="lineno">23 </span>   <span class="p">}</span>
+<span class="lineno">24 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program</p>
+</li>
+<li><p class="first">Switch to the picoscope application</p>
+</li>
+<li><p class="first">Using the probe with picoscope to measure the voltage at <span class="hl">PA_4</span>.</p>
+</li>
+<li><p class="first">Select collection time as 20 ms/div</p>
+</li>
+<li><p class="first">The waveform will shows on the <a class="reference external" href="labs/img/Analog_Output/2_3_Sine_Waveform_wave.jpg">monitor</a>.</p>
+</li>
+<li><p class="first">Screenshot your result of picoscope.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="mbed-pwm-output">
+<h3><a class="toc-backref" href="#id10">4.6&nbsp;&nbsp;&nbsp;mbed PWM Output</a></h3>
+<ol class="arabic">
+<li><p class="first">We will measure a different pinout, so please unplug B_L4S5I_IOT01A and probe D13 pin.</p>
+<p>Make sure the selected pin can support PWM. Please refer to <a class="reference external" href="labs/img/Mbed_Intro/B_L4S5I_IOT01A_pinmap.jpg">Pinmap</a> of B_L4S5I_IOT01A on PWM signals.</p>
+<p>Using the probe with picoscope to measure the voltage at <a class="reference external" href="labs/img/Analog_Output/lab2_PWM_D13.jpg">D13</a>.</p>
+<img alt="Wiring for PicoScope probe" src="labs/img/Analog_Output/B_L4S5I_IOT01A_pico_probe_D13_new.jpg" />
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>3_4_PWM_Ouput</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="c1">// Adjust pin name to your board specification.</span>
+<span class="lineno"> 4 </span><span class="c1">// You can use LED1/LED2/LED3/LED4 if any is connected to PWM capable pin,</span>
+<span class="lineno"> 5 </span><span class="c1">// or use any PWM capable pin, and see generated signal on logical analyzer.</span>
+<span class="lineno"> 6 </span><span class="n">PwmOut</span> <span class="nf">led</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>   <span class="c1">// specify period first</span>
+<span class="lineno">11 </span>   <span class="n">led</span><span class="p">.</span><span class="n">period_ms</span><span class="p">(</span><span class="mi">4000</span><span class="p">);</span>         <span class="c1">// 4 second period</span>
+<span class="lineno">12 </span>   <span class="n">led</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mf">0.50f</span><span class="p">);</span>            <span class="c1">// 50% duty cycle, relative to period</span>
+<span class="lineno">13 </span>   <span class="c1">//led = 0.5f;                // shorthand for led.write()</span>
+<span class="lineno">14 </span>   <span class="c1">//led.pulsewidth_ms(2000);   // alternative to led.write, set duty cycle time in milliseconds</span>
+<span class="lineno">15 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">16 </span><span class="p">}</span>
+</pre></div>
+<p>PWMOut is a class which generates a pulse-width modulation digital output. This is the PWM  <a class="reference external" href="labs/img/Analog_Output/lab2_PWM_D13.jpg">pinout</a> which we use.</p>
+<div class="highlight"><pre><span></span><span class="n">PwmOut</span> <span class="nf">led</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program</p>
+</li>
+<li><p class="first">Switch to the picoscope application</p>
+</li>
+<li><p class="first">Using the probe with picoscope to measure the voltage at <span class="hl">D13</span>.</p>
+</li>
+<li><p class="first">The waveform will shows on the <a class="reference external" href="labs/img/Analog_Output/2_4_PWM_Ouput_wave.jpg">monitor</a>.</p>
+</li>
+<li><p class="first">Screenshot your result of picoscope.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id11">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Show the waveform results above.</li>
+<li>Show your git remote repository.</li>
+<li>How to find analog output pins and PWM pins from <a class="reference external" href="labs/img/Mbed_Intro/B_L4S5I_IOT01A_pinmap.jpg">Pinmap</a>?</li>
+</ol>
+</div>
+<div class="section" id="reference-list">
+<h2><a class="toc-backref" href="#id12">6&nbsp;&nbsp;&nbsp;Reference List</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://os.mbed.com/platforms/B-L4S5I-IOT01A/">B_L4S5I_IOT01A introduction</a></li>
+<li><a class="reference external" href="https://developer.mbed.org/handbook/AnalogOut">Analog output introduction of mbed</a></li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

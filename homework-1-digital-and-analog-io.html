@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>Homework 1 Digital and Analog I/O</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/homework-1-digital-and-analog-io.html" rel="bookmark"
+                   title="Permalink to Homework 1 Digital and Analog I/O">Homework 1 Digital and Analog I/O</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-03-09T15:00:00+08:00">
+                Mar 09, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script><div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#prerequisites" id="id1">1&nbsp;&nbsp;&nbsp;Prerequisites</a></li>
+<li><a class="reference internal" href="#submission" id="id2">2&nbsp;&nbsp;&nbsp;Submission</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#homework-description" id="id4">4&nbsp;&nbsp;&nbsp;Homework Description</a></li>
+</ul>
+</div>
+<p>Update 1 (3/6/2022): Add texts to list the compared signals.
+Update 2 (3/8/2022): Add texts to explain the DAC/ADC operations in the same loop.</p>
+<div class="section" id="prerequisites">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Prerequisites</a></h2>
+<ol class="arabic simple">
+<li><strong>mbed Lab 2 Digital Input and Output</strong></li>
+<li><strong>mbed Lab 3 Analog Output</strong></li>
+<li><strong>mbed Lab 4 Analog Input</strong></li>
+</ol>
+</div>
+<div class="section" id="submission">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Submission</a></h2>
+<ol class="arabic simple">
+<li>Due date: noon, March 9, 2022</li>
+<li>Please create your own hw1 github repo.</li>
+<li>Please push all your codes and README to your hw1 github repo, and submit the report in pdf to eeclass.<ul>
+<li>The Readme file should explain: (1) how to setup and run your program (2) what are the results</li>
+<li>The pdf is a record and explanation of your codes (don't print out codes).
+You may include the following contents (but not limited to):
+(1) implementation (data structure and algorithm) in each part (2) Results and validation of each step
+(3) Encountered issues (4) Discussion</li>
+</ul>
+</li>
+<li><strong>Please demo your homework and explain how it works before 6:20pm on March 9.</strong></li>
+</ol>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B_L4S5I_IOT01A</li>
+<li>Bread board</li>
+<li>Buttons * 3</li>
+<li>Picoscope</li>
+<li>Wires * 20</li>
+<li>Resistor and Capacitor</li>
+</ol>
+</div>
+<div class="section" id="homework-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Homework Description</a></h2>
+<ul>
+<li><p class="first">In this assignment, you will need to do the following:</p>
+<ol class="arabic simple">
+<li>(<strong>Inputs</strong>) Add buttons on the bread board (as DigitalIn): up, down and select.</li>
+<li>(<strong>Display</strong>) Print selection with printf and select from a few frequencies by your choice, e.g., 100Hz, 200Hz, etc.</li>
+<li>(<strong>Generate waveform</strong>) Use DAC to generate a wave form with the chosen frequency and pass the generated signal through a RC low pass filter.</li>
+<li>(<strong>Measure</strong>) Use Picoscope to measure the generated wave form.</li>
+<li>(<strong>Sample</strong>) Sample the generated wave form and send the value to PC/Python.</li>
+<li>(<strong>Analysis</strong>) Analyze the captured waveform: show frequency response and wave on screen with Matplotlib.</li>
+</ol>
+</li>
+<li><p class="first">Detailed parts for this homework</p>
+<ol class="arabic">
+<li><p class="first">(<strong>Inputs</strong>) Add 3 buttons to mbed.</p>
+<ol class="arabic">
+<li><p class="first">Plugin 3 buttons and wire to mbed:</p>
+<img alt="hw1 input circuit" src="homework/img/HW2_3buttons.png" />
+</li>
+<li><p class="first">As shown in the diagram, for each button, we connect a resistor in series with a button
+(the resistor is for pulldown use. Several hundreds Ohm or above will work.)</p>
+</li>
+<li><p class="first">The function of the two Up and Down buttons are to display a current selection with printf</p>
+</li>
+<li><p class="first">The function of the Confirm button is to confirm a selection of a frequency</p>
+</li>
+<li><p class="first">Once the frequency is selected, we execute the following waveform generation without going back to selection again.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">(<strong>Generate waveform</strong>) Use DAC to generate a wave form</p>
+<ol class="arabic">
+<li><p class="first">Once user confirm the frequency selection, please generate continously a waveform with the frequency with DAC output.</p>
+</li>
+<li><p class="first">The signal is also pass through a RC-based low-pass filter (<a class="reference external" href="https://www.electronics-tutorials.ws/filter/filter_2.html">https://www.electronics-tutorials.ws/filter/filter_2.html</a>).
+Note that the RC selection should match the frequency range in the menu. At least one frequency choice should be at cut-off frequency (Formula is in the website above).
+Therefore, it is suggested that you design a RC filter first and then the frequency choices.</p>
+</li>
+<li><p class="first">Waveform specification before RC fliters should follow the rules:</p>
+<ol class="arabic">
+<li><p class="first">The waveform is a form of trapezoidal signal. The signal peaks at 3V (the reference voltage of DAC).</p>
+</li>
+<li><p class="first">Each student will use LSB 2 digits of student ID to select a specific trapezoidal waveform.</p>
+<p>Assume the LSB digits are d0 and d1, and d0&lt;d1, and they are converted to ratios r0=d0/10 and r1=d1/10.
+The trapezoidal waveform start at 0V at the beginning of a period. It will grow linearly to reach peak at r0% of the period.
+Then it stays at peak till r1% of the period is reached. And it decreases linearly to reach 0V at the end of the period.</p>
+<p>Please adjust the d0 and d1 according to the following conditions if necessary:</p>
+<ol class="arabic simple">
+<li>If d0==0, d0=d0+1.</li>
+<li>If d0==d1, choose either d0=d0-1 or d1=d1+1.</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p class="first">(<strong>Measure</strong>) Picoscope.</p>
+<ol class="arabic simple">
+<li>Please use Picoscope to measure the above waveform and confirm the frequency (both before and after the RC fliter).</li>
+</ol>
+</li>
+<li><p class="first">(<strong>Sample</strong>) Sample the generated waveform</p>
+<ol class="arabic simple">
+<li>Please use ADC on mbed to sample the above waveform (both before and after the RC filter).</li>
+<li>Send both waveform data to PC.</li>
+<li>It is important to note that we perform both DAC and ADC in the same loop. Therefore, they both operations will loop in
+the same time duration. However, in each loop we can perform more DAC or more ADC operations. For example, in the loop,
+we run two DAC and one ADC. Then the sample rates of DAC are twice as ADC. Note that sleep_for() should be adjusted to
+increase or decrease the actual sampling frequency. And the corresponding sampling frequency in FFT.py should also be changed.</li>
+</ol>
+</li>
+<li><p class="first">(<strong>Analysis 1</strong>) Python program</p>
+<ol class="arabic">
+<li><p class="first">Please write a Python program in PC to get the waveform values.</p>
+</li>
+<li><p class="first">Plot the waveform and the FFT spectrum of the waveform in the same plot with Python in PC
+before and after RC filter.</p>
+</li>
+<li><p class="first">One waveform result would be like this: <a class="reference external" href="homework/img/HW2_result_FFT.png">1hz_waveform</a></p>
+<p>Your frequency response will probably not be the same as example above.</p>
+</li>
+<li><p class="first">Please compare the frequency and waveform with those measured by Picoscope before and after RC filter.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">(<strong>Analysis 2</strong>) Python program</p>
+<ol class="arabic simple">
+<li>Please use Python to implement a simple digital low pass filter.
+Please check <a class="reference external" href="https://dobrian.github.io/cmp/topics/filters/lowpassfilter.html">https://dobrian.github.io/cmp/topics/filters/lowpassfilter.html</a>
+for a simple filter design.</li>
+<li>Please also compare the the frequency and waveform produced by your digital filter
+with previous results.</li>
+<li>In summary (Analysis 1 and 2), there are two signal points we measure
+with ADC (and Picoscope) on board: before and after RC filter. We can use Picoscope
+to verify ADC results (in Analysis 1).  We will also perform a digital
+filter on the measured waveform before RC filter.  If it works
+correctly with mbed ADC/Python by comparing with Picoscope, we then
+compare the results of Python analysis of digital filter on waveform
+before RC filter with waveform before RC filter and after RC filter.</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

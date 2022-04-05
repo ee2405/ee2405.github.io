@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 5 Liquid Crystal Displays</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-5-liquid-crystal-displays.html" rel="bookmark"
+                   title="Permalink to mbed Lab 5 Liquid Crystal Displays">mbed Lab 5 Liquid Crystal Displays</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-03-09T15:00:00+08:00">
+                Mar 09, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id2">2&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id3">3&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id4">3.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#lcd-qc1602a-with-hd44780-interface" id="id5">3.2&nbsp;&nbsp;&nbsp;LCD QC1602A with HD44780 interface</a><ul class="auto-toc">
+<li><a class="reference internal" href="#build-your-own-lcd-library" id="id6">3.2.1&nbsp;&nbsp;&nbsp;Build your own LCD library</a></li>
+<li><a class="reference internal" href="#import-textlcd-library" id="id7">3.2.2&nbsp;&nbsp;&nbsp;Import &quot;textLCD&quot; library</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#color-lcd-display-ulcd-144g2-ar" id="id8">3.3&nbsp;&nbsp;&nbsp;Color LCD display - uLCD-144G2-AR</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id9">4&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>How to display texts with LCD QC1602A in HD44780 interface</li>
+<li>How to display graphics with uLCD-144G2-AR</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>Mar. 9, 2022</strong></p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B_L4S5I_IOT01A * 1</li>
+<li>Breadboard * 1</li>
+<li>LCD QC1602A * 1</li>
+<li>uLCD 144G2 AR * 1</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id4">3.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 6: Liquid Crystal Displays <a class="reference external" href="notes/ch6_lcd.pdf">ch6_lcd.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="lcd-qc1602a-with-hd44780-interface">
+<h3><a class="toc-backref" href="#id5">3.2&nbsp;&nbsp;&nbsp;LCD QC1602A with HD44780 interface</a></h3>
+<div class="instruct docutils container">
+In this section, we explore two methods to control QC1602A: (1) we build our
+own LCD library; and (2) we use an online library.  The first method creates
+a custom libary, so we have the flexbility to change and extend the libary
+to better fit our purpose. In the second method, the existing libary makes
+it easier for regular user of the LCD.  Still we can learn from the
+interface design from this pre-built library.</div>
+<div class="warning docutils container">
+For all the following, please unplug B_L4S5I_IOT01A from power while wiring
+circuits.</div>
+<ol class="arabic">
+<li><p class="first">Connect your LCD to mbed as the following picture. <a class="reference external" href="labs/img/LCD/Lab4_LCD.png">picture</a></p>
+<div class="warning docutils container">
+<p><strong>Be careful about pin connections. Double check before you turn on the power.</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">LCD</th>
+<th class="head">mbed</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>VSS</td>
+<td>GND</td>
+</tr>
+<tr><td>VDD</td>
+<td>5V</td>
+</tr>
+<tr><td>vo</td>
+<td>GND</td>
+</tr>
+<tr><td>RS</td>
+<td>D2</td>
+</tr>
+<tr><td>R/W</td>
+<td>GND</td>
+</tr>
+<tr><td>E</td>
+<td>D3</td>
+</tr>
+<tr><td>DB0</td>
+<td>X</td>
+</tr>
+<tr><td>DB1</td>
+<td>X</td>
+</tr>
+<tr><td>DB2</td>
+<td>X</td>
+</tr>
+<tr><td>DB3</td>
+<td>X</td>
+</tr>
+<tr><td>DB4</td>
+<td>D4</td>
+</tr>
+<tr><td>DB5</td>
+<td>D5</td>
+</tr>
+<tr><td>DB6</td>
+<td>D6</td>
+</tr>
+<tr><td>DB7</td>
+<td>D7</td>
+</tr>
+<tr><td>A</td>
+<td>5V</td>
+</tr>
+<tr><td>K</td>
+<td>GND</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+<div class="section" id="build-your-own-lcd-library">
+<h4><a class="toc-backref" href="#id6">3.2.1&nbsp;&nbsp;&nbsp;Build your own LCD library</a></h4>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>5_1_LCD_QC1602A</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;LCD.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 4 </span><span class="p">{</span>
+<span class="lineno"> 5 </span>      <span class="n">LCD_init</span><span class="p">();</span>                     <span class="c1">// call the initialise function</span>
+<span class="lineno"> 6 </span>      <span class="n">display_to_LCD</span><span class="p">(</span><span class="mh">0x48</span><span class="p">);</span>           <span class="c1">// ‘H’</span>
+<span class="lineno"> 7 </span>      <span class="n">display_to_LCD</span><span class="p">(</span><span class="mh">0x45</span><span class="p">);</span>           <span class="c1">// ‘E’</span>
+<span class="lineno"> 8 </span>      <span class="n">display_to_LCD</span><span class="p">(</span><span class="mh">0x4C</span><span class="p">);</span>           <span class="c1">// ‘L’</span>
+<span class="lineno"> 9 </span>      <span class="n">display_to_LCD</span><span class="p">(</span><span class="mh">0x4C</span><span class="p">);</span>           <span class="c1">// ‘L’</span>
+<span class="lineno">10 </span>      <span class="n">display_to_LCD</span><span class="p">(</span><span class="mh">0x4F</span><span class="p">);</span>           <span class="c1">// ‘O’</span>
+<span class="lineno">11 </span>      <span class="k">for</span><span class="p">(</span><span class="kt">char</span> <span class="n">x</span><span class="o">=</span><span class="mh">0x30</span><span class="p">;</span><span class="n">x</span><span class="o">&lt;=</span><span class="mh">0x39</span><span class="p">;</span><span class="n">x</span><span class="o">++</span><span class="p">)</span>
+<span class="lineno">12 </span>      <span class="p">{</span>
+<span class="lineno">13 </span>            <span class="n">display_to_LCD</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>      <span class="c1">// display numbers 0-9</span>
+<span class="lineno">14 </span>      <span class="p">}</span>
+<span class="lineno">15 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Add a LCD.h under 5_1_LCD_QC1602A. And enter the following source code in LCD.h.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#ifndef LCD_H</span>
+<span class="lineno"> 2 </span><span class="cp">#define LCD_H</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="kt">void</span> <span class="nf">toggle_enable</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>        <span class="c1">//function to toggle/pulse the enable bit</span>
+<span class="lineno"> 7 </span><span class="kt">void</span> <span class="nf">LCD_init</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>             <span class="c1">//function to initialise the LCD</span>
+<span class="lineno"> 8 </span><span class="kt">void</span> <span class="nf">display_to_LCD</span><span class="p">(</span><span class="kt">char</span> <span class="n">value</span><span class="p">);</span> <span class="c1">//function to display characters</span>
+<span class="lineno"> 9 </span><span class="kt">void</span> <span class="nf">set_location</span><span class="p">(</span><span class="kt">char</span> <span class="n">location</span><span class="p">);</span><span class="c1">//function to set display location</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="cp">#endif</span>
+</pre></div>
+</li>
+<li><p class="first">Add a LCD.cpp under 5_1_LCD_QC1602A. And enter the following source code in LCD.cpp.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;LCD.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">DigitalOut</span> <span class="nf">RS</span><span class="p">(</span><span class="n">D2</span><span class="p">);</span>            <span class="c1">//check out these pin numbers CAREFULLY!!!</span>
+<span class="lineno"> 4 </span><span class="n">DigitalOut</span> <span class="nf">E</span><span class="p">(</span><span class="n">D3</span><span class="p">);</span>
+<span class="lineno"> 5 </span><span class="n">BusOut</span> <span class="nf">data</span><span class="p">(</span><span class="n">D4</span><span class="p">,</span><span class="n">D5</span><span class="p">,</span><span class="n">D6</span><span class="p">,</span><span class="n">D7</span><span class="p">);</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kt">void</span> <span class="nf">toggle_enable</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="lineno"> 8 </span><span class="p">{</span>
+<span class="lineno"> 9 </span>      <span class="n">E</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<span class="lineno">10 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">11 </span>      <span class="n">E</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="lineno">12 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">13 </span><span class="p">}</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span><span class="c1">//initialise LCD function</span>
+<span class="lineno">16 </span><span class="kt">void</span> <span class="nf">LCD_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="lineno">17 </span><span class="p">{</span>
+<span class="lineno">18 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">20</span><span class="n">ms</span><span class="p">);</span>             <span class="c1">// pause for 20 ms</span>
+<span class="lineno">19 </span>      <span class="n">RS</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>                   <span class="c1">// set low to write control data</span>
+<span class="lineno">20 </span>      <span class="n">E</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>                    <span class="c1">// set low</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span>      <span class="c1">//function mode</span>
+<span class="lineno">23 </span>      <span class="n">data</span><span class="o">=</span><span class="mh">0x2</span><span class="p">;</span>               <span class="c1">// 4 bit mode (data packet 1, DB4-DB7)</span>
+<span class="lineno">24 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">25 </span>      <span class="n">data</span><span class="o">=</span><span class="mh">0x8</span><span class="p">;</span>               <span class="c1">// 2-line, 7 dot char (data packet 2, DB0-DB3)</span>
+<span class="lineno">26 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">27 </span>      <span class="c1">//display mode</span>
+<span class="lineno">28 </span>      <span class="n">data</span><span class="o">=</span><span class="mh">0x0</span><span class="p">;</span>               <span class="c1">// 4 bit mode (data packet 1, DB4-DB7)</span>
+<span class="lineno">29 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">30 </span>      <span class="n">data</span><span class="o">=</span><span class="mh">0xF</span><span class="p">;</span>               <span class="c1">// display on, cursor on, blink on</span>
+<span class="lineno">31 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">32 </span>
+<span class="lineno">33 </span>      <span class="c1">//clear display</span>
+<span class="lineno">34 </span>      <span class="n">data</span><span class="o">=</span><span class="mh">0x0</span><span class="p">;</span>
+<span class="lineno">35 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">36 </span>      <span class="n">data</span><span class="o">=</span><span class="mh">0x1</span><span class="p">;</span>               <span class="c1">// clear</span>
+<span class="lineno">37 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">38 </span><span class="p">}</span>
+<span class="lineno">39 </span>
+<span class="lineno">40 </span><span class="c1">//display function</span>
+<span class="lineno">41 </span><span class="kt">void</span> <span class="nf">display_to_LCD</span><span class="p">(</span><span class="kt">char</span> <span class="n">value</span><span class="p">)</span>
+<span class="lineno">42 </span><span class="p">{</span>
+<span class="lineno">43 </span>      <span class="n">RS</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>               <span class="c1">// set high to write character data</span>
+<span class="lineno">44 </span>      <span class="n">data</span><span class="o">=</span><span class="n">value</span><span class="o">&gt;&gt;</span><span class="mi">4</span><span class="p">;</span>      <span class="c1">// value shifted right 4 = upper nibble</span>
+<span class="lineno">45 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">46 </span>      <span class="n">data</span><span class="o">=</span><span class="n">value</span><span class="p">;</span>         <span class="c1">// value bitmask with 0x0F = lower nibble</span>
+<span class="lineno">47 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">48 </span><span class="p">}</span>
+<span class="lineno">49 </span>
+<span class="lineno">50 </span><span class="kt">void</span> <span class="nf">set_location</span><span class="p">(</span><span class="kt">char</span> <span class="n">location</span><span class="p">)</span>
+<span class="lineno">51 </span><span class="p">{</span>
+<span class="lineno">52 </span>      <span class="n">RS</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="lineno">53 </span>      <span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="n">location</span><span class="o">|</span><span class="mh">0x80</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">4</span><span class="p">;</span>        <span class="c1">// upper nibble</span>
+<span class="lineno">54 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">55 </span>      <span class="n">data</span><span class="o">=</span><span class="n">location</span><span class="o">&amp;</span><span class="mh">0x0F</span><span class="p">;</span>             <span class="c1">// lower nibble</span>
+<span class="lineno">56 </span>      <span class="n">toggle_enable</span><span class="p">();</span>
+<span class="lineno">57 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program</p>
+</li>
+<li><p class="first">Please record your results and push codes to GitHub.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="import-textlcd-library">
+<h4><a class="toc-backref" href="#id7">3.2.2&nbsp;&nbsp;&nbsp;Import &quot;textLCD&quot; library</a></h4>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>5_2_textLCD</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Add a library to the current project</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in <cite>https://gitlab.larc-nthu.net/ee2405_2021/textlcd.git</cite>
+And click &quot;Next&quot;</li>
+<li>Select &quot;Master&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Please run each of the following 3 example codes as <span class="file">main.cpp</span>.</p>
+<ol class="arabic">
+<li><p class="first">Example 1</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;TextLCD.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">TextLCD</span> <span class="nf">lcd</span><span class="p">(</span><span class="n">D2</span><span class="p">,</span> <span class="n">D3</span><span class="p">,</span> <span class="n">D4</span><span class="p">,</span> <span class="n">D5</span><span class="p">,</span> <span class="n">D6</span><span class="p">,</span> <span class="n">D7</span><span class="p">);</span> <span class="c1">// RS, E, DB4-DB7</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 7 </span><span class="p">{</span>
+<span class="lineno"> 8 </span>      <span class="n">lcd</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;HELLO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 9 </span>      <span class="k">for</span> <span class="p">(</span><span class="kt">char</span> <span class="n">x</span> <span class="o">=</span> <span class="mh">0x00</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mh">0x09</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span>
+<span class="lineno">10 </span>      <span class="p">{</span> <span class="c1">// display numbers 0-9</span>
+<span class="lineno">11 </span>            <span class="n">lcd</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%u&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="lineno">12 </span>      <span class="p">}</span>
+<span class="lineno">13 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Example 2</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;TextLCD.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">DigitalOut</span> <span class="nf">led</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>      <span class="c1">//LED1 = PA_5</span>
+<span class="lineno"> 5 </span><span class="n">TextLCD</span> <span class="nf">lcd</span><span class="p">(</span><span class="n">D2</span><span class="p">,</span> <span class="n">D3</span><span class="p">,</span> <span class="n">D4</span><span class="p">,</span> <span class="n">D5</span><span class="p">,</span> <span class="n">D6</span><span class="p">,</span> <span class="n">D7</span><span class="p">);</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 8 </span><span class="p">{</span>
+<span class="lineno"> 9 </span>      <span class="kt">int</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="lineno">10 </span>      <span class="n">lcd</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">11 </span>      <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+<span class="lineno">12 </span>      <span class="p">{</span>
+<span class="lineno">13 </span>            <span class="n">led</span> <span class="o">=</span> <span class="o">!</span><span class="n">led</span><span class="p">;</span>             <span class="c1">// toggle led</span>
+<span class="lineno">14 </span>            <span class="n">lcd</span><span class="p">.</span><span class="n">locate</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">15 </span>            <span class="n">lcd</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%5i&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>    <span class="c1">//counter display</span>
+<span class="lineno">16 </span>            <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">17 </span>            <span class="n">x</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">18 </span>      <span class="p">}</span>
+<span class="lineno">19 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Example 3
+In this example, please connect picoscope as a source to pin A0.
+Please do not power up the circuit, during wiring the circuit.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="c1">//Display ADC input data</span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span><span class="cp">#include</span> <span class="cpf">&quot;TextLCD.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">TextLCD</span> <span class="nf">lcd</span><span class="p">(</span><span class="n">D2</span><span class="p">,</span> <span class="n">D3</span><span class="p">,</span> <span class="n">D4</span><span class="p">,</span> <span class="n">D5</span><span class="p">,</span> <span class="n">D6</span><span class="p">,</span> <span class="n">D7</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">AnalogIn</span> <span class="nf">Ain</span><span class="p">(</span><span class="n">A0</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>      <span class="kt">float</span> <span class="n">percentage</span><span class="p">;</span>
+<span class="lineno">11 </span>      <span class="kt">int</span> <span class="n">D</span><span class="p">;</span>
+<span class="lineno">12 </span>      <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">13 </span>      <span class="p">{</span>
+<span class="lineno">14 </span>            <span class="n">percentage</span> <span class="o">=</span> <span class="n">Ain</span> <span class="o">*</span> <span class="mi">100</span><span class="p">;</span>
+<span class="lineno">15 </span>            <span class="n">D</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">percentage</span><span class="p">);</span>
+<span class="lineno">16 </span>            <span class="kt">float</span> <span class="n">B</span> <span class="o">=</span> <span class="n">percentage</span> <span class="o">-</span> <span class="n">D</span><span class="p">;</span>
+<span class="lineno">17 </span>            <span class="kt">int</span> <span class="n">C</span> <span class="o">=</span> <span class="n">B</span> <span class="o">*</span> <span class="mi">1000000</span><span class="p">;</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span>            <span class="n">lcd</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d.&quot;</span><span class="p">,</span> <span class="n">D</span><span class="p">);</span>
+<span class="lineno">20 </span>            <span class="n">lcd</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="n">C</span><span class="p">);</span>
+<span class="lineno">21 </span>            <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">250</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">22 </span>            <span class="n">lcd</span><span class="p">.</span><span class="n">cls</span><span class="p">();</span>
+<span class="lineno">23 </span>      <span class="p">}</span>
+<span class="lineno">24 </span><span class="p">}</span>
+</pre></div>
+</li>
+</ol>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the codes.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="color-lcd-display-ulcd-144g2-ar">
+<h3><a class="toc-backref" href="#id8">3.3&nbsp;&nbsp;&nbsp;Color LCD display - uLCD-144G2-AR</a></h3>
+<div class="instruct docutils container">
+<p>(From 4D Systems): The uLCD-144G2 display module is compact and cost
+effective and features a 1.44” LCD TFT screen. Driven by the GOLDELOX
+processor, the uLCD-144G2 is the compact display solution for
+any application requiring a small embedded screen.</p>
+<ul class="simple">
+<li>128xRGBx128 resolution, 65K true to life colours, LCD-TFT screen.</li>
+<li>1.44&quot; diagonal size, 43 x 31 x 6.4mm. Active Area: 25.5mm x 26.5mm.</li>
+<li>Easy 10 pin interface to any external device: 3.3Vout, IO2, GND, IO1, RESET, GND, RX, TX, +5V, 5V OUT.</li>
+<li>10K bytes of flash memory for user code storage and 510 bytes of RAM for user variables (255 x 16bit vars).</li>
+<li>1 x Asynchronous hardware serial port, TTL interface, with 300 baud to 600K baud.</li>
+<li>On-board micro-SD memory card adaptor for storing of icons, images, animations, etc.</li>
+</ul>
+</div>
+<ol class="arabic">
+<li><p class="first">Connect your LCD to mbed as the following <a class="reference external" href="labs/img/LCD/board_uLCD.jpg">picture</a> .</p>
+<div class="warning docutils container">
+<p><strong>Please be careful about pin connections. Double check before you turn on the power.</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">LCD</th>
+<th class="head">mbed</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>+5V</td>
+<td>5V</td>
+</tr>
+<tr><td>TX</td>
+<td>D1</td>
+</tr>
+<tr><td>RX</td>
+<td>D0</td>
+</tr>
+<tr><td>GND</td>
+<td>GND</td>
+</tr>
+<tr><td>RES</td>
+<td>D2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li><p class="first">Go to <a class="reference external" href="https://developer.mbed.org/users/4180_1/notebook/ulcd-144-g2-128-by-128-color-lcd/">the link</a> and read the web page carefully.</p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>5_3_uLCD</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Add &quot;4DGL-uLCD-SE&quot; library to the current project</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in <cite>https://gitlab.larc-nthu.net/ee2405_2021/4dgl-ulcd-se.git</cite>
+And click &quot;Next&quot;</li>
+<li>Select &quot;Master&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;uLCD_4DGL.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">uLCD_4DGL</span> <span class="nf">uLCD</span><span class="p">(</span><span class="n">D1</span><span class="p">,</span> <span class="n">D0</span><span class="p">,</span> <span class="n">D2</span><span class="p">);</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 7 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;uLCD printing...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 8 </span>  <span class="n">uLCD</span><span class="p">.</span><span class="n">color</span><span class="p">(</span><span class="n">WHITE</span><span class="p">);</span>
+<span class="lineno"> 9 </span>  <span class="n">uLCD</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">Hello uLCD World</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">10 </span>  <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">11 </span>  <span class="n">uLCD</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Counting down:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">12 </span>  <span class="n">uLCD</span><span class="p">.</span><span class="n">text_width</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span> <span class="c1">// 4X size text</span>
+<span class="lineno">13 </span>  <span class="n">uLCD</span><span class="p">.</span><span class="n">text_height</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="lineno">14 </span>  <span class="n">uLCD</span><span class="p">.</span><span class="n">color</span><span class="p">(</span><span class="n">RED</span><span class="p">);</span>
+<span class="lineno">15 </span>  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">16 </span>    <span class="n">uLCD</span><span class="p">.</span><span class="n">locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+<span class="lineno">17 </span>    <span class="n">uLCD</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%2d&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+<span class="lineno">18 </span>    <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1000</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">19 </span>  <span class="p">}</span>
+<span class="lineno">20 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">21 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo</p>
+</li>
+<li><p class="first">uLCD functions</p>
+<div class="instruct docutils container">
+<p>There are five types of commands set up by the library for easier control.
+Here we introduce some of them for your reference.</p>
+</div>
+<p>Please dive into <strong>uLCD_4DGL.h</strong> for more information of the programming interface (API).</p>
+<ol class="arabic">
+<li><p class="first">General functions</p>
+<ul>
+<li><p class="first"><strong>uLCD.cls()</strong> clears the entire screen using the background color.</p>
+</li>
+<li><p class="first"><strong>uLCD.reset()</strong> wipes the entire screen.</p>
+</li>
+<li><p class="first"><strong>uLCD.background_color(int color)</strong> changes the background color.</p>
+<p>Ex. uLCD.background_color(0xFFFFFF) // white</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Graphic functions</p>
+<p>These functions draws simple shapes.</p>
+<ul class="simple">
+<li><strong>uLCD.circle(int x , int y , int radius, int color)</strong></li>
+<li><strong>uLCD.triangle(int x1, int y1, int x2, int y2, int x3, int y3, int color)</strong></li>
+<li><strong>uLCD.line(int x1, int y1 , int x2, int y2, int color)</strong></li>
+</ul>
+</li>
+<li><p class="first">Text functions</p>
+<ul>
+<li><p class="first"><strong>uLCD.set_font(char mode)</strong>. ex. uLCD.set_font(FONT_7X8)</p>
+<p>This function set the size of the font(width=7, height=8).</p>
+</li>
+<li><p class="first"><strong>uLCD.locate(char col, char row)</strong>. ex. uLCD.locate(0, 0)</p>
+<p>This function sets the location of the cursor. Then we can put our text anywhere we want to.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Media</p>
+<p>This type of command is for displaying video or image from SD card. If you are interested in doing so, please go to <a class="reference external" href="https://developer.mbed.org/users/4180_1/notebook/ulcd-144-g2-128-by-128-color-lcd/">the link</a> and scroll to the buttom part for complete tutorial.</p>
+</li>
+<li><p class="first">Screen data</p>
+<p>We can get LCD hardware information via this type of command.</p>
+<p>Ex. int a=uLCD.type;</p>
+</li>
+<li><p class="first">Text data</p>
+<p>We can get text information via this type of command.</p>
+<p>Ex. Get cursor location: char column=uLCD.current_col;</p>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id9">4&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Show your git remote repository.</li>
+<li>Show your student ID number and a 30 second count down on QC1602A.</li>
+<li>Show your student ID number in blue, a 30 second count down in green, and a white background on uLCD-144G2.</li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 1 Mbed Introduction</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-1-mbed-introduction.html" rel="bookmark"
+                   title="Permalink to mbed Lab 1 Mbed Introduction">mbed Lab 1 Mbed Introduction</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-02-23T15:00:00+08:00">
+                Feb 23, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id2">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id3">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id4">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id5">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id6">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#reference-website" id="id7">4.2&nbsp;&nbsp;&nbsp;Reference Website</a></li>
+<li><a class="reference internal" href="#revision-control-with-git" id="id8">4.3&nbsp;&nbsp;&nbsp;Revision Control with Git</a><ul class="auto-toc">
+<li><a class="reference internal" href="#sign-up-github-com-and-create-a-remote-repository" id="id9">4.3.1&nbsp;&nbsp;&nbsp;Sign Up github.com and Create a Remote Repository</a></li>
+<li><a class="reference internal" href="#add-course-github-as-a-collaborator" id="id10">4.3.2&nbsp;&nbsp;&nbsp;Add Course GitHub as a Collaborator</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setup-host-programming-tools" id="id11">4.4&nbsp;&nbsp;&nbsp;Setup Host Programming Tools</a><ul class="auto-toc">
+<li><a class="reference internal" href="#install-visual-studio-code" id="id12">4.4.1&nbsp;&nbsp;&nbsp;Install Visual Studio Code</a></li>
+<li><a class="reference internal" href="#install-c-c-compiler" id="id13">4.4.2&nbsp;&nbsp;&nbsp;Install C/C++ Compiler</a></li>
+<li><a class="reference internal" href="#git-in-vs-code" id="id14">4.4.3&nbsp;&nbsp;&nbsp;Git in VS Code</a></li>
+<li><a class="reference internal" href="#programming-with-python" id="id15">4.4.4&nbsp;&nbsp;&nbsp;Programming with Python</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#programming-with-mbed-studio" id="id16">4.5&nbsp;&nbsp;&nbsp;Programming with mbed Studio</a><ul class="auto-toc">
+<li><a class="reference internal" href="#install-git-desktop-tools" id="id17">4.5.1&nbsp;&nbsp;&nbsp;Install Git Desktop Tools</a></li>
+<li><a class="reference internal" href="#setup-ssh-key" id="id18">4.5.2&nbsp;&nbsp;&nbsp;Setup SSH Key</a></li>
+<li><a class="reference internal" href="#install-mbed-studio" id="id19">4.5.3&nbsp;&nbsp;&nbsp;Install mbed Studio</a></li>
+<li><a class="reference internal" href="#create-and-compile-a-mbed-progrem" id="id20">4.5.4&nbsp;&nbsp;&nbsp;Create and Compile a mbed progrem</a></li>
+<li><a class="reference internal" href="#push-source-code-to-github" id="id21">4.5.5&nbsp;&nbsp;&nbsp;Push source code to github</a></li>
+<li><a class="reference internal" href="#create-a-second-mbed-progrem" id="id22">4.5.6&nbsp;&nbsp;&nbsp;Create a second mbed progrem</a></li>
+<li><a class="reference internal" href="#debugging-mbed-programs" id="id23">4.5.7&nbsp;&nbsp;&nbsp;Debugging mbed Programs</a></li>
+<li><a class="reference internal" href="#create-a-third-mbed-progrem" id="id24">4.5.8&nbsp;&nbsp;&nbsp;Create a third mbed progrem</a></li>
+<li><a class="reference internal" href="#setup-mbed-os" id="id25">4.5.9&nbsp;&nbsp;&nbsp;Setup mbed OS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hardware-block-diagram-and-pinout" id="id26">4.6&nbsp;&nbsp;&nbsp;Hardware block diagram and Pinout</a><ul class="auto-toc">
+<li><a class="reference internal" href="#course-example-codes" id="id27">4.6.1&nbsp;&nbsp;&nbsp;Course Example Codes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id28">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>How to setup the Mbed programming environments</li>
+<li>Familiar with the STMicroelectronics Discovery kit for IoT node (B-L4S5I-IOT01A board)</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id2">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>Feb. 23, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id3">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>With the STMicroelectronics Discovery kit for IoT node, users develop applications
+with direct connection to cloud servers. The Discovery kit enables a wide
+diversity of applications by exploiting low-power communication, multiway
+sensing and Arm® Cortex®-M4 core-based STM32L4+ Series features. The support
+for ARDUINO® Uno V3 and Pmod™ connectivity provides unlimited expansion
+capabilities with a large choice of specialized add-on boards.</p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id4">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B-L4S5I-IOT01A * 1</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id5">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id6">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Introduction to Course <a class="reference external" href="notes/Course_Intro.pdf">Course_Intro.pdf</a></li>
+<li>Chapter 1: Embedded Systems and Microcontrollers <a class="reference external" href="notes/ch1_intro.pdf">ch1_intro.pdf</a></li>
+<li>Chapter 2: Introducing STM32L4 and mbed <a class="reference external" href="notes/ch2_STM32L4.pdf">ch2_STM32L4.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="reference-website">
+<h3><a class="toc-backref" href="#id7">4.2&nbsp;&nbsp;&nbsp;Reference Website</a></h3>
+<div class="instruct docutils container">
+<p>Please find details in the following website:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://os.mbed.com/platforms/B-L4S5I-IOT01A/">Mbed and B-L4S5I-IOT01A</a></li>
+<li><a class="reference external" href="https://os.mbed.com/docs/mbed-studio/current/introduction/index.html">ARM Mbed Studio Documentation</a></li>
+<li><a class="reference external" href="https://help.github.com/en/github/getting-started-with-github/quickstart">GitHub Quickstart</a></li>
+<li><a class="reference external" href="https://git-scm.com/book/en/v2">Pro Git book</a></li>
+</ol>
+</div>
+</div>
+<div class="section" id="revision-control-with-git">
+<h3><a class="toc-backref" href="#id8">4.3&nbsp;&nbsp;&nbsp;Revision Control with Git</a></h3>
+<div class="instruct docutils container">
+Git is an essential tool in a programming development. It is also a convenient way to
+sync source codes between different computers and developers.
+For example, you can write a code and push to a git server, which can be accessed
+in another computer by pulling the codes. This can be done with multiple programmers, too.
+You can also trace all the changes during your development.
+Please get familiar with Git in this course.
+You will need to push all your lab/homework/project to your github.com repo.</div>
+<div class="section" id="sign-up-github-com-and-create-a-remote-repository">
+<h4><a class="toc-backref" href="#id9">4.3.1&nbsp;&nbsp;&nbsp;Sign Up github.com and Create a Remote Repository</a></h4>
+<ol class="arabic">
+<li><p class="first">To start, you will need a git remote repository account.
+We recommend you to use <a class="reference external" href="https://github.com/">GitHub</a>.</p>
+<ol class="arabic simple">
+<li>Fill the sign up form and click on <span class="hl">Sign up for GitHub</span>.
+<a class="reference external" href="labs/img/Linux_Intro/github-signup-1.png">screenshot</a></li>
+<li>Verify that you are not robot and click on <span class="hl">Join a free plan</span>.
+<a class="reference external" href="labs/img/Linux_Intro/github-signup-2.png">screenshot</a></li>
+<li>Scroll down and click on <span class="hl">Skip this step</span>.
+<a class="reference external" href="labs/img/Linux_Intro/github-signup-3.png">screenshot</a></li>
+<li>After above steps, you will see
+<a class="reference external" href="labs/img/Linux_Intro/github-signup-4.png">screenshot</a>.</li>
+<li>Check your email inbox and click on <span class="hl">Verify email address</span> link.
+<a class="reference external" href="labs/img/Linux_Intro/github-signup-5.png">screenshot</a></li>
+</ol>
+</li>
+<li><p class="first">Create a remote repository.</p>
+<ol class="arabic">
+<li><p class="first">Go to <a class="reference external" href="https://github.com/">GitHub</a> and click on <span class="hl">New</span> button on
+the left of the website.
+<a class="reference external" href="labs/img/Linux_Intro/github-new-repo-1.png">screenshot</a></p>
+</li>
+<li><p class="first">Fill the repository name (e.g., mbed01), choose the repository to be private,
+and then click on <span class="hl">Create repository</span>.</p>
+</li>
+<li><p class="first">Click &quot;Code&quot; (a green button) and select &quot;SSH&quot; (under Clone).
+The repository link will show for copying.
+Copy the remote repository link <span class="hl">&lt;URL&gt;</span>:
+<span class="file">git:&#64;gitserver.com/&lt;username&gt;/&lt;repo-name&gt;.git</span>.</p>
+<p>For example, <span class="file">git&#64;github.com:ee2405/mbed01.git</span></p>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="add-course-github-as-a-collaborator">
+<h4><a class="toc-backref" href="#id10">4.3.2&nbsp;&nbsp;&nbsp;Add Course GitHub as a Collaborator</a></h4>
+<ol class="arabic simple">
+<li>Click &quot;Settings&quot; at top menu under your repo.</li>
+<li>Click &quot;Collaborators&quot; and &quot;Add people&quot;</li>
+<li>Please add &quot;ee2405&quot; to your collaborator, so TAs can check your git repo.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="setup-host-programming-tools">
+<h3><a class="toc-backref" href="#id11">4.4&nbsp;&nbsp;&nbsp;Setup Host Programming Tools</a></h3>
+<div class="instruct docutils container">
+In this section, we will install GCC, Python and VS Code
+for host programming.</div>
+<div class="section" id="install-visual-studio-code">
+<h4><a class="toc-backref" href="#id12">4.4.1&nbsp;&nbsp;&nbsp;Install Visual Studio Code</a></h4>
+<div class="instruct docutils container">
+<p>Visual Studio Code is a lightweight but powerful source code editor
+which runs on your desktop and is available for Windows, macOS and Linux.
+It comes with built-in support for JavaScript, TypeScript and Node.js
+and has a rich ecosystem of extensions for other languages
+(such as C++, C#, Java, Python, PHP, Go) and runtimes (such as .NET and Unity).</p>
+<p>VS Code tutorial can be found at <a class="reference external" href="https://code.visualstudio.com/docs/">https://code.visualstudio.com/docs/</a>.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Download and install VS Code</p>
+<p><a class="reference external" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
+</li>
+<li><p class="first">Run the VS Code, and install the C/C++ and Python extensions.
+(Done only once per installation)</p>
+<ol class="arabic simple">
+<li>Start VS Code</li>
+<li>Click the Extensions icon
+(<a class="reference external" href="labs/img/Linux_Intro/vscode_extension.png">Screenshot</a>) in the
+<span class="file">Activity Bar</span> on the side of VS Code to bring up the Extensions
+view.</li>
+<li>Type <span class="file">C/C++</span> to search the extension which publisher name is
+<span class="file">Microsoft</span> and click the green icon to install.</li>
+<li>Type <span class="file">Python</span> to search the extension which publisher name is
+<span class="file">Microsoft</span> and click the green icon to install.</li>
+<li>Quit VS Code when done.</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="install-c-c-compiler">
+<h4><a class="toc-backref" href="#id13">4.4.2&nbsp;&nbsp;&nbsp;Install C/C++ Compiler</a></h4>
+<p>For Windows, please follow <a class="reference external" href="https://code.visualstudio.com/docs/cpp/config-mingw">https://code.visualstudio.com/docs/cpp/config-mingw</a>
+We will also install MSYS2 environment (a Unix port) and use it as our main terminal application in Windows.</p>
+<p>For MAC OS, please follow <a class="reference external" href="https://code.visualstudio.com/docs/cpp/config-clang-mac">https://code.visualstudio.com/docs/cpp/config-clang-mac</a></p>
+<p>Please create a folder &quot;ee2405&quot; under your home directory. This will be your main course directory for host programming projects.
+Please create &quot;helloworld_cpp&quot; directory under &quot;ee2405&quot; (instead of using &quot;project&quot; folder in above tutorial).
+And the commands are:</p>
+<p>Please start a Terminal app.</p>
+<p><code class="cmd-host">$ cd ~</code></p>
+<p><code class="cmd-host">$ mkdir ee2405</code></p>
+<p><code class="cmd-host">$ cd ee2405</code></p>
+<p><code class="cmd-host">$ mkdir helloworld_cpp</code></p>
+<p><code class="cmd-host">$ cd helloworld_cpp</code></p>
+<p><code class="cmd-host">$ code .</code></p>
+<p>Please follow all steps until &quot;Step through the code&quot;.</p>
+</div>
+<div class="section" id="git-in-vs-code">
+<h4><a class="toc-backref" href="#id14">4.4.3&nbsp;&nbsp;&nbsp;Git in VS Code</a></h4>
+<ol class="arabic simple">
+<li>From menu, select SCM under View.</li>
+<li>Click the &quot;Publish to GitHub&quot;.
+Select &quot;Publish to GitHub private repository ee2405/helloworld_cpp&quot;.
+For the first github publish, VS Code will direct to your default browser and ask your permission to access github.com.
+After setting permission correctly in github.com, you will be prompted a file selection for pushing to the repo.
+Please select source codes and VS code setup files.
+After confirmation, you should see selected files in the repo.</li>
+</ol>
+</div>
+<div class="section" id="programming-with-python">
+<h4><a class="toc-backref" href="#id15">4.4.4&nbsp;&nbsp;&nbsp;Programming with Python</a></h4>
+<p>Please follow instructions on how to install and run Python3: <a class="reference external" href="https://code.visualstudio.com/docs/python/python-tutorial">https://code.visualstudio.com/docs/python/python-tutorial</a>
+Please create &quot;helloworld_py&quot; directory under &quot;ee2405&quot;.</p>
+<p>Please start a Terminal app.</p>
+<p><code class="cmd-host">$ cd ~</code>
+<code class="cmd-host">$ cd ee2405</code>
+<code class="cmd-host">$ mkdir helloworld_py</code>
+<code class="cmd-host">$ cd helloworld_py</code>
+<code class="cmd-host">$ code .</code></p>
+<ol class="arabic simple">
+<li>From menu, select SCM under View.</li>
+<li>Click the &quot;Publish to GitHub&quot;.
+Select &quot;Publish to GitHub private repository ee2405/helloworld_py&quot;.
+After setting permission correcly in github.com, you will be prompted a file selection for pushing to the repo.
+Please select source codes and VS code setup files.
+After confirmation, you should see selected files in the repo.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="programming-with-mbed-studio">
+<h3><a class="toc-backref" href="#id16">4.5&nbsp;&nbsp;&nbsp;Programming with mbed Studio</a></h3>
+<div class="section" id="install-git-desktop-tools">
+<h4><a class="toc-backref" href="#id17">4.5.1&nbsp;&nbsp;&nbsp;Install Git Desktop Tools</a></h4>
+<ol class="arabic">
+<li><p class="first">Follow instructions to install Git for your OS:</p>
+<p><a class="reference external" href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">https://git-scm.com/book/en/v2/Getting-Started-Installing-Git</a></p>
+</li>
+<li><p class="first">Open a terminal app.
+In Windows, please use &quot;Git Bash&quot; just installed by git Desktop.
+In Mac OS, you search and can use terminal app.</p>
+</li>
+<li><p class="first">Verify the installation and the version by running:</p>
+<p><code class="cmd-host">$ git --version</code></p>
+</li>
+<li><p class="first">Set git configuration values.</p>
+<p><code class="cmd-host">$ git config --global user.name &quot;your name&quot;</code></p>
+<p><code class="cmd-host">$ git config --global user.email &quot;your email&quot;</code></p>
+<p>Every Git commit will use the above information after these configurations.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="setup-ssh-key">
+<h4><a class="toc-backref" href="#id18">4.5.2&nbsp;&nbsp;&nbsp;Setup SSH Key</a></h4>
+<ol class="arabic">
+<li><p class="first">Follow instructions to setup SSH key</p>
+<p><a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent</a></p>
+</li>
+<li><p class="first">Open a terminal app.
+In Windows, please use &quot;Git Bash&quot; just installed by git Desktop.
+In Mac OS, you can search and use the terminal app.</p>
+</li>
+<li><p class="first">Paste the text below, substituting in your GitHub email address.</p>
+<p><code class="cmd-host">$ ssh-keygen -t ed25519 -C &quot;your_email&#64;example.com&quot;</code></p>
+<p>This will generate a public/private key pair for you.
+You will copy the public key to GitHub to enable your PC to link to GitHub.</p>
+<p>When you're prompted to &quot;Enter a file in which to save the key,&quot; press Enter. This accepts the default file location.</p>
+<blockquote>
+<p>&gt; Enter a file in which to save the key (/Users/you/.ssh/id_algorithm): [Press enter]</p>
+</blockquote>
+<p>At the prompt, type a secure passphrase (this is your password to use the private key). For more information, see &quot;Working with SSH key passphrases.&quot;</p>
+<blockquote>
+<p>&gt; Enter passphrase (empty for no passphrase): [Type a passphrase]
+&gt; Enter same passphrase again: [Type passphrase again]</p>
+</blockquote>
+</li>
+<li><p class="first">Adding your SSH key to the ssh-agent</p>
+<ol class="arabic">
+<li><p class="first">Start the ssh-agent in the background.</p>
+<p><code class="cmd-host">$ eval &quot;$(ssh-agent -s)&quot;</code></p>
+<blockquote>
+<p>&gt; Agent pid 59566</p>
+</blockquote>
+</li>
+<li><p class="first">Add your SSH private key to the ssh-agent.</p>
+<p><code class="cmd-host">$ ssh-add ~/.ssh/id_ed25519</code></p>
+</li>
+<li><p class="first">Add the SSH key to your account on GitHub. For more information, see <a class="reference external" href="https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account">&quot;Adding a new SSH key to your GitHub account.&quot;</a></p>
+</li>
+<li><p class="first">For MAC OS, please modify also <span class="file">~/.ssh/config</span> to include the following contents:</p>
+<p><code class="cmd-host">$ code -add ~/.ssh/config</code></p>
+<blockquote>
+<p>Host *
+AddKeysToAgent yes
+UseKeychain yes
+IdentityFile ~/.ssh/id_ed25519</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="install-mbed-studio">
+<h4><a class="toc-backref" href="#id19">4.5.3&nbsp;&nbsp;&nbsp;Install mbed Studio</a></h4>
+<div class="instruct docutils container">
+Mbed Studio is a free IDE for Mbed OS application and library development,
+including all the dependencies and tools you need in a single package so
+that you can create, compile and debug your Mbed programs on the desktop.</div>
+<ol class="arabic simple">
+<li>Create an account at mbed.com: <a class="reference external" href="https://os.mbed.com/account/login/">https://os.mbed.com/account/login/</a></li>
+<li>Download and install mbed Studio from <a class="reference external" href="https://os.mbed.com/studio/">https://os.mbed.com/studio/</a></li>
+</ol>
+</div>
+<div class="section" id="create-and-compile-a-mbed-progrem">
+<h4><a class="toc-backref" href="#id20">4.5.4&nbsp;&nbsp;&nbsp;Create and Compile a mbed progrem</a></h4>
+<ol class="arabic">
+<li><p class="first">Follow instructions to create and compile a mbed program: <a class="reference external" href="https://os.mbed.com/docs/mbed-studio/current/create-import/index.html">https://os.mbed.com/docs/mbed-studio/current/create-import/index.html</a></p>
+</li>
+<li><p class="first">Note that mbed Studio automatically creates <span class="file">~/MbedPrograms</span> folder to store all mbed programs.
+You may change it by <strong>File --&gt; Open Workspace....</strong>.</p>
+<div class="warning docutils container">
+<p>Mbed Studio automatically uses your user folder for <span class="file">~/MbedPrograms</span>.
+However, if your user folder uses Chinese characters (e.g., your user name),
+mbed Studio will not compile in the following.
+In such case, please create another folder and make sure the path names are without Chinese characters.
+Then you can use this new folder as the mbed Workspace by selecting <strong>File --&gt; Open Workspace....</strong>.
+This only has to be done for once. All following mbed programs will be created under the new folder.</p>
+</div>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select mbed-os-example-blinky under <strong>MBED OS 6</strong>
+Enter mbed01 for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Store Mbed OS in the program folder (+1GB)&quot;
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">The mbed-os-example-blinky project will be created.
+Please double-click on main.cpp to check its contents:</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">/* mbed Microcontroller Library</span>
+<span class="lineno"> 2 </span><span class="cm"> * Copyright (c) 2019 ARM Limited</span>
+<span class="lineno"> 3 </span><span class="cm"> * SPDX-License-Identifier: Apache-2.0</span>
+<span class="lineno"> 4 </span><span class="cm"> */</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="c1">// Blinking rate in milliseconds</span>
+<span class="lineno"> 9 </span><span class="cp">#define BLINKING_RATE     500ms</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">12 </span><span class="p">{</span>
+<span class="lineno">13 </span>    <span class="c1">// Initialise the digital pin LED1 as an output</span>
+<span class="lineno">14 </span>    <span class="n">DigitalOut</span> <span class="n">led</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span>    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">17 </span>       <span class="n">led</span> <span class="o">=</span> <span class="o">!</span><span class="n">led</span><span class="p">;</span>
+<span class="lineno">18 </span>       <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">BLINKING_RATE</span><span class="p">);</span>
+<span class="lineno">19 </span>    <span class="p">}</span>
+<span class="lineno">20 </span><span class="p">}</span>
+</pre></div>
+<div class="instruct docutils container">
+<p>ThisThread::sleep_for() will put the micro-controller into a low-power mode (not doing any computation).</p>
+<p>led.write(0) is the same as led=0. It will pull myled pin low.</p>
+</div>
+</li>
+<li><p class="first">Note that mbed-os / stores the current Mbed OS. We will reuse this copy of Mbed OS for other labs.</p>
+</li>
+<li><p class="first">Plugin the B_L4S5I_IOT01A mbed board to your PC.</p>
+<img alt="mbed board" src="labs/img/Mbed_Intro/board_top.jpg" />
+<p>The board should be automatically recognized as &quot;DISCO-L4S5I (B-L4S5I-IOT01A)</p>
+<p>Note: if the RED LED besides the micro USB port keeps blinking, it means you have used a USB power cable.
+Please change port of the cable or find a cable that support USB signals. You can also verify this that no &quot;DIS_L4S5VI&quot; folder
+is created by your O.S. like an external flash drive.</p>
+</li>
+<li><p class="first">Build and running the program</p>
+<p>Please follow instructions in <a class="reference external" href="https://os.mbed.com/docs/mbed-studio/current/building-running/index.html">https://os.mbed.com/docs/mbed-studio/current/building-running/index.html</a></p>
+<p>Click <strong>Run</strong> button to build and run the program.
+It will take a while to build Mbed OS first and then the example blinky program.</p>
+<blockquote>
+<div class="instruct docutils container">
+<p>In the <span class="file">BUILD/B_L4S5I_IOT01A/</span> folder, there is a mbed01.bin file which is the compiled program.
+You can copy the .bin file to DIS_L4S5VI folder to flash the program onto B_L4S5I_IOT01A.</p>
+</div>
+</blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="push-source-code-to-github">
+<h4><a class="toc-backref" href="#id21">4.5.5&nbsp;&nbsp;&nbsp;Push source code to github</a></h4>
+<ol class="arabic simple">
+<li>Follow instructions to link a mbed program to a github rep: <a class="reference external" href="https://os.mbed.com/docs/mbed-studio/current/source-control/index.html">https://os.mbed.com/docs/mbed-studio/current/source-control/index.html</a></li>
+<li>First we follow instructions in <a class="reference external" href="https://os.mbed.com/docs/mbed-studio/current/source-control/index.html#configuring-a-program-for-source-control-and-collaboration">https://os.mbed.com/docs/mbed-studio/current/source-control/index.html#configuring-a-program-for-source-control-and-collaboration</a>
+to configure the github for the program:<ol class="arabic">
+<li>Go to the Source Control view.</li>
+<li>Click the Set Remote URL button.
+The Set Remote URL dialog box opens.
+Enter a URL for your remote repository, for example: <a class="reference external" href="mailto:git&#64;github.com">git&#64;github.com</a>:ee2405/mbed01.git.</li>
+<li>Click Set Remote Repository.
+mbed Studio will ask you to login github to authenticate git operations.</li>
+</ol>
+</li>
+<li>Push the code to your git remote repository, and check your remote repository for new files.<ol class="arabic">
+<li>Add the main.cpp by clicking &quot;+&quot;.</li>
+<li>Enter a commit Message and commit by click &quot;V&quot;.</li>
+<li>Push your commit to the remote repository by clicking &quot;...&quot; and select &quot;Push&quot;.</li>
+<li>Start the web browser and go to github.com. Check if your main.cpp is uploaded to the remote repository.</li>
+</ol>
+</li>
+<li>If, for some reason, the above git operations do not work in mbed Studio,
+you may simply use &quot;Add file&quot; menu --&gt; &quot;Upload files&quot; at the repo. And select
+files you want to upload to github without mbed Studio or git tools.</li>
+</ol>
+</div>
+<div class="section" id="create-a-second-mbed-progrem">
+<h4><a class="toc-backref" href="#id22">4.5.6&nbsp;&nbsp;&nbsp;Create a second mbed progrem</a></h4>
+<p>We will use this example to show a multiple cpp project and
+also we use the existing Mbed OS from mbed01.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>mbed-os-test-program2</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Add copy the following source code into the main program <span class="file">main.cpp</span> under <span class="file">mbed-os-test-program2</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">DigitalOut</span> <span class="nf">myLED</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 4 </span><span class="n">DigitalOut</span> <span class="nf">myLED2</span><span class="p">(</span><span class="n">LED3</span><span class="p">);</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="kt">void</span> <span class="nf">Led</span><span class="p">(</span><span class="n">DigitalOut</span> <span class="o">&amp;</span><span class="n">ledpin</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno"> 9 </span><span class="p">{</span>
+<span class="lineno">10 </span>   <span class="n">myLED</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno">11 </span>   <span class="n">myLED2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno">12 </span>   <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+<span class="lineno">13 </span>   <span class="p">{</span>
+<span class="lineno">14 </span>      <span class="n">Led</span><span class="p">(</span><span class="n">myLED</span><span class="p">);</span>
+<span class="lineno">15 </span>      <span class="n">Led</span><span class="p">(</span><span class="n">myLED2</span><span class="p">);</span>
+<span class="lineno">16 </span>   <span class="p">}</span>
+<span class="lineno">17 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Add the following source code as another cpp source file <span class="file">led.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="kt">void</span> <span class="nf">Led</span><span class="p">(</span><span class="n">DigitalOut</span> <span class="o">&amp;</span><span class="n">ledpin</span><span class="p">)</span>
+<span class="lineno"> 4 </span><span class="p">{</span>
+<span class="lineno"> 5 </span>   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="lineno"> 6 </span>   <span class="p">{</span>                     <span class="c1">//blink for 10 times</span>
+<span class="lineno"> 7 </span>      <span class="n">ledpin</span> <span class="o">=</span> <span class="o">!</span><span class="n">ledpin</span><span class="p">;</span> <span class="c1">// toggle led</span>
+<span class="lineno"> 8 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno"> 9 </span>   <span class="p">}</span>
+<span class="lineno">10 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and test the program</p>
+<p>The LED will light green light five times. After that, the blue and orange light will light five times.
+And the above sequence will repeat until we unplug the board.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="debugging-mbed-programs">
+<h4><a class="toc-backref" href="#id23">4.5.7&nbsp;&nbsp;&nbsp;Debugging mbed Programs</a></h4>
+<p>Pyocd does NOT work with our mbed board currently. Do NOT proceed with your board in this part.
+There is no demo for this section.</p>
+<p><a class="reference external" href="https://os.mbed.com/docs/mbed-studio/current/monitor-debug/index.html">https://os.mbed.com/docs/mbed-studio/current/monitor-debug/index.html</a></p>
+</div>
+<div class="section" id="create-a-third-mbed-progrem">
+<h4><a class="toc-backref" href="#id24">4.5.8&nbsp;&nbsp;&nbsp;Create a third mbed progrem</a></h4>
+<p>We will use this example to show how to use printf for floating points.</p>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>mbed-os-test-program3</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;.</p>
+</li>
+<li><p class="first">Add copy the following source code into the main program <span class="file">main.cpp</span> under <span class="file">mbed-os-test-program3</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">/* mbed Microcontroller Library</span>
+<span class="lineno"> 2 </span><span class="cm"> * Copyright (c) 2019 ARM Limited</span>
+<span class="lineno"> 3 </span><span class="cm"> * SPDX-License-Identifier: Apache-2.0</span>
+<span class="lineno"> 4 </span><span class="cm"> */</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="c1">// Blinking rate in milliseconds</span>
+<span class="lineno">10 </span><span class="cp">#define BLINKING_RATE     1000ms</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="lineno">14 </span><span class="p">{</span>
+<span class="lineno">15 </span>    <span class="c1">// Initialise the digital pin LED1 as an output</span>
+<span class="lineno">16 </span>    <span class="n">DigitalOut</span> <span class="n">led</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="lineno">19 </span>        <span class="n">led</span> <span class="o">=</span> <span class="o">!</span><span class="n">led</span><span class="p">;</span>
+<span class="lineno">20 </span>        <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">BLINKING_RATE</span><span class="p">);</span>
+<span class="lineno">21 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%1.5f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="mf">3.14159</span><span class="p">);</span>
+<span class="lineno">22 </span>    <span class="p">}</span>
+<span class="lineno">23 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and test the program</p>
+<p>The LED will light green light 10 times. And there are printout in the &quot;Output&quot;. What are they?</p>
+</li>
+</ol>
+</div>
+<div class="section" id="setup-mbed-os">
+<h4><a class="toc-backref" href="#id25">4.5.9&nbsp;&nbsp;&nbsp;Setup mbed OS</a></h4>
+<ol class="arabic">
+<li><p class="first">Change the default printf library to &quot;std&quot;</p>
+<p>Please find <span class="file">~/Mbed Programs/mbed01/mbed-os/targets/targets.json</span>
+in the file browser and click to edit it.
+Search for &quot;printf_lib&quot;, and replace &quot;minimal-printf&quot; with &quot;std&quot;</p>
+<p>We will modify the application configuration file to override the parameter
+<span class="hl">printf_lib</span> with the value <span class="hl">std</span> (to replace &quot;minimal-printf&quot;). <a class="reference external" href="labs/img/Mbed_Intro/fixed_std_new.jpg">Screenshot</a>
+The purpose is to support floating point printf.</p>
+</li>
+<li><p class="first">Please find <span class="file">~/Mbed Programs/mbed01/mbed-os/platform/mbed_lib.json</span>
+Search and Set &quot;callback-nontrivial&quot; parameter to <span class="hl">true</span> .
+This will enable a callback feature in task scheduling, which will be used in later labs.</p>
+</li>
+<li><p class="first">After set above parameters, please compile and test the <span class="file">mbed-os-test-program3</span> again.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="hardware-block-diagram-and-pinout">
+<h3><a class="toc-backref" href="#id26">4.6&nbsp;&nbsp;&nbsp;Hardware block diagram and Pinout</a></h3>
+<ol class="arabic simple">
+<li>The hardware block diagram illustrates the
+connection between the STM32 and peripherals: embedded ST-LINK, ARDUINO® Uno V3 shields, Pmod™
+connector, Quad-SPI Flash memory, USB OTG connectors, digital microphones, various ST-MEMS sensors, and
+the three RF modules (Wi‑Fi®, Bluetooth®, and NFC):  <a class="reference external" href="labs/img/Mbed_Intro/hardware_block_diagram.jpg">Board Block Diagram</a></li>
+<li>Board Pinout : <a class="reference external" href="labs/img/Mbed_Intro/B_L4S5I_IOT01A_pinmap.jpg">Board Pinout</a></li>
+</ol>
+<div class="section" id="course-example-codes">
+<h4><a class="toc-backref" href="#id27">4.6.1&nbsp;&nbsp;&nbsp;Course Example Codes</a></h4>
+<ol class="arabic simple">
+<li>You may check course example codes in <code class="cmd-host">https://gitlab.larc-nthu.net/ee2405_2022/code-example.git</code>.
+We will update the repo regularly for the latest version along with the course.
+You should be able to find example codes used in labs of this course here.
+If you clone or download the example, it will be easier to examine and copy codes than from course website.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id28">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Please fill in a <a class="reference external" href="https://eeclass.nthu.edu.tw/course/questionnaire/727?next=login">questionnaire at EEClass course website</a>
+to answer the following items:
+1. Name, 2. Student ID, 3. Email, 4. Cell phone, 5. GitHub account, 6. GitHub link</li>
+<li>Create a new project to write for the following function.
+Please repetitively turn on LED3 &quot;three times&quot; and then LED1 &quot;twice&quot;.</li>
+<li>Please submit your lab report to EEClass as a pdf file.
+The pdf is a record of key lab parts you have done.
+You may include the following contents (but not limited to):
+(1) Steps or commands in each part
+(2) Results of each step
+(3) Encountered issues
+(4) Discussion</li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

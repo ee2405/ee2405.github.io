@@ -1,0 +1,97 @@
+EE2405 Embedded System Laboratory Exam #1
+###########################################
+:Date:    2022-04-13 15:30
+:Tags:    Exams
+:Summary: Exam #1
+:Status: Draft
+
+.. sectnum::
+    :depth: 2
+
+.. include:: ../LARC_def.txt
+
+.. role:: raw-latex(raw)
+            :format: latex html
+
+.. raw:: html
+
+          <script id="MathJax-script" async
+                  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+          </script> 
+
+
+.. contents::
+
+****
+Rule
+****
+
+#. Any communication with others is strictly prohibited.
+
+#. Please commit your changes every time you compile your code. This is the record of your programming.
+
+#. If you cannot connect to internet with your own notebook, please use a USB
+   stick to transfer your exam data to a desktop PC and submit your results.
+
+**********
+Submission
+**********
+
+* Due time: 17:30, April 13, 2022
+
+* Demo time: 17:30 - 18:20, April 13, 2022
+
+* Submit your the following information to EEClass
+
+  #. URL of your GitHub remote repo "Exam1"
+
+  #. A ZIP file of the following items:
+
+     Please also put all files in your GitHub repo.
+
+     #. All mbed and PC Python source codes organized by problem numbers: prob1, prob1_1, etc.
+     #. A Readme file in your git repo to explain briefly how to setup and run your program 
+     #. Screenshots or photos of results 
+
+*********************
+Equipment List
+*********************
+
+#. PC or notebook 
+#. A USB Stick to transfer codes and backup data (Recommended but optional)
+#. B_L4S5I_IOT01A
+#. Bread board
+#. Buttons * 3 (Please keep the same connection as HW2)
+#. Picoscope
+#. I2C TextLCD
+#. uLCD display
+#. Wires 
+
+*********
+Questions
+*********
+
+Thread
+
+#. (25 points) Please use uLCD and User button to make a stop watch.
+
+   - Push User button once to start counting time from 0s at the resolution of 0.01s.
+
+   - Push User button again will stop the counting.
+
+   - Please use interrupt in Mbed.
+
+#. (25 points) Please use DAC to generate a :raw-latex:`\(tanh(t)\)`-based waveform. For each period,
+   the first half of the waveform = :raw-latex:`\(3.0*tanh(t)\)`, and the second half of the waveform 
+   = :raw-latex:`\(3.0*(1-tanh(t))\)`. The frequency is 10Hz. 
+
+   - Please verify with Picoscope
+
+#. (25 points) Please use Picoscope to decode I2C signals when using the textLCD I2C library in 4.4 of 
+   `mbed Lab 7 Serial Communication <{filename}/labs/Serial_Communication.rst>`__
+
+#. (25 points) Please use the accelerometer on B_L4S5I_IOT01A to measure the tilted angle of the board.
+
+   - Please send the tilted angle to PC every 0.1s
+   
+   - Please draw the titled angles vs. time with Matplotlib in Python

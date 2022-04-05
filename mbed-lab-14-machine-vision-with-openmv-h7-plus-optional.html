@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 14 Machine Vision with OpenMV H7 Plus (Optional)</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-14-machine-vision-with-openmv-h7-plus-optional.html" rel="bookmark"
+                   title="Permalink to mbed Lab 14 Machine Vision with OpenMV H7 Plus (Optional)">mbed Lab 14 Machine Vision with OpenMV H7 Plus (Optional)</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-05-25T15:00:00+08:00">
+                May 25, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-introduction" id="id2">1&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">2&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">3&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id5">3.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#preparation" id="id6">3.2&nbsp;&nbsp;&nbsp;Preparation</a></li>
+<li><a class="reference internal" href="#take-and-store-a-picture-by-openmv-h7-plus" id="id7">3.3&nbsp;&nbsp;&nbsp;Take and store a picture by OpenMV H7 Plus</a></li>
+<li><a class="reference internal" href="#qr-code-decoding-optional" id="id8">3.4&nbsp;&nbsp;&nbsp;QR Code Decoding (Optional)</a></li>
+<li><a class="reference internal" href="#data-matrices-decoding-optional" id="id9">3.5&nbsp;&nbsp;&nbsp;Data Matrices Decoding (Optional)</a></li>
+<li><a class="reference internal" href="#apriltags" id="id10">3.6&nbsp;&nbsp;&nbsp;AprilTags</a></li>
+<li><a class="reference internal" href="#line-detection" id="id11">3.7&nbsp;&nbsp;&nbsp;Line Detection</a></li>
+<li><a class="reference internal" href="#tensorflow-lite-optional" id="id12">3.8&nbsp;&nbsp;&nbsp;Tensorflow lite (Optional)</a><ul class="auto-toc">
+<li><a class="reference internal" href="#person-detection-optional" id="id13">3.8.1&nbsp;&nbsp;&nbsp;Person Detection (Optional)</a></li>
+<li><a class="reference internal" href="#image-classification-mnist-optional" id="id14">3.8.2&nbsp;&nbsp;&nbsp;Image Classification - MNIST (Optional)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#serial-connection-of-openmv-h7-plus-with-mbed-optional" id="id15">3.9&nbsp;&nbsp;&nbsp;Serial connection of OpenMV H7 plus with mbed (Optional)</a></li>
+<li><a class="reference internal" href="#put-openmv-h7-plus-on-the-boe-bot-car" id="id16">3.10&nbsp;&nbsp;&nbsp;Put OpenMV H7 plus on the BOE BOT Car</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id17">4&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+<li><a class="reference internal" href="#reference-list" id="id18">5&nbsp;&nbsp;&nbsp;Reference List</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>Learn practical image processing</li>
+<li>Use OpenMV H7 board</li>
+</ol>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">1&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>For more information about OpenMV Cam, please visit <a class="reference external" href="https://openmv.io/products/openmv-cam-h7-plus">https://openmv.io/products/openmv-cam-h7-plus</a>.
+For documentation of micropython libraries, please check <a class="reference external" href="https://docs.openmv.io/library/index.html#libraries-specific-to-the-openmv-cam">https://docs.openmv.io/library/index.html#libraries-specific-to-the-openmv-cam</a>.</p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">2&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>PC or notebook with internet connection</li>
+<li>OpenMV H7 Plus</li>
+<li>L-shape metal connector * 2</li>
+<li>M2.7*6mm screws * 4</li>
+<li>M2.7 nuts * 4</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">3&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id5">3.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 14: OpenMV <a class="reference external" href="notes/ch14_openmv.pdf">ch14_openmv.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="preparation">
+<h3><a class="toc-backref" href="#id6">3.2&nbsp;&nbsp;&nbsp;Preparation</a></h3>
+<ol class="arabic simple">
+<li>Install OpenMV IDE from the following <a class="reference external" href="https://openmv.io/pages/download">link.</a></li>
+<li>Download the latest OpenMV firmware for OpenMV H7 plus from <a class="reference external" href="https://github.com/openmv/openmv/releases/">here</a>.</li>
+<li>Connect your OpenMV H7 plus to your host machine (Windows or Mac OS).</li>
+<li>Open IDE, select <a class="reference external" href="labs/img/ML_on_OpenMV/run_bootloader.png">tools</a> and click Run Bootloader (Load Firmware).</li>
+<li>Select the <a class="reference external" href="labs/img/ML_on_OpenMV/select_firmware.png">firmware path</a> you
+just downloaded, and choose folder <cite>OPENMV4P</cite>. Then click &quot;run&quot;. If you followed
+the instruction, the OpenMV H7 plus firmware will become the latest version you just downloaded.</li>
+</ol>
+</div>
+<div class="section" id="take-and-store-a-picture-by-openmv-h7-plus">
+<h3><a class="toc-backref" href="#id7">3.3&nbsp;&nbsp;&nbsp;Take and store a picture by OpenMV H7 Plus</a></h3>
+<ol class="arabic">
+<li><p class="first">This part does not require mbed Studio.</p>
+</li>
+<li><p class="first">Copy the following code into IDE</p>
+<p>The programming language for OpenMV H7 Plus (H7+) is Micro-Python, which is a sub-set of Python plus
+a I/O library for the board. Even though it should be relatively easy to learn Micro-Python,
+you are not required to program with the language in this lab. Students only need to apply
+H7+ codes provided in this lab for final projects.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">pyb</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">RED_LED_PIN</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="lineno"> 4 </span><span class="n">BLUE_LED_PIN</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span> <span class="c1"># Initialize the camera sensor.</span>
+<span class="lineno"> 7 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span> <span class="c1"># or sensor.GRAYSCALE</span>
+<span class="lineno"> 8 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QVGA</span><span class="p">)</span> <span class="c1"># or sensor.QQVGA (or others)</span>
+<span class="lineno"> 9 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span> <span class="c1"># Let new settings take affect.</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="n">pyb</span><span class="o">.</span><span class="n">LED</span><span class="p">(</span><span class="n">RED_LED_PIN</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="lineno">12 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span> <span class="c1"># Give the user time to get ready.</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span><span class="n">pyb</span><span class="o">.</span><span class="n">LED</span><span class="p">(</span><span class="n">RED_LED_PIN</span><span class="p">)</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+<span class="lineno">15 </span><span class="n">pyb</span><span class="o">.</span><span class="n">LED</span><span class="p">(</span><span class="n">BLUE_LED_PIN</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You&#39;re on camera!&quot;</span><span class="p">)</span>
+<span class="lineno">18 </span><span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;example.jpg&quot;</span><span class="p">)</span> <span class="c1"># or &quot;example.bmp&quot; (or others)</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span><span class="n">pyb</span><span class="o">.</span><span class="n">LED</span><span class="p">(</span><span class="n">BLUE_LED_PIN</span><span class="p">)</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+<span class="lineno">21 </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done! Reset the camera to see the saved image.&quot;</span><span class="p">)</span>
+</pre></div>
+</li>
+<li><p class="first">Click Connect and Start <a class="reference external" href="labs/img/ML_on_OpenMV/ide_start.png">(Run Script)</a>. <strong>(It will take 2 seconds to get ready.)</strong></p>
+</li>
+<li><p class="first">Press <strong>Tools &gt; Reset OpenMV Cam</strong> to save the image.</p>
+</li>
+<li><p class="first">We can see the image in your OpenMV device.</p>
+</li>
+<li><p class="first"><strong>Note that OpenMV H7 Plus will run main.py if</strong> <a class="reference external" href="labs/img/ML_on_OpenMV/ide_start.png">start</a> <strong>is not clicked.</strong></p>
+</li>
+</ol>
+</div>
+<div class="section" id="qr-code-decoding-optional">
+<h3><a class="toc-backref" href="#id8">3.4&nbsp;&nbsp;&nbsp;QR Code Decoding (Optional)</a></h3>
+<ol class="arabic">
+<li><p class="first">In this example, we use OpenMV H7 plus to get the information from a QR Code.</p>
+</li>
+<li><p class="first">Please generate a QR code with known information and display it on screen.
+You may use on-line QR code services or install a QR code generator as your browser extension.</p>
+</li>
+<li><p class="first">Copy the following code into IDE and run to decode above QR code</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="lineno"> 4 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span>
+<span class="lineno"> 5 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QVGA</span><span class="p">)</span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="lineno"> 7 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_auto_gain</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># must turn this off to prevent image washout...</span>
+<span class="lineno"> 8 </span><span class="n">clock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+<span class="lineno"> 9 </span>
+<span class="lineno">10 </span><span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="lineno">11 </span>   <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+<span class="lineno">12 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="lineno">13 </span>   <span class="n">img</span><span class="o">.</span><span class="n">lens_corr</span><span class="p">(</span><span class="mf">1.8</span><span class="p">)</span> <span class="c1"># strength of 1.8 is good for the 2.8mm lens.</span>
+<span class="lineno">14 </span>   <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">img</span><span class="o">.</span><span class="n">find_qrcodes</span><span class="p">():</span>
+<span class="lineno">15 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">rect</span><span class="p">(),</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="lineno">16 </span>      <span class="nb">print</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+<span class="lineno">17 </span>   <span class="nb">print</span><span class="p">(</span><span class="n">clock</span><span class="o">.</span><span class="n">fps</span><span class="p">())</span>
+</pre></div>
+</li>
+<li><p class="first">Click Connect and Start (Run Script).</p>
+</li>
+</ol>
+</div>
+<div class="section" id="data-matrices-decoding-optional">
+<h3><a class="toc-backref" href="#id9">3.5&nbsp;&nbsp;&nbsp;Data Matrices Decoding (Optional)</a></h3>
+<ol class="arabic">
+<li><p class="first">In this example, we use OpenMV H7 plus to get information stored in a <a class="reference external" href="https://en.wikipedia.org/wiki/Data_Matrix">Data Matrices</a>.
+Also we get the viewing angle to the data matrix image, which is useful for BB car position calibration.</p>
+</li>
+<li><p class="first">Please show <a class="reference external" href="labs/img/ML_on_OpenMV/Data_matrix.png">this Data Matrix</a> on screen.</p>
+</li>
+<li><p class="first">Copy the following code into IDE and run to decode above Data Matrices.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">math</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="lineno"> 4 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span>
+<span class="lineno"> 5 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QVGA</span><span class="p">)</span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="lineno"> 7 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_auto_gain</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># must turn this off to prevent image washout...</span>
+<span class="lineno"> 8 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_auto_whitebal</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># must turn this off to prevent image washout...</span>
+<span class="lineno"> 9 </span><span class="n">clock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="lineno">12 </span>   <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+<span class="lineno">13 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="lineno">14 </span>   <span class="n">img</span><span class="o">.</span><span class="n">lens_corr</span><span class="p">(</span><span class="mf">1.8</span><span class="p">)</span> <span class="c1"># strength of 1.8 is good for the 2.8mm lens.</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span>   <span class="n">matrices</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">find_datamatrices</span><span class="p">()</span>
+<span class="lineno">17 </span>   <span class="k">for</span> <span class="n">matrix</span> <span class="ow">in</span> <span class="n">matrices</span><span class="p">:</span>
+<span class="lineno">18 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">rect</span><span class="p">(),</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="lineno">19 </span>      <span class="n">print_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">rows</span><span class="p">(),</span> <span class="n">matrix</span><span class="o">.</span><span class="n">columns</span><span class="p">(),</span> <span class="n">matrix</span><span class="o">.</span><span class="n">payload</span><span class="p">(),</span> <span class="p">(</span><span class="mi">180</span> <span class="o">*</span> <span class="n">matrix</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">clock</span><span class="o">.</span><span class="n">fps</span><span class="p">())</span>
+<span class="lineno">20 </span>      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix [</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">], Payload </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">, rotation </span><span class="si">%f</span><span class="s2"> (degrees), FPS </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">print_args</span><span class="p">)</span>
+<span class="lineno">21 </span>   <span class="k">if</span> <span class="ow">not</span> <span class="n">matrices</span><span class="p">:</span>
+<span class="lineno">22 </span>      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FPS </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">clock</span><span class="o">.</span><span class="n">fps</span><span class="p">())</span>
+</pre></div>
+</li>
+<li><p class="first">Click Connect and Start (Run Script).</p>
+</li>
+<li><p class="first"><strong>Note that we could also get the angle between the camera of OpenMV H7 plus and the wall with the data matrix image.</strong></p>
+</li>
+</ol>
+</div>
+<div class="section" id="apriltags">
+<h3><a class="toc-backref" href="#id10">3.6&nbsp;&nbsp;&nbsp;AprilTags</a></h3>
+<ol class="arabic">
+<li><p class="first">In this example, we will use OpenMV H7 plus to get information stored in a
+<a class="reference external" href="https://april.eecs.umich.edu/software/apriltag">Apriltag</a>. Via Apriltags, we
+are able to get the rotational angle and the relative translational distance
+from an object, which is useful in 3D positioning and camera calibration.</p>
+</li>
+<li><p class="first">Please show <a class="reference external" href="labs/img/ML_on_OpenMV/tag_36h11.png">this AprilTag</a> on screen.</p>
+</li>
+<li><p class="first">Copy the following code into IDE and run to decode above AprilTag.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">math</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="lineno"> 4 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span>
+<span class="lineno"> 5 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QQVGA</span><span class="p">)</span> <span class="c1"># we run out of memory if the resolution is much bigger...</span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="lineno"> 7 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_auto_gain</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># must turn this off to prevent image washout...</span>
+<span class="lineno"> 8 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_auto_whitebal</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># must turn this off to prevent image washout...</span>
+<span class="lineno"> 9 </span><span class="n">clock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="c1"># Note! Unlike find_qrcodes the find_apriltags method does not need lens correction on the image to work.</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="c1"># What&#39;s the difference between tag families? Well, for example, the TAG16H5 family is effectively</span>
+<span class="lineno">14 </span><span class="c1"># a 4x4 square tag. So, this means it can be seen at a longer distance than a TAG36H11 tag which</span>
+<span class="lineno">15 </span><span class="c1"># is a 6x6 square tag. However, the lower H value (H5 versus H11) means that the false positve</span>
+<span class="lineno">16 </span><span class="c1"># rate for the 4x4 tag is much, much, much, higher than the 6x6 tag. So, unless you have a</span>
+<span class="lineno">17 </span><span class="c1"># reason to use the other tags families just use TAG36H11 which is the default family.</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span><span class="c1"># The AprilTags library outputs the pose information for tags. This is the x/y/z translation and</span>
+<span class="lineno">20 </span><span class="c1"># x/y/z rotation. The x/y/z rotation is in radians and can be converted to degrees. As for</span>
+<span class="lineno">21 </span><span class="c1"># translation the units are dimensionless and you must apply a conversion function.</span>
+<span class="lineno">22 </span>
+<span class="lineno">23 </span><span class="c1"># f_x is the x focal length of the camera. It should be equal to the lens focal length in mm</span>
+<span class="lineno">24 </span><span class="c1"># divided by the x sensor size in mm times the number of pixels in the image.</span>
+<span class="lineno">25 </span><span class="c1"># The below values are for the OV7725 camera with a 2.8 mm lens.</span>
+<span class="lineno">26 </span>
+<span class="lineno">27 </span><span class="c1"># f_y is the y focal length of the camera. It should be equal to the lens focal length in mm</span>
+<span class="lineno">28 </span><span class="c1"># divided by the y sensor size in mm times the number of pixels in the image.</span>
+<span class="lineno">29 </span><span class="c1"># The below values are for the OV7725 camera with a 2.8 mm lens.</span>
+<span class="lineno">30 </span>
+<span class="lineno">31 </span><span class="c1"># c_x is the image x center position in pixels.</span>
+<span class="lineno">32 </span><span class="c1"># c_y is the image y center position in pixels.</span>
+<span class="lineno">33 </span>
+<span class="lineno">34 </span><span class="n">f_x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.8</span> <span class="o">/</span> <span class="mf">3.984</span><span class="p">)</span> <span class="o">*</span> <span class="mi">160</span> <span class="c1"># find_apriltags defaults to this if not set</span>
+<span class="lineno">35 </span><span class="n">f_y</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.8</span> <span class="o">/</span> <span class="mf">2.952</span><span class="p">)</span> <span class="o">*</span> <span class="mi">120</span> <span class="c1"># find_apriltags defaults to this if not set</span>
+<span class="lineno">36 </span><span class="n">c_x</span> <span class="o">=</span> <span class="mi">160</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="c1"># find_apriltags defaults to this if not set (the image.w * 0.5)</span>
+<span class="lineno">37 </span><span class="n">c_y</span> <span class="o">=</span> <span class="mi">120</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="c1"># find_apriltags defaults to this if not set (the image.h * 0.5)</span>
+<span class="lineno">38 </span>
+<span class="lineno">39 </span><span class="k">def</span> <span class="nf">degrees</span><span class="p">(</span><span class="n">radians</span><span class="p">):</span>
+<span class="lineno">40 </span>   <span class="k">return</span> <span class="p">(</span><span class="mi">180</span> <span class="o">*</span> <span class="n">radians</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+<span class="lineno">41 </span>
+<span class="lineno">42 </span><span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="lineno">43 </span>   <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+<span class="lineno">44 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="lineno">45 </span>   <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">img</span><span class="o">.</span><span class="n">find_apriltags</span><span class="p">(</span><span class="n">fx</span><span class="o">=</span><span class="n">f_x</span><span class="p">,</span> <span class="n">fy</span><span class="o">=</span><span class="n">f_y</span><span class="p">,</span> <span class="n">cx</span><span class="o">=</span><span class="n">c_x</span><span class="p">,</span> <span class="n">cy</span><span class="o">=</span><span class="n">c_y</span><span class="p">):</span> <span class="c1"># defaults to TAG36H11</span>
+<span class="lineno">46 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">rect</span><span class="p">(),</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="lineno">47 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_cross</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">cx</span><span class="p">(),</span> <span class="n">tag</span><span class="o">.</span><span class="n">cy</span><span class="p">(),</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="lineno">48 </span>      <span class="n">print_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">x_translation</span><span class="p">(),</span> <span class="n">tag</span><span class="o">.</span><span class="n">y_translation</span><span class="p">(),</span> <span class="n">tag</span><span class="o">.</span><span class="n">z_translation</span><span class="p">(),</span> \
+<span class="lineno">49 </span>            <span class="n">degrees</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">x_rotation</span><span class="p">()),</span> <span class="n">degrees</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">y_rotation</span><span class="p">()),</span> <span class="n">degrees</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">z_rotation</span><span class="p">()))</span>
+<span class="lineno">50 </span>      <span class="c1"># Translation units are unknown. Rotation units are in degrees.</span>
+<span class="lineno">51 </span>      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tx: </span><span class="si">%f</span><span class="s2">, Ty </span><span class="si">%f</span><span class="s2">, Tz </span><span class="si">%f</span><span class="s2">, Rx </span><span class="si">%f</span><span class="s2">, Ry </span><span class="si">%f</span><span class="s2">, Rz </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">print_args</span><span class="p">)</span>
+<span class="lineno">52 </span>   <span class="nb">print</span><span class="p">(</span><span class="n">clock</span><span class="o">.</span><span class="n">fps</span><span class="p">())</span>
+</pre></div>
+</li>
+<li><p class="first">Click connect and Start(Run Script).</p>
+</li>
+<li><p class="first">Note that the translational distance of each dimension is relative, you
+might need to construct a conversion table on your own. In our measurement
+(with the shown AprilTag and OpenMV H7 plus), the constant is approximately
+6.2cm to 1 unit from the Apriltag.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="line-detection">
+<h3><a class="toc-backref" href="#id11">3.7&nbsp;&nbsp;&nbsp;Line Detection</a></h3>
+<ol class="arabic">
+<li><p class="first">In this example, we use OpenMV H7 plus to detect lines in an image.
+This is useful if we want to develop a line-following BB Car.</p>
+</li>
+<li><p class="first">Copy the folowing code into IDE and run to dectect line.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span>
+<span class="lineno"> 2 </span><span class="n">enable_lens_corr</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># turn on for straighter lines...</span>
+<span class="lineno"> 3 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="lineno"> 4 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span> <span class="c1"># grayscale is faster</span>
+<span class="lineno"> 5 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QQVGA</span><span class="p">)</span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="lineno"> 7 </span><span class="n">clock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="c1"># All lines also have `x1()`, `y1()`, `x2()`, and `y2()` methods to get their end-points</span>
+<span class="lineno">10 </span><span class="c1"># and a `line()` method to get all the above as one 4 value tuple for `draw_line()`.</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="lineno">13 </span>   <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+<span class="lineno">14 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="lineno">15 </span>   <span class="k">if</span> <span class="n">enable_lens_corr</span><span class="p">:</span> <span class="n">img</span><span class="o">.</span><span class="n">lens_corr</span><span class="p">(</span><span class="mf">1.8</span><span class="p">)</span> <span class="c1"># for 2.8mm lens...</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span>   <span class="c1"># `merge_distance` controls the merging of nearby lines. At 0 (the default), no</span>
+<span class="lineno">18 </span>   <span class="c1"># merging is done. At 1, any line 1 pixel away from another is merged... and so</span>
+<span class="lineno">19 </span>   <span class="c1"># on as you increase this value. You may wish to merge lines as line segment</span>
+<span class="lineno">20 </span>   <span class="c1"># detection produces a lot of line segment results.</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span>   <span class="c1"># `max_theta_diff` controls the maximum amount of rotation difference between</span>
+<span class="lineno">23 </span>   <span class="c1"># any two lines about to be merged. The default setting allows for 15 degrees.</span>
+<span class="lineno">24 </span>
+<span class="lineno">25 </span>   <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">img</span><span class="o">.</span><span class="n">find_line_segments</span><span class="p">(</span><span class="n">merge_distance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max_theta_diff</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+<span class="lineno">26 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_line</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">line</span><span class="p">(),</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="lineno">27 </span>      <span class="c1"># print(l)</span>
+<span class="lineno">28 </span>
+<span class="lineno">29 </span>   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FPS </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">clock</span><span class="o">.</span><span class="n">fps</span><span class="p">())</span>
+</pre></div>
+</li>
+<li><p class="first">Click Connect and Start (Run Script)</p>
+</li>
+</ol>
+</div>
+<div class="section" id="tensorflow-lite-optional">
+<h3><a class="toc-backref" href="#id12">3.8&nbsp;&nbsp;&nbsp;Tensorflow lite (Optional)</a></h3>
+<p>You may skip the following two parts, since we may not need them in the homework or final projects.</p>
+<div class="section" id="person-detection-optional">
+<h4><a class="toc-backref" href="#id13">3.8.1&nbsp;&nbsp;&nbsp;Person Detection (Optional)</a></h4>
+<ol class="arabic">
+<li><p class="first">OpenMV H7 Plus has a build-in person detection model in its firmware.
+In the following codes, we try to load and use the network to detect a person in an image.</p>
+</li>
+<li><p class="first">Copy the following code into IDE</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">tf</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>                         <span class="c1"># Reset and initialize the sensor.</span>
+<span class="lineno"> 4 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">GRAYSCALE</span><span class="p">)</span> <span class="c1"># Set pixel format to RGB565 (or GRAYSCALE)</span>
+<span class="lineno"> 5 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QVGA</span><span class="p">)</span>      <span class="c1"># Set frame size to QVGA (320x240)</span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_windowing</span><span class="p">((</span><span class="mi">240</span><span class="p">,</span> <span class="mi">240</span><span class="p">))</span>       <span class="c1"># Set 240x240 window.</span>
+<span class="lineno"> 7 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>          <span class="c1"># Let the camera adjust.</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="c1"># Load the built-in person detection network (the network is in your OpenMV Cam&#39;s firmware).</span>
+<span class="lineno">10 </span><span class="n">net</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;person_detection&#39;</span><span class="p">)</span>
+<span class="lineno">11 </span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;unsure&#39;</span><span class="p">,</span> <span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="s1">&#39;no_person&#39;</span><span class="p">]</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="n">clock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+<span class="lineno">14 </span><span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="lineno">15 </span>   <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="lineno">18 </span>   <span class="c1"># default settings just do one detection... change them to search the image...</span>
+<span class="lineno">19 </span>   <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">min_scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scale_mul</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">x_overlap</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y_overlap</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="lineno">20 </span>      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;**********</span><span class="se">\n</span><span class="s2">Detections at [x=</span><span class="si">%d</span><span class="s2">,y=</span><span class="si">%d</span><span class="s2">,w=</span><span class="si">%d</span><span class="s2">,h=</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">obj</span><span class="o">.</span><span class="n">rect</span><span class="p">())</span>
+<span class="lineno">21 </span>      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">())):</span>
+<span class="lineno">22 </span>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()[</span><span class="n">i</span><span class="p">]))</span>
+<span class="lineno">23 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">rect</span><span class="p">())</span>
+<span class="lineno">24 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_string</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">x</span><span class="p">()</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">y</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">labels</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()))],</span> <span class="n">mono_space</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="lineno">25 </span>   <span class="nb">print</span><span class="p">(</span><span class="n">clock</span><span class="o">.</span><span class="n">fps</span><span class="p">(),</span> <span class="s2">&quot;fps&quot;</span><span class="p">)</span>
+</pre></div>
+</li>
+<li><p class="first">Click Connect and Start (Run Script).</p>
+</li>
+</ol>
+</div>
+<div class="section" id="image-classification-mnist-optional">
+<h4><a class="toc-backref" href="#id14">3.8.2&nbsp;&nbsp;&nbsp;Image Classification - MNIST (Optional)</a></h4>
+<p>We will classify hand-written numbers by training a model based on MNIST data.
+We recommend edgeimpulse.com service to train the MNIST data, which is simpler than writing Tensorflow script.</p>
+<ol class="arabic">
+<li><p class="first">Training a classifier with MNIST</p>
+<ol class="arabic simple">
+<li>Open <a class="reference external" href="https://www.edgeimpulse.com/">link</a> in the browser, sign up to use the platform.</li>
+<li>Follow the tutorial <a class="reference external" href="https://docs.edgeimpulse.com/docs/image-classification">here</a>, play around the settings.</li>
+<li>You are encouraged to collect you own datasets with OpenMV H7 plus according to 4.3. Besides, we also provide part of our data set for training. Yet, this part is optional as you may directly apply our trained and converted tflite model.</li>
+<li>If you don't want to collect your own dataset, you can use ours: <code class="cmd-host">$ git clone https://gitlab.larc-nthu.net/ee2405_2021/mnist_jpg.git</code></li>
+<li>The dataset is large, it may take a long time to upload and train, you can either reduce the train and test set, or you can use only the test set and let edge impulse split them into test and train automatically.</li>
+<li>After training, choose <strong>deployment</strong>, then choose <strong>OpenMV cam</strong> to download the tflite file.</li>
+</ol>
+<div class="warning docutils container">
+<ul class="simple">
+<li><strong>Hint for training your own model and using the model that we provide.</strong></li>
+<li>Please download the openmv_mnist dataset and check images inside each categories.
+The lighting and viewing angles of images may have a great impact on actual image classification.</li>
+<li>At least 200 images for each category is recommended.</li>
+<li>The order of label might be different to the order of class name.</li>
+</ul>
+</div>
+</li>
+<li><p class="first">Apply trained model from Edge Impulse</p>
+<ol class="arabic simple">
+<li>After you trained your own dataset, please copy the python code generated from edge
+impulse. <strong>do not copy the following codes</strong>. Also, make sure your tflite file
+has the correct naming to match the codes.</li>
+<li><strong>Remember to put the tflite file inside the OpenMV!!</strong></li>
+<li>Click Connect and Start (Run Script).</li>
+</ol>
+</li>
+<li><p class="first">Run a pre-trained model (optional)</p>
+<p>You can skip this part if you train and run the model yourself as above process.</p>
+<ol class="arabic">
+<li><p class="first">For those who want to skip the training part,
+we also provide a pre-trained tflite model:
+<code class="cmd-host">$ git clone https://gitlab.larc-nthu.net/ee2405_2021/pretrained_mnist.git</code> with label.txt</p>
+</li>
+<li><p class="first">If you download the tflite file from gitlab, copy the following codes into IDE.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="c1"># Edge Impulse - OpenMV Image Classification Example</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">tf</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>                         <span class="c1"># Reset and initialize the sensor.</span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span>    <span class="c1"># Set pixel format to RGB565 (or GRAYSCALE)</span>
+<span class="lineno"> 7 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QVGA</span><span class="p">)</span>      <span class="c1"># Set frame size to QVGA (320x240)</span>
+<span class="lineno"> 8 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_windowing</span><span class="p">((</span><span class="mi">240</span><span class="p">,</span> <span class="mi">240</span><span class="p">))</span>       <span class="c1"># Set 240x240 window.</span>
+<span class="lineno"> 9 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>          <span class="c1"># Let the camera adjust.</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="n">net</span> <span class="o">=</span> <span class="s2">&quot;trained.tflite&quot;</span>
+<span class="lineno">12 </span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;labels.txt&quot;</span><span class="p">)]</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span><span class="n">clock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+<span class="lineno">15 </span><span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="lineno">16 </span>   <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span>   <span class="c1"># default settings just do one detection... change them to search the image...</span>
+<span class="lineno">21 </span>   <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">min_scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scale_mul</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">x_overlap</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y_overlap</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="lineno">22 </span>      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">())):</span>
+<span class="lineno">23 </span>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()[</span><span class="n">i</span><span class="p">]))</span>
+<span class="lineno">24 </span>   <span class="n">img</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">rect</span><span class="p">())</span>
+<span class="lineno">25 </span>   <span class="n">img</span><span class="o">.</span><span class="n">draw_string</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">x</span><span class="p">()</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">y</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">labels</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()))],</span> <span class="n">mono_space</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="lineno">26 </span>   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This is : &quot;</span><span class="p">,</span><span class="n">labels</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()))])</span>
+</pre></div>
+</li>
+<li><p class="first"><strong>Remember to put the tflite file and the label.txt inside the OpenMV!!</strong></p>
+</li>
+<li><p class="first">Click Connect and Start (Run Script).</p>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="serial-connection-of-openmv-h7-plus-with-mbed-optional">
+<h3><a class="toc-backref" href="#id15">3.9&nbsp;&nbsp;&nbsp;Serial connection of OpenMV H7 plus with mbed (Optional)</a></h3>
+<p>If you skip the previous part on TF Lite, please also skip this part, too.</p>
+<ol class="arabic">
+<li><p class="first">In this example, OpenMV H7 plus will communicate with mbed through UART.</p>
+</li>
+<li><p class="first">The default UART pins for OpenMV H7 plus are TX (P4), RX (P5).
+For reference, please check the <a class="reference external" href="https://openmv.io/products/openmv-cam-h7-plus">Open MV H7+ page</a> for the pin names.
+Please connect  OpenMV TX (P4) to mbed RX (D0), and OpenMV RX (P5) to STM32 TX (D1) like <a class="reference external" href="labs/img/ML_on_OpenMV/stm_uart_openmv.png">this</a>.
+Remember to set the same baud rate for OpenMV and mbed.</p>
+</li>
+<li><p class="first">Start mbed Studio and create a new Mbed program with &quot;14_1_OpenMV_UART&quot;.</p>
+</li>
+<li><p class="first">Edit <span class="file">main.cpp</span>.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<p>Note that this program simply send a &quot;image_classification&quot; string to H7+.
+And when H7+ sees this string the corresponding function will be called
+and return with classification results.
+Therefore, we can extend such a simple interface to include QR code decoding and
+other functions if necessary.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span><span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">Thread</span> <span class="n">thread1</span><span class="p">;</span>
+<span class="lineno"> 4 </span><span class="n">Thread</span> <span class="n">thread2</span><span class="p">;</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span><span class="n">USBRX</span><span class="p">);</span> <span class="c1">//tx,rx</span>
+<span class="lineno"> 7 </span><span class="n">BufferedSerial</span> <span class="nf">uart</span><span class="p">(</span><span class="n">D1</span><span class="p">,</span><span class="n">D0</span><span class="p">);</span> <span class="c1">//tx,rx</span>
+<span class="lineno"> 8 </span><span class="n">DigitalIn</span> <span class="nf">button</span><span class="p">(</span><span class="n">BUTTON1</span><span class="p">);</span>
+<span class="lineno"> 9 </span>
+<span class="lineno">10 </span><span class="kt">void</span> <span class="nf">recieve_thread</span><span class="p">(){</span>
+<span class="lineno">11 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">12 </span>      <span class="k">if</span><span class="p">(</span><span class="n">uart</span><span class="p">.</span><span class="n">readable</span><span class="p">()){</span>
+<span class="lineno">13 </span>         <span class="kt">char</span> <span class="n">recv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="lineno">14 </span>         <span class="n">uart</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">recv</span><span class="p">));</span>
+<span class="lineno">15 </span>         <span class="c1">// print out the recieved data</span>
+<span class="lineno">16 </span>         <span class="n">pc</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">recv</span><span class="p">));</span>
+<span class="lineno">17 </span>         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">18 </span>      <span class="p">}</span>
+<span class="lineno">19 </span>   <span class="p">}</span>
+<span class="lineno">20 </span><span class="p">}</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span><span class="kt">void</span> <span class="nf">send_thread</span><span class="p">(){</span>
+<span class="lineno">23 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="lineno">24 </span>      <span class="c1">// if button is pressed</span>
+<span class="lineno">25 </span>      <span class="k">if</span><span class="p">(</span><span class="n">button</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+<span class="lineno">26 </span>         <span class="kt">char</span> <span class="n">s</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;image_classification</span><span class="se">\0</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="lineno">27 </span>         <span class="n">uart</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">s</span><span class="p">));</span>
+<span class="lineno">28 </span>         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;send</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">29 </span>         <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">30 </span>      <span class="p">}</span>
+<span class="lineno">31 </span>   <span class="p">}</span>
+<span class="lineno">32 </span><span class="p">}</span>
+<span class="lineno">33 </span>
+<span class="lineno">34 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+<span class="lineno">35 </span>   <span class="n">uart</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">36 </span>   <span class="n">thread1</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">send_thread</span><span class="p">);</span>
+<span class="lineno">37 </span>   <span class="n">thread2</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">recieve_thread</span><span class="p">);</span>
+<span class="lineno">38 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first"><strong>Put your trained `.tflite` file inside OpenMV, as in 4.7</strong></p>
+</li>
+<li><p class="first">For OpenMV, copy the following codes into IDE.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">pyb</span>
+<span class="lineno"> 2 </span><span class="kn">import</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">tf</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">uart</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">UART</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">9600</span><span class="p">,</span><span class="n">timeout_char</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="lineno"> 5 </span><span class="n">uart</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mi">9600</span><span class="p">,</span><span class="n">bits</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">parity</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">timeout_char</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="lineno"> 6 </span><span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="k">def</span> <span class="nf">image_classification</span><span class="p">():</span>
+<span class="lineno"> 9 </span>   <span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>                         <span class="c1"># Reset and initialize the sensor.</span>
+<span class="lineno">10 </span>   <span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span>    <span class="c1"># Set pixel format to RGB565 (or GRAYSCALE)</span>
+<span class="lineno">11 </span>   <span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QVGA</span><span class="p">)</span>      <span class="c1"># Set frame size to QVGA (?x?)</span>
+<span class="lineno">12 </span>   <span class="n">sensor</span><span class="o">.</span><span class="n">set_windowing</span><span class="p">((</span><span class="mi">240</span><span class="p">,</span> <span class="mi">240</span><span class="p">))</span>       <span class="c1"># Set 240x240 window.</span>
+<span class="lineno">13 </span>   <span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>          <span class="c1"># Let the camera adjust.</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(())</span>
+<span class="lineno">16 </span>   <span class="n">net</span> <span class="o">=</span> <span class="s2">&quot;trained.tflite&quot;</span>
+<span class="lineno">17 </span>   <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;labels.txt&quot;</span><span class="p">)]</span>
+<span class="lineno">18 </span>   <span class="c1"># default settings just do one detection... change them to search the image...</span>
+<span class="lineno">19 </span>   <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">min_scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scale_mul</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">x_overlap</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y_overlap</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="lineno">20 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">rect</span><span class="p">())</span>
+<span class="lineno">21 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_string</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">x</span><span class="p">()</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">y</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">labels</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()))],</span> <span class="n">mono_space</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="lineno">22 </span>   <span class="k">return</span> <span class="n">labels</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">output</span><span class="p">()))]</span>
+<span class="lineno">23 </span>
+<span class="lineno">24 </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+<span class="lineno">25 </span>   <span class="n">a</span> <span class="o">=</span> <span class="n">uart</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+<span class="lineno">26 </span>   <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="lineno">27 </span>      <span class="n">tmp</span> <span class="o">+=</span> <span class="n">a</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+<span class="lineno">28 </span>      <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="lineno">29 </span>
+<span class="lineno">30 </span>   <span class="k">if</span> <span class="n">tmp</span> <span class="o">==</span> <span class="s2">&quot;image_classification</span><span class="se">\0</span><span class="s2">&quot;</span><span class="p">:</span>
+<span class="lineno">31 </span>      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;classify images&quot;</span><span class="p">)</span>
+<span class="lineno">32 </span>      <span class="n">tmp</span> <span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="lineno">33 </span>      <span class="n">label</span> <span class="o">=</span> <span class="n">image_classification</span><span class="p">()</span>
+<span class="lineno">34 </span>      <span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+<span class="lineno">35 </span>      <span class="n">uart</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+<span class="lineno">36 </span>      <span class="n">uart</span><span class="o">.</span><span class="n">readchar</span><span class="p">()</span>
+</pre></div>
+</li>
+<li><p class="first">Click Connect and Start (Run Script).</p>
+</li>
+</ol>
+</div>
+<div class="section" id="put-openmv-h7-plus-on-the-boe-bot-car">
+<h3><a class="toc-backref" href="#id16">3.10&nbsp;&nbsp;&nbsp;Put OpenMV H7 plus on the BOE BOT Car</a></h3>
+<p>Here we install the OpenMV H7 plus on BB Car for mbed to use the vision and detection.</p>
+<ol class="arabic">
+<li><p class="first">Install the L-shape metal connector on the OpenMV H7 plus with M2.7*6mm screws * 2 and M2.7 nuts * 2, and then it should become like <a class="reference external" href="labs/img/bbcar_installation/06_openmv/install-openmv-1.jpg">this</a>.</p>
+</li>
+<li><p class="first">Put OpenMV H7 plus on the BOE BOT Car with M2.7*6mm screws * 2 and M2.7 nuts * 2, and then it should become like <a class="reference external" href="labs/img/bbcar_installation/06_openmv/install-openmv-2.jpg">this</a>.</p>
+</li>
+<li><p class="first">Please connect OpenMV TX (P4) to mbed RX (D0), and OpenMV RX (P5) to mbed TX (D1) like <a class="reference external" href="labs/img/ML_on_OpenMV/stm_uart_openmv.png">this</a>.</p>
+<p>For reference, please check the <a class="reference external" href="https://openmv.io/products/openmv-cam-h7-plus">Open MV H7+ page</a> for the pin names. Remember to set the same baud rate for OpenMV and mbed.</p>
+</li>
+<li><p class="first">Start mbed Studio and create a new Mbed program with &quot;14_2_OpenMV_BOE_BOT_Car&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span><span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span><span class="n">USBRX</span><span class="p">);</span> <span class="c1">//tx,rx</span>
+<span class="lineno"> 4 </span><span class="n">BufferedSerial</span> <span class="nf">uart</span><span class="p">(</span><span class="n">D1</span><span class="p">,</span><span class="n">D0</span><span class="p">);</span> <span class="c1">//tx,rx</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+<span class="lineno"> 7 </span>   <span class="n">uart</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno"> 8 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="lineno"> 9 </span>      <span class="k">if</span><span class="p">(</span><span class="n">uart</span><span class="p">.</span><span class="n">readable</span><span class="p">()){</span>
+<span class="lineno">10 </span>            <span class="kt">char</span> <span class="n">recv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="lineno">11 </span>            <span class="n">uart</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">recv</span><span class="p">));</span>
+<span class="lineno">12 </span>            <span class="n">pc</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">recv</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">recv</span><span class="p">));</span>
+<span class="lineno">13 </span>      <span class="p">}</span>
+<span class="lineno">14 </span>   <span class="p">}</span>
+<span class="lineno">15 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Plug the OpenMV H7 plus to PC.</p>
+</li>
+<li><p class="first">Paste following code into the <span class="file">main.py</span> in the OpenMV H7 plus.
+This program will be executed automatically when OpenMV is booted.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">pyb</span><span class="o">,</span> <span class="nn">sensor</span><span class="o">,</span> <span class="nn">image</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">math</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">sensor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="lineno"> 4 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_pixformat</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span>
+<span class="lineno"> 5 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_framesize</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">QQVGA</span><span class="p">)</span> <span class="c1"># we run out of memory if the resolution is much bigger...</span>
+<span class="lineno"> 6 </span><span class="n">sensor</span><span class="o">.</span><span class="n">skip_frames</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="lineno"> 7 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_auto_gain</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># must turn this off to prevent image washout...</span>
+<span class="lineno"> 8 </span><span class="n">sensor</span><span class="o">.</span><span class="n">set_auto_whitebal</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># must turn this off to prevent image washout...</span>
+<span class="lineno"> 9 </span><span class="n">clock</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="n">f_x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.8</span> <span class="o">/</span> <span class="mf">3.984</span><span class="p">)</span> <span class="o">*</span> <span class="mi">160</span> <span class="c1"># find_apriltags defaults to this if not set</span>
+<span class="lineno">12 </span><span class="n">f_y</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.8</span> <span class="o">/</span> <span class="mf">2.952</span><span class="p">)</span> <span class="o">*</span> <span class="mi">120</span> <span class="c1"># find_apriltags defaults to this if not set</span>
+<span class="lineno">13 </span><span class="n">c_x</span> <span class="o">=</span> <span class="mi">160</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="c1"># find_apriltags defaults to this if not set (the image.w * 0.5)</span>
+<span class="lineno">14 </span><span class="n">c_y</span> <span class="o">=</span> <span class="mi">120</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="c1"># find_apriltags defaults to this if not set (the image.h * 0.5)</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span><span class="k">def</span> <span class="nf">degrees</span><span class="p">(</span><span class="n">radians</span><span class="p">):</span>
+<span class="lineno">17 </span>   <span class="k">return</span> <span class="p">(</span><span class="mi">180</span> <span class="o">*</span> <span class="n">radians</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span><span class="n">uart</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">UART</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">9600</span><span class="p">,</span><span class="n">timeout_char</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="lineno">20 </span><span class="n">uart</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mi">9600</span><span class="p">,</span><span class="n">bits</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">parity</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">timeout_char</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span><span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="lineno">23 </span>   <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+<span class="lineno">24 </span>   <span class="n">img</span> <span class="o">=</span> <span class="n">sensor</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="lineno">25 </span>   <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">img</span><span class="o">.</span><span class="n">find_apriltags</span><span class="p">(</span><span class="n">fx</span><span class="o">=</span><span class="n">f_x</span><span class="p">,</span> <span class="n">fy</span><span class="o">=</span><span class="n">f_y</span><span class="p">,</span> <span class="n">cx</span><span class="o">=</span><span class="n">c_x</span><span class="p">,</span> <span class="n">cy</span><span class="o">=</span><span class="n">c_y</span><span class="p">):</span> <span class="c1"># defaults to TAG36H11</span>
+<span class="lineno">26 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">rect</span><span class="p">(),</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="lineno">27 </span>      <span class="n">img</span><span class="o">.</span><span class="n">draw_cross</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">cx</span><span class="p">(),</span> <span class="n">tag</span><span class="o">.</span><span class="n">cy</span><span class="p">(),</span> <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="lineno">28 </span>      <span class="c1"># The conversion is nearly 6.2cm to 1 -&gt; translation</span>
+<span class="lineno">29 </span>      <span class="n">print_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">x_translation</span><span class="p">(),</span> <span class="n">tag</span><span class="o">.</span><span class="n">y_translation</span><span class="p">(),</span> <span class="n">tag</span><span class="o">.</span><span class="n">z_translation</span><span class="p">(),</span> \
+<span class="lineno">30 </span>            <span class="n">degrees</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">x_rotation</span><span class="p">()),</span> <span class="n">degrees</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">y_rotation</span><span class="p">()),</span> <span class="n">degrees</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">z_rotation</span><span class="p">()))</span>
+<span class="lineno">31 </span>      <span class="c1"># Translation units are unknown. Rotation units are in degrees.</span>
+<span class="lineno">32 </span>      <span class="n">uart</span><span class="o">.</span><span class="n">write</span><span class="p">((</span><span class="s2">&quot;Tx: </span><span class="si">%f</span><span class="s2">, Ty </span><span class="si">%f</span><span class="s2">, Tz </span><span class="si">%f</span><span class="s2">, Rx </span><span class="si">%f</span><span class="s2">, Ry </span><span class="si">%f</span><span class="s2">, Rz </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">print_args</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+<span class="lineno">33 </span>   <span class="n">uart</span><span class="o">.</span><span class="n">write</span><span class="p">((</span><span class="s2">&quot;FPS </span><span class="si">%f</span><span class="se">\r\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">clock</span><span class="o">.</span><span class="n">fps</span><span class="p">())</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+</pre></div>
+</li>
+<li><p class="first">Unplug OpenMV H7 plus and plug the OpenMV H7 plus to the portable charger. The charger should connect to OpenMV(Vin).</p>
+</li>
+<li><p class="first">Use OpenMV H7 plus to view the <a class="reference external" href="labs/img/ML_on_OpenMV/tag_36h11.png">AprilTag</a>.</p>
+</li>
+<li><p class="first"><strong>Note that now mbed on BB Car could get the rotational angle and the translational relative distance for each dimension.</strong>
+If we also use PING to estimate the distance between BB Car and the wall, we can estimate the location of BB Car.
+This part will be applied in the final project.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id17">4&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Please download an AprilTag from <a class="reference external" href="https://github.com/AprilRobotics/apriltag-imgs/">https://github.com/AprilRobotics/apriltag-imgs/</a></li>
+<li>Show your AprilTag on screen and find out the ID information in the AprilTag (They should match with the number on
+the png file name.</li>
+<li>The png file in the github is small. Please download the file and open it with paint(小畫家). Use the resize tool twice to get a reasonable size for scanning.</li>
+<li>Please send the AprilTag information back to mbed and show the information of on screen.</li>
+</ol>
+</div>
+<div class="section" id="reference-list">
+<h2><a class="toc-backref" href="#id18">5&nbsp;&nbsp;&nbsp;Reference List</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://github.com/tensorflow/models/tree/master/research/slim?fbclid=IwAR3CeDa2WRadJT7cvaZa723IJGDV72QhXXCNj4NXJc41U0Of6PkQaa5EG5c#preparing-the-datasets">TensorFlow-Slim image classification model library</a></li>
+<li><a class="reference external" href="https://www.tensorflow.org/tutorials/images/transfer_learning">Tensorflow transfer learning</a></li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

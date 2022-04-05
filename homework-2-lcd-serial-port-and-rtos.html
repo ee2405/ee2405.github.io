@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>Homework 2 LCD, Serial Port and RTOS</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/homework-2-lcd-serial-port-and-rtos.html" rel="bookmark"
+                   title="Permalink to Homework 2 LCD, Serial Port and RTOS">Homework 2 LCD, Serial Port and RTOS</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-04-06T15:00:00+08:00">
+                Apr 06, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script><div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#prerequisites" id="id1">1&nbsp;&nbsp;&nbsp;Prerequisites</a></li>
+<li><a class="reference internal" href="#submission" id="id2">2&nbsp;&nbsp;&nbsp;Submission</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#homework-description" id="id4">4&nbsp;&nbsp;&nbsp;Homework Description</a></li>
+</ul>
+</div>
+<p><strong>update 3/23</strong> Add a Ticker example for DAC/ADC threads.</p>
+<p><strong>update 3/24</strong> Replace a Ticker example with attach_us().</p>
+<p><strong>update 3/25</strong> Add waveform DAC sample rate specification.</p>
+<p><strong>update 3/28</strong> (1) Remove Ticker example, since it is deprecated in Mbed OS 6.
+(2) Change waveform spec to 10Hz. (3) Extend due day to April 6.</p>
+<div class="section" id="prerequisites">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Prerequisites</a></h2>
+<ol class="arabic simple">
+<li><strong>mbed Lab 5 Liquid Crystal Displays</strong></li>
+<li><strong>mbed Lab 6 Interrupts, Timers, Tasks and RTOS</strong></li>
+<li><strong>mbed Lab 7 Serial Communication</strong></li>
+</ol>
+</div>
+<div class="section" id="submission">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Submission</a></h2>
+<ol class="arabic simple">
+<li>Due date: noon, April 6, 2022</li>
+<li>Please create your own hw2 github repo.</li>
+<li>Please push all your codes and README to your hw2 github repo, and submit the report in pdf to eeclass.<ul>
+<li>The Readme file should explain: (1) how to setup and run your program (2) what are the results</li>
+<li>The pdf is a record and explanation of your codes (don't print out codes).
+You may include the following contents (but not limited to):
+(1) implementation (data structure and algorithm) in each part (2) Results and validation of each step
+(3) Encountered issues (4) Discussion</li>
+</ul>
+</li>
+<li><strong>Please demo your homework and explain how it works before 6:20pm on March 30.</strong></li>
+</ol>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B_L4S5I_IOT01A</li>
+<li>Bread board</li>
+<li>Buttons * 3</li>
+<li>Picoscope</li>
+<li>Wires * 20</li>
+<li>uLCD</li>
+</ol>
+</div>
+<div class="section" id="homework-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Homework Description</a></h2>
+<ol class="arabic">
+<li><p class="first">Threads and waveform generation</p>
+<p>We will repeat a simplified version of homework 1 with threads and interrupts.
+In the following we partition our mbed program into several threads or interrupt service routines.</p>
+<ol class="arabic">
+<li><p class="first">Please implement two push buttons: Button A is for starting waveform generation and Button B is for
+stopping the generation.</p>
+</li>
+<li><p class="first">Button A will trigger an ISR to start the waveform generation by setting a global variable &quot;GenWave&quot; to true.
+Picoscope can be used to check the waveform. There is no need to include a RC filter.</p>
+</li>
+<li><p class="first">Button B will trigger an ISR to stop the waveform generation by setting the global variable &quot;GenWave&quot; to false,
+and output the stored waveforms to PC through printf().
+The function to transfer the waveform data will be called from an EventQueue.
+Please also write a Python program to display and analyze the received waveform.</p>
+</li>
+<li><p class="first">A thread will run in a while(true) loop to generate waveforms to a DAC pin if &quot;GenWave&quot;=true.
+Otherwise, it sleep_for() the same period as the DAC waveform sampling rate.</p>
+<p>The waveform from HW1 has a frequency faster 10Hz. So, the base waveform period is 1/10s.
+The waveform of HW1 digitize each period for 10 parts, so for each digit the duration is 1/100s.
+Assume we send 10 samples or less for each digit. We will need 1/10 the digit duration for each DAC sample.
+Therefore, each DAC sample rate will be at most 1kHz (at most 1ms).</p>
+<p>Note that we don't schedule events above 1ms, so we can use regular sleep_for().</p>
+</li>
+<li><p class="first">A thread will run in a while(true) loop to store waveforms from a ADC pin if &quot;GenWave&quot;=true to
+an mbed C++ array.
+Otherwise, it sleep_for() the same period as the ADC waveform sampling rate.</p>
+<p>The C++ array can be either static or dynamic. Note that the number of data capture will increase
+as the duration increases between the clicks of Button A and B. Please check the size of input data
+to avoid array overflow.</p>
+<p>If you encounter stack overflow issue when executing the mbed program, it may be caused by the C++ array size.
+The solution is to increase the default stack size setup. Please create mbed_app.json in the project folder
+and add the following configuration. The original size is 4K, we set it to 8192:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s">&quot;config&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s">&quot;main-stack-size&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s">&quot;value&quot;</span><span class="o">:</span> <span class="mi">8192</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Waveforms are the same signal waveforms in HW1 with frequencies above 10Hz.
+Only one and fixed frequency is required in this homework.</p>
+</li>
+<li><p class="first">Please show the status of mbed on uLCD: (1) waveform generation (2) data transfer (3) when interrupts from
+Button A and B are detected, etc. Please only update uLCD status during the transition of operations. Do not output
+to uLCD during waveform generation to avoid interfering ADC/DAC.</p>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

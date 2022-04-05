@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 9 Serial RPC</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-9-serial-rpc.html" rel="bookmark"
+                   title="Permalink to mbed Lab 9 Serial RPC">mbed Lab 9 Serial RPC</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-04-20T15:00:00+08:00">
+                Apr 20, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#install-eprc-library-and-tool" id="id6">4.2&nbsp;&nbsp;&nbsp;Install EPRC Library and Tool</a></li>
+<li><a class="reference internal" href="#erpc-over-serial" id="id7">4.3&nbsp;&nbsp;&nbsp;eRPC Over Serial</a><ul class="auto-toc">
+<li><a class="reference internal" href="#introduction-to-mbed-rpc" id="id8">4.3.1&nbsp;&nbsp;&nbsp;Introduction to mbed RPC</a></li>
+<li><a class="reference internal" href="#generate-erpc-shim-codes" id="id9">4.3.2&nbsp;&nbsp;&nbsp;Generate eRPC Shim Codes</a></li>
+<li><a class="reference internal" href="#build-a-usb-serial-connection" id="id10">4.3.3&nbsp;&nbsp;&nbsp;Build a USB Serial Connection</a></li>
+<li><a class="reference internal" href="#create-a-mbed-erpc-server" id="id11">4.3.4&nbsp;&nbsp;&nbsp;Create a mbed eRPC server</a></li>
+<li><a class="reference internal" href="#create-a-python-erpc-client" id="id12">4.3.5&nbsp;&nbsp;&nbsp;Create a Python eRPC client</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id13">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a><ul class="auto-toc">
+<li><a class="reference internal" href="#reference-list" id="id14">5.1&nbsp;&nbsp;&nbsp;Reference List</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>Learn to use remote procedural calls (RPC) with serial ports</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>Apr. 20, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>A common application of RPC is to send commands to a remote device through serial
+communication (or any form of communication like Ethernet). For such a purpose,
+it's useful to implement commands based on a RPC library.</p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B-L4S5I-IOT01A * 1</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 10: Remote Procedure Call <a class="reference external" href="notes/ch10_RPC.pdf">ch10_RPC.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="install-eprc-library-and-tool">
+<h3><a class="toc-backref" href="#id6">4.2&nbsp;&nbsp;&nbsp;Install EPRC Library and Tool</a></h3>
+<ol class="arabic">
+<li><p class="first">For Windows</p>
+<ol class="arabic">
+<li><p class="first">Download &quot;Windows.zip&quot; from <a class="reference external" href="https://github.com/EmbeddedRPC/erpc/releases">https://github.com/EmbeddedRPC/erpc/releases</a> and extract it (assuming at ~/Downloads).</p>
+</li>
+<li><p class="first">Switch to Git Bash app and go to the folder with &quot;erpcgen&quot;</p>
+<p><code class="cmd-host">$ cd ~/Downloads/</code></p>
+<p>Copy &quot;eprcgen&quot; to ~/Downloads/ for easier reference.</p>
+<p><code class="cmd-host">$ cp ./Windows/erpcgen .</code></p>
+<p>Test &quot;eprcgen&quot; execution.</p>
+<p><code class="cmd-host">$ ./erpcgen -h</code></p>
+<pre class="terminal literal-block">
+usage: erpcgen [-?|--help] [-V|--version] [-o|--output &lt;filePath&gt;]
+       [-v|--verbose] [-I|--path &lt;filePath&gt;] [-g|--generate &lt;language&gt;]
+       [-c|--codec &lt;codecType&gt;] files...
+
+Options:
+  -?/--help                    Show this help
+  -V/--version                 Display tool version
+  -o/--output &lt;filePath&gt;       Set output directory path prefix
+  -v/--verbose                 Print extra detailed log information
+  -I/--path &lt;filePath&gt;         Add search path for imports
+  -g/--generate &lt;language&gt;     Select the output language (default is C)
+  -c/--codec &lt;codecType&gt;       Specify used codec type
+
+Available languages (use with -g option):
+  c    C/C++
+  py   Python
+
+Available codecs (use with --c option):
+  basic   BasicCodec
+</pre>
+</li>
+<li><p class="first">Download &quot;erpc-develop.zip&quot; from <a class="reference external" href="https://github.com/EmbeddedRPC/erpc/">https://github.com/EmbeddedRPC/erpc/</a> and extract it (assuming at ~/Downloads).
+Please click the green &quot;Code&quot; and select &quot;Download ZIP&quot;. (This is the full ERPC source codes).</p>
+</li>
+<li><p class="first">Start a Git Bash Terminal to install erpc Python library</p>
+<p><code class="cmd-host">$ cd ~/Downloads/erpc-develop</code></p>
+<p><code class="cmd-host">$ cd erpc_python/</code></p>
+<p><code class="cmd-host">$ pip3 install .</code></p>
+</li>
+</ol>
+</li>
+<li><p class="first">For Mac OS</p>
+<ol class="arabic">
+<li><p class="first">Download &quot;Mac.zip&quot; from <a class="reference external" href="https://github.com/EmbeddedRPC/erpc/releases">https://github.com/EmbeddedRPC/erpc/releases</a> and extract it (assuming at ~/Downloads).</p>
+</li>
+<li><p class="first">Start a Terminal app</p>
+<p><code class="cmd-host">$ cd ~/Downloads/Mac</code></p>
+<p>Make sure &quot;eprcgen&quot; is in the folder with ls.</p>
+<p><code class="cmd-host">$ ls</code></p>
+<p>Change &quot;eprcgen&quot; execution permission.</p>
+<p><code class="cmd-host">$ chmod +x erpcgen</code></p>
+</li>
+<li><p class="first">Use Finder app to locate &quot;eprcgen&quot; (at ~/Downloads/Mac) and,
+right-click with two fingers to select &quot;Open with Apps&quot; and choose &quot;Terminal&quot;.
+Mac OS will show a warning <a class="reference external" href="labs/img/erpc/set_erprcgen_with_permission.png">like this</a>.
+Please click &quot;Open&quot; to set the security permission to execute &quot;eprcgen&quot;.
+A terminal will show up and close quickly.</p>
+</li>
+<li><p class="first">Switch to Terminal app and go to the folder with &quot;erpcgen&quot;</p>
+<p><code class="cmd-host">$ cd ~/Downloads/</code></p>
+<p>Copy &quot;eprcgen&quot; to ~/Downloads/ for easier reference.</p>
+<p><code class="cmd-host">$ cp ./Mac/erpcgen .</code></p>
+<p>Test &quot;eprcgen&quot; execution.</p>
+<p><code class="cmd-host">$ ./erpcgen -h</code></p>
+<pre class="terminal literal-block">
+usage: erpcgen [-?|--help] [-V|--version] [-o|--output &lt;filePath&gt;]
+       [-v|--verbose] [-I|--path &lt;filePath&gt;] [-g|--generate &lt;language&gt;]
+       [-c|--codec &lt;codecType&gt;] files...
+
+Options:
+  -?/--help                    Show this help
+  -V/--version                 Display tool version
+  -o/--output &lt;filePath&gt;       Set output directory path prefix
+  -v/--verbose                 Print extra detailed log information
+  -I/--path &lt;filePath&gt;         Add search path for imports
+  -g/--generate &lt;language&gt;     Select the output language (default is C)
+  -c/--codec &lt;codecType&gt;       Specify used codec type
+
+Available languages (use with -g option):
+  c    C/C++
+  py   Python
+
+Available codecs (use with --c option):
+  basic   BasicCodec
+</pre>
+<p>If otherwise a warning show up <a class="reference external" href="labs/img/erpc/erprcgen_no_permission.png">like this</a>,
+please try to set the security permission again for &quot;eprcgen&quot; as above or
+explained in <a class="reference external" href="https://support.apple.com/en-us/HT202491">https://support.apple.com/en-us/HT202491</a> for &quot;If you want to open an app
+that hasn’t been notarized or is from an unidentified developer&quot;. You can go to &quot;Settings&quot;.
+And under &quot;Security and Privacy&quot; to allow &quot;Open Anyway&quot; for &quot;eprcgen&quot;.</p>
+</li>
+<li><p class="first">Download &quot;erpc-develop.zip&quot; from <a class="reference external" href="https://github.com/EmbeddedRPC/erpc/">https://github.com/EmbeddedRPC/erpc/</a> and extract it (assuming at ~/Downloads).
+Please click the green &quot;Code&quot; and select &quot;Download ZIP&quot;. (This is the full ERPC source codes).</p>
+</li>
+<li><p class="first">Start a Terminal app to install erpc Python library</p>
+<p><code class="cmd-host">$ cd ~/Downloads/erpc-develop</code></p>
+<p><code class="cmd-host">$ cd erpc_python/</code></p>
+<p><code class="cmd-host">$ pip3 install .</code></p>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="erpc-over-serial">
+<h3><a class="toc-backref" href="#id7">4.3&nbsp;&nbsp;&nbsp;eRPC Over Serial</a></h3>
+<div class="section" id="introduction-to-mbed-rpc">
+<h4><a class="toc-backref" href="#id8">4.3.1&nbsp;&nbsp;&nbsp;Introduction to mbed RPC</a></h4>
+<ol class="arabic">
+<li><p class="first">What is eRPC?</p>
+<p><strong>Remote Procedure Call (RPC)</strong> allows a computer program to execute subroutines on another computer. It’s generally used in networks of computing devices. In the case of mbed, you can manipulate variables and execute subroutines on the mbed by simply calling the name of the variable or function on the host computer through a terminal or a browser.</p>
+<p>eRPC is an implementation of RPC for embedded systems. Please read <a class="reference external" href="https://github.com/EmbeddedRPC/erpc/wiki">the introduction</a> and
+<a class="reference external" href="https://github.com/EmbeddedRPC/erpc/wiki/Getting-Started">the Getting Started Chapter</a>.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="generate-erpc-shim-codes">
+<h4><a class="toc-backref" href="#id9">4.3.2&nbsp;&nbsp;&nbsp;Generate eRPC Shim Codes</a></h4>
+<p>These are interface codes (objects) to encode and decode the RPC function calls.
+These codes are generated automatically from an IDL file (from our blinky example <span class="file">led-service.erpc</span>):</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cm">/*!</span>
+<span class="lineno"> 2 </span><span class="cm"> * You can write copyrights rules here. These rules will be copied into the outputs.</span>
+<span class="lineno"> 3 </span><span class="cm"> */</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="c1">//@outputDir(&quot;erpc_outputs&quot;) // output directory</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="n">program</span> <span class="n">blink_led</span><span class="p">;</span> <span class="c1">// specify name of output files</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">interface</span> <span class="n">LEDBlinkService</span> <span class="c1">// cover functions for same topic</span>
+<span class="lineno">10 </span><span class="p">{</span>
+<span class="lineno">11 </span>    <span class="n">led_on</span><span class="p">(</span><span class="n">in</span> <span class="n">uint8</span> <span class="n">led</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">void</span>
+<span class="lineno">12 </span>    <span class="n">led_off</span><span class="p">(</span><span class="n">in</span> <span class="n">uint8</span> <span class="n">led</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">void</span>
+<span class="lineno">13 </span><span class="p">}</span>
+</pre></div>
+<ol class="arabic">
+<li><p class="first">Create a folder <span class="file">~/MbedPrograms/blinky_erpc</span> to store <span class="file">led-service.erpc</span>.</p>
+</li>
+<li><p class="first">Start a Terminal app and go to folder <span class="file">~/MbedPrograms/blinky_erpc</span></p>
+<p><code class="cmd-host">$ cd ~/Mbed\ Programs/blinky_erpc/blinky_erpc</code></p>
+</li>
+<li><p class="first">Generate C codes</p>
+<p><code class="cmd-host">$ ~/Downloads/erpcgen led-service.erpc</code></p>
+<p><code class="cmd-host">$ ls</code></p>
+<pre class="terminal literal-block">
+blink_led.h blink_led_client.cpp blink_led_server.cpp blink_led_server.h led-service.erpc
+</pre>
+<p>Four new files are generated. We will use blink_led.h, blink_led_server.cpp, and blink_led_server.h in
+our mbed program in the following.</p>
+</li>
+<li><p class="first">Generate Python codes</p>
+<p><code class="cmd-host">$ ~/Downloads/erpcgen -g py led-service.erpc</code></p>
+<p>A new folder will be created to keep the Python erpc codes:
+We will use these interface codes for the host Python program.</p>
+<p><code class="cmd-host">$ ls blink_led/</code></p>
+<pre class="terminal literal-block">
+__init__.py client.py common.py interface.py server.py
+</pre>
+</li>
+</ol>
+</div>
+<div class="section" id="build-a-usb-serial-connection">
+<h4><a class="toc-backref" href="#id10">4.3.3&nbsp;&nbsp;&nbsp;Build a USB Serial Connection</a></h4>
+<p>We will use a USB serial shield to create another USB connection
+between mbed and PC host (besides the mbed USBTX and USBRX).
+We use this connection to send/receive RPC commands.</p>
+<ol class="arabic simple">
+<li>Use the XBee USB serial shield without the XBee chip.</li>
+<li>Connect mbed D1 to Rx and mbed D0 to Tx of the USB serial shield.
+Also connect mbed Gnd to Gnd of the USB serial shield.</li>
+</ol>
+</div>
+<div class="section" id="create-a-mbed-erpc-server">
+<h4><a class="toc-backref" href="#id11">4.3.4&nbsp;&nbsp;&nbsp;Create a mbed eRPC server</a></h4>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>9_1_erpc_blinky</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Add a erpc library to the current project</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in <cite>https://gitlab.larc-nthu.net/ee2405_2022/erpc_c.git</cite>
+And click &quot;Next&quot;</li>
+<li>Select &quot;Main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;drivers/DigitalOut.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="cp">#include</span> <span class="cpf">&quot;erpc_simple_server.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 5 </span><span class="cp">#include</span> <span class="cpf">&quot;erpc_basic_codec.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 6 </span><span class="cp">#include</span> <span class="cpf">&quot;erpc_crc16.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 7 </span><span class="cp">#include</span> <span class="cpf">&quot;UARTTransport.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 8 </span><span class="cp">#include</span> <span class="cpf">&quot;DynamicMessageBufferFactory.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 9 </span><span class="cp">#include</span> <span class="cpf">&quot;blink_led_server.h&quot;</span><span class="cp"></span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="cm">/**</span>
+<span class="lineno">12 </span><span class="cm"> * Macros for setting console flow control.</span>
+<span class="lineno">13 </span><span class="cm"> */</span>
+<span class="lineno">14 </span><span class="cp">#define CONSOLE_FLOWCONTROL_RTS     1</span>
+<span class="lineno">15 </span><span class="cp">#define CONSOLE_FLOWCONTROL_CTS     2</span>
+<span class="lineno">16 </span><span class="cp">#define CONSOLE_FLOWCONTROL_RTSCTS  3</span>
+<span class="lineno">17 </span><span class="cp">#define mbed_console_concat_(x) CONSOLE_FLOWCONTROL_##x</span>
+<span class="lineno">18 </span><span class="cp">#define mbed_console_concat(x) mbed_console_concat_(x)</span>
+<span class="lineno">19 </span><span class="cp">#define CONSOLE_FLOWCONTROL mbed_console_concat(MBED_CONF_TARGET_CONSOLE_UART_FLOW_CONTROL)</span>
+<span class="lineno">20 </span>
+<span class="lineno">21 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span> <span class="n">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">22 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span> <span class="n">led2</span><span class="p">(</span><span class="n">LED2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">23 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span> <span class="n">led3</span><span class="p">(</span><span class="n">LED3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">24 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span><span class="o">*</span> <span class="n">leds</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&amp;</span><span class="n">led1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">led2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">led3</span> <span class="p">};</span>
+<span class="lineno">25 </span>
+<span class="lineno">26 </span><span class="cm">/****** erpc declarations *******/</span>
+<span class="lineno">27 </span>
+<span class="lineno">28 </span><span class="kt">void</span> <span class="nf">led_on</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">led</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">29 </span>  <span class="k">if</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="n">led</span> <span class="o">&amp;&amp;</span> <span class="n">led</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">30 </span>          <span class="o">*</span><span class="n">leds</span><span class="p">[</span><span class="n">led</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">31 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;LED %d is On.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">led</span><span class="p">);</span>
+<span class="lineno">32 </span>  <span class="p">}</span>
+<span class="lineno">33 </span><span class="p">}</span>
+<span class="lineno">34 </span>
+<span class="lineno">35 </span><span class="kt">void</span> <span class="nf">led_off</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">led</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">36 </span>  <span class="k">if</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="n">led</span> <span class="o">&amp;&amp;</span> <span class="n">led</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">37 </span>          <span class="o">*</span><span class="n">leds</span><span class="p">[</span><span class="n">led</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno">38 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;LED %d is Off.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">led</span><span class="p">);</span>
+<span class="lineno">39 </span>  <span class="p">}</span>
+<span class="lineno">40 </span><span class="p">}</span>
+<span class="lineno">41 </span>
+<span class="lineno">42 </span><span class="cm">/** erpc infrastructure */</span>
+<span class="lineno">43 </span><span class="n">ep</span><span class="o">::</span><span class="n">UARTTransport</span> <span class="n">uart_transport</span><span class="p">(</span><span class="n">D1</span><span class="p">,</span> <span class="n">D0</span><span class="p">,</span> <span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">44 </span><span class="n">ep</span><span class="o">::</span><span class="n">DynamicMessageBufferFactory</span> <span class="n">dynamic_mbf</span><span class="p">;</span>
+<span class="lineno">45 </span><span class="n">erpc</span><span class="o">::</span><span class="n">BasicCodecFactory</span> <span class="n">basic_cf</span><span class="p">;</span>
+<span class="lineno">46 </span><span class="n">erpc</span><span class="o">::</span><span class="n">Crc16</span> <span class="n">crc16</span><span class="p">;</span>
+<span class="lineno">47 </span><span class="n">erpc</span><span class="o">::</span><span class="n">SimpleServer</span> <span class="n">rpc_server</span><span class="p">;</span>
+<span class="lineno">48 </span>
+<span class="lineno">49 </span><span class="cm">/** LED service */</span>
+<span class="lineno">50 </span><span class="n">LEDBlinkService_service</span> <span class="n">led_service</span><span class="p">;</span>
+<span class="lineno">51 </span>
+<span class="lineno">52 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">53 </span>
+<span class="lineno">54 </span>  <span class="c1">// Initialize the rpc server</span>
+<span class="lineno">55 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">setCrc16</span><span class="p">(</span><span class="o">&amp;</span><span class="n">crc16</span><span class="p">);</span>
+<span class="lineno">56 </span>
+<span class="lineno">57 </span>  <span class="c1">// Set up hardware flow control, if needed</span>
+<span class="lineno">58 </span><span class="cp">#if CONSOLE_FLOWCONTROL == CONSOLE_FLOWCONTROL_RTS</span>
+<span class="lineno">59 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">set_flow_control</span><span class="p">(</span><span class="n">mbed</span><span class="o">::</span><span class="n">SerialBase</span><span class="o">::</span><span class="n">RTS</span><span class="p">,</span> <span class="n">STDIO_UART_RTS</span><span class="p">,</span> <span class="n">NC</span><span class="p">);</span>
+<span class="lineno">60 </span><span class="cp">#elif CONSOLE_FLOWCONTROL == CONSOLE_FLOWCONTROL_CTS</span>
+<span class="lineno">61 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">set_flow_control</span><span class="p">(</span><span class="n">mbed</span><span class="o">::</span><span class="n">SerialBase</span><span class="o">::</span><span class="n">CTS</span><span class="p">,</span> <span class="n">NC</span><span class="p">,</span> <span class="n">STDIO_UART_CTS</span><span class="p">);</span>
+<span class="lineno">62 </span><span class="cp">#elif CONSOLE_FLOWCONTROL == CONSOLE_FLOWCONTROL_RTSCTS</span>
+<span class="lineno">63 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">set_flow_control</span><span class="p">(</span><span class="n">mbed</span><span class="o">::</span><span class="n">SerialBase</span><span class="o">::</span><span class="n">RTSCTS</span><span class="p">,</span> <span class="n">STDIO_UART_RTS</span><span class="p">,</span> <span class="n">STDIO_UART_CTS</span><span class="p">);</span>
+<span class="lineno">64 </span><span class="cp">#endif</span>
+<span class="lineno">65 </span>
+<span class="lineno">66 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Initializing server.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">67 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">setTransport</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_transport</span><span class="p">);</span>
+<span class="lineno">68 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">setCodecFactory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">basic_cf</span><span class="p">);</span>
+<span class="lineno">69 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">setMessageBufferFactory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dynamic_mbf</span><span class="p">);</span>
+<span class="lineno">70 </span>
+<span class="lineno">71 </span>  <span class="c1">// Add the led service to the server</span>
+<span class="lineno">72 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Adding LED server.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">73 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">addService</span><span class="p">(</span><span class="o">&amp;</span><span class="n">led_service</span><span class="p">);</span>
+<span class="lineno">74 </span>
+<span class="lineno">75 </span>  <span class="c1">// Run the server. This should never exit</span>
+<span class="lineno">76 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Running server.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">77 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+<span class="lineno">78 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Copy blink_led.h, blink_led_server.cpp, and blink_led_server.h in <span class="file">~/MbedPrograms/blinky_erpc/</span>
+to our mbed program folder (<span class="file">~/MbedPrograms/9_1_erpc_blinky/</span>).</p>
+</li>
+<li><p class="first">Compile and run the program.</p>
+<p>The following messages will be in the console:</p>
+<pre class="terminal literal-block">
+Initializing server.
+Adding LED server.
+Running server.
+</pre>
+</li>
+</ol>
+</div>
+<div class="section" id="create-a-python-erpc-client">
+<h4><a class="toc-backref" href="#id12">4.3.5&nbsp;&nbsp;&nbsp;Create a Python eRPC client</a></h4>
+<ol class="arabic">
+<li><p class="first">Copy the following codes into <span class="file">led_test_client.py</span>.
+Also assume the file is in <span class="file">~/MbedPrograms/9_1_erpc_blinky/</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="c1"># led_test_client.py</span>
+<span class="lineno"> 2 </span><span class="c1"># Test client for erpc led server example</span>
+<span class="lineno"> 3 </span><span class="c1"># Author: becksteing/Jing-Jia Liou</span>
+<span class="lineno"> 4 </span><span class="c1"># Date: 02/13/2022</span>
+<span class="lineno"> 5 </span><span class="c1"># Blinks LEDs on a connected Mbed-enabled board running the erpc LED server example</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="lineno"> 8 </span><span class="kn">import</span> <span class="nn">erpc</span>
+<span class="lineno"> 9 </span><span class="kn">from</span> <span class="nn">blink_led</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="lineno">10 </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+<span class="lineno">15 </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Usage: python led_test_client.py &lt;serial port to use&gt;&quot;</span><span class="p">)</span>
+<span class="lineno">16 </span>        <span class="n">exit</span><span class="p">()</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span>    <span class="c1"># Initialize all erpc infrastructure</span>
+<span class="lineno">19 </span>    <span class="n">xport</span> <span class="o">=</span> <span class="n">erpc</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">SerialTransport</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">9600</span><span class="p">)</span>
+<span class="lineno">20 </span>    <span class="n">client_mgr</span> <span class="o">=</span> <span class="n">erpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">ClientManager</span><span class="p">(</span><span class="n">xport</span><span class="p">,</span> <span class="n">erpc</span><span class="o">.</span><span class="n">basic_codec</span><span class="o">.</span><span class="n">BasicCodec</span><span class="p">)</span>
+<span class="lineno">21 </span>    <span class="n">client</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">LEDBlinkServiceClient</span><span class="p">(</span><span class="n">client_mgr</span><span class="p">)</span>
+<span class="lineno">22 </span>
+<span class="lineno">23 </span>    <span class="c1"># Blink LEDs on the connected erpc server</span>
+<span class="lineno">24 </span>    <span class="n">turning_on</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="lineno">25 </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="lineno">26 </span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+<span class="lineno">27 </span>            <span class="k">if</span><span class="p">(</span><span class="n">turning_on</span><span class="p">):</span>
+<span class="lineno">28 </span>                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Call led_on &quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="lineno">29 </span>                <span class="n">client</span><span class="o">.</span><span class="n">led_on</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="lineno">30 </span>            <span class="k">else</span><span class="p">:</span>
+<span class="lineno">31 </span>                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Call led_off &quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="lineno">32 </span>                <span class="n">client</span><span class="o">.</span><span class="n">led_off</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="lineno">33 </span>            <span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="lineno">34 </span>
+<span class="lineno">35 </span>        <span class="n">turning_on</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">turning_on</span>
+</pre></div>
+</li>
+<li><p class="first">Copy folder <span class="file">blink_led/</span> in <span class="file">~/MbedPrograms/blinky_erpc/</span>
+to our mbed program folder (<span class="file">~/MbedPrograms/9_1_erpc_blinky/</span>).</p>
+</li>
+<li><p class="first">Start a Terminal app</p>
+</li>
+<li><p class="first">Check the USB serial port</p>
+<p>For example, it's &quot;/dev/cu.usbserial-AC00CNOQ&quot; in Mac OS or COM7 in Windows.</p>
+<p><code class="cmd-host">$ python3 -m serial.tools.list_ports -v</code></p>
+</li>
+<li><p class="first">Run python codes</p>
+<p><code class="cmd-host">$ cd ~/Mbed\ Programs/9_1_erpc_blinky/</code></p>
+<p><code class="cmd-host">$ python3 led_test_client.py /dev/cu.usbserial-AC00CNOQ</code></p>
+<p>or</p>
+<p><code class="cmd-host">$ python3 led_test_client.py COM7</code></p>
+</li>
+<li><p class="first">The LEDs will blink in order and the following messages will be in Mbed Studio repetitively:</p>
+<pre class="terminal literal-block">
+LED 1 is On.
+LED 2 is On.
+LED 3 is On.
+LED 1 is Off.
+LED 2 is Off.
+LED 3 is Off.
+...
+</pre>
+<p>The following messages will be in Python terminal repetitively:</p>
+<pre class="terminal literal-block">
+Call led_on  1
+Call led_on  2
+Call led_on  3
+Call led_off  1
+Call led_off  2
+Call led_off  3
+...
+</pre>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id13">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Show your git remote repository.</li>
+<li>Know how to send RPC commands with serial ports.</li>
+<li>Create a custom RPC function that blink the red led and blue led respectively. (You should modify the RPC Function in the cpp file.)</li>
+</ol>
+<div class="section" id="reference-list">
+<h3><a class="toc-backref" href="#id14">5.1&nbsp;&nbsp;&nbsp;Reference List</a></h3>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://os.mbed.com/teams/mbed/code/mbed-rpc/">mbed Serial RPC</a></li>
+</ol>
+</div>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

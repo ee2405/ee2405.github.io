@@ -1,0 +1,58 @@
+/* main content */
+#content {
+
+    /* enumerated list */
+    ol.decimal    { list-style : decimal; }
+    ol.upperalpha { list-style : upper-alpha; }
+    ol.loweralpha { list-style : lower-alpha; }
+    ol.upperroman { list-style : upper-roman; }
+    ol.lowerroman { list-style : lower-roman; }
+    ol.lowergreek { list-style : lower-greek; }
+
+    pre.terminal {
+        background  : #333;
+        color       : white;
+        font-weight : bold;
+    }
+
+    span.func { background : #e6ffe6; }
+    span.dir  { background : #e6ffe6; }
+    span.file { background : #e6ffe6; }
+
+    /* code block's line num table */
+    table.highlighttable {
+        td.linenos, td.code {
+            padding : 0px;
+        }
+        td.linenos div.linenodiv pre {
+            border-radius : 4px 0 0 4px;
+            margin-right  : -1px;
+        }
+        td.code div.highlight pre {
+            border-radius : 0 4px 4px 0 ;
+        }
+    }
+
+    /* pelican directive: Note */
+    div.admonition, div.attention, div.caution, div.danger, div.error,
+    div.hint, div.important, div.note, div.tip, div.warning {
+      border: medium outset;
+      margin: 2em;
+      padding: 1em;
+    }
+    p.admonition-title, p.attention-title, p.caution-title, p.danger-title, p.error-title,
+    p.hint-title, p.important-title, p.note-title, p.tip-title, p.warning-title {
+        font-weight: bold;
+    }
+
+    /* inline linenum */
+    span.lineno {
+        -khtml-user-select    : none;
+        -moz-user-select      : none;
+        -ms-user-select       : none;
+        -webkit-touch-callout : none;
+        -webkit-user-select   : none;
+        user-select           : none;
+    }
+
+}

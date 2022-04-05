@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 13 BOE BOT Car</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-13-boe-bot-car.html" rel="bookmark"
+                   title="Permalink to mbed Lab 13 BOE BOT Car">mbed Lab 13 BOE BOT Car</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-05-18T15:00:00+08:00">
+                May 18, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#assemble-your-propeller-boe-bot" id="id5">4.1&nbsp;&nbsp;&nbsp;Assemble Your Propeller Boe-Bot</a></li>
+<li><a class="reference internal" href="#modulize-bbcar-control" id="id6">4.2&nbsp;&nbsp;&nbsp;Modulize BBCar Control</a></li>
+<li><a class="reference internal" href="#go-certain-distance" id="id7">4.3&nbsp;&nbsp;&nbsp;Go Certain Distance</a></li>
+<li><a class="reference internal" href="#control-bbcar-using-calibration-table" id="id8">4.4&nbsp;&nbsp;&nbsp;Control BBCar Using Calibration Table</a></li>
+<li><a class="reference internal" href="#navigate-by-ultrasound-ping" id="id9">4.5&nbsp;&nbsp;&nbsp;Navigate by Ultrasound (Ping)</a></li>
+<li><a class="reference internal" href="#remote-controlled-boe-bot-car-with-uart" id="id10">4.6&nbsp;&nbsp;&nbsp;Remote Controlled BOE BOT Car with UART</a><ul class="auto-toc">
+<li><a class="reference internal" href="#generate-erpc-shim-codes" id="id11">4.6.1&nbsp;&nbsp;&nbsp;Generate eRPC Shim Codes</a></li>
+<li><a class="reference internal" href="#build-a-usb-serial-connection" id="id12">4.6.2&nbsp;&nbsp;&nbsp;Build a USB Serial Connection</a></li>
+<li><a class="reference internal" href="#create-a-mbed-erpc-server" id="id13">4.6.3&nbsp;&nbsp;&nbsp;Create a mbed eRPC server</a></li>
+<li><a class="reference internal" href="#using-python-to-remote-control-bbcar" id="id14">4.6.4&nbsp;&nbsp;&nbsp;Using Python to remote control BBCar</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#remote-controlled-boe-bot-car-with-xbee" id="id15">4.7&nbsp;&nbsp;&nbsp;Remote Controlled BOE BOT Car with Xbee</a></li>
+<li><a class="reference internal" href="#boe-bot-controls-with-pid-optional" id="id16">4.8&nbsp;&nbsp;&nbsp;Boe Bot Controls with PID (Optional)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id17">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+<li><a class="reference internal" href="#reference-list" id="id18">6&nbsp;&nbsp;&nbsp;Reference List</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>A two-wheel robot control</li>
+<li>Boe-bot car remote control</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>May 18, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>In this lab, we will work with servo control (programmable electric
+motors) on a Propeller Boe-Bot car, which is a two-wheel robot.
+We will also experiment a few sensing techniques to assist the BB car
+to navigate, such as PING and accelerometer.</p>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B-L4S5I-IOT01A * 1</li>
+<li>Continuous Servo * 2</li>
+<li>Optical encoder * 2</li>
+<li>Ping * 1</li>
+<li>2.2k-ohm resistor * 1</li>
+<li>10k-ohm resistor * 2</li>
+<li>M3*8mm screws * 4</li>
+<li>M3*6mm screws * 6</li>
+<li>M3 nuts * 4</li>
+<li>Metal frame</li>
+<li>Wheel * 2</li>
+<li>Copper pillar * 3</li>
+<li>Dupont line * dozens</li>
+<li>Portable charger</li>
+<li>USB cable</li>
+<li>Parallax servo shield</li>
+<li>Screwdriver</li>
+<li>USB to pin converter</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="assemble-your-propeller-boe-bot">
+<h3><a class="toc-backref" href="#id5">4.1&nbsp;&nbsp;&nbsp;Assemble Your Propeller Boe-Bot</a></h3>
+<div class="warning docutils container">
+For all the following, please unplug B-L4S5I-IOT01A from power while wiring circuits.</div>
+<div class="instruct docutils container">
+<p>The continuous rotation servos should be calibrated to stay still when
+they receive a specific &quot;stay still&quot; signal before you assemble your
+Prop Boe-Bot. It's a quick and easy procedure. All you have to do is
+connect the servos to B-L4S5I-IOT01A board and run a program that
+sends them the stay-still signal. If a servo turns in response to this
+signal, just use a #1 Phillips screwdriver to adjust its built-in
+feedback potentiometer to make it stop.</p>
+<p>Note that before assembling your Boe-Bot car, you need to calibarate
+both servos. If either assembled servos on Boe-Bot car is not calibrated,
+you will need to disassemble the car for calibration.</p>
+<p>In addition to step-by-step instructions for servo connection and
+calibration, this lesson also includes example programs for speed and
+direction control, speed ramping, and a look inside the signals that
+control a continuous rotation servo's speed and direction.</p>
+</div>
+<div class="instruct docutils container">
+If your BB car has been assembled, please skip this section.</div>
+<ol class="arabic">
+<li><p class="first">Car_base</p>
+<ol class="arabic simple">
+<li>You have to use the following parts, including metal frame and <a class="reference external" href="labs/img/bbcar_installation/01_car_base/IMAG0314.jpg">six M3*6mm screws and three copper pillars</a>.</li>
+<li>Install the pillars, then it should become like <a class="reference external" href="labs/img/bbcar_installation/01_car_base/IMAG0319.jpg">this</a>, and <a class="reference external" href="labs/img/bbcar_installation/01_car_base/IMAG0320.jpg">bottom of the model</a>.</li>
+</ol>
+<div class="warning docutils container">
+<p>We can not fit all four copper pillars on the frame, since the B-L4S5I-IOT01A board is too big.</p>
+</div>
+</li>
+<li><p class="first">Install wheels</p>
+<ol class="arabic simple">
+<li>The <a class="reference external" href="labs/img/bbcar_installation/02_wheels/IMAG0315.jpg">parts</a> including plastic wheels, optical encoders, continuous servos, four M3*8mm screws and four M3 nuts.</li>
+<li>First, align the sensor on encoder with center of continuous servo like <a class="reference external" href="labs/img/bbcar_installation/02_wheels/IMAG0321.jpg">this</a>. And lock them onto the car. After this step, the car should look like <a class="reference external" href="labs/img/bbcar_installation/02_wheels/IMAG0322.jpg">this</a>.</li>
+<li>Second, after the installation of both sides of continuous servos and encoders, plug in the wheels. <a class="reference external" href="labs/img/bbcar_installation/02_wheels/IMAG0323.jpg">Your car</a> will be able to stand on the table.</li>
+<li>Wires may be messy. Pull wires from top of the car and it will be <a class="reference external" href="labs/img/bbcar_installation/03_battery_box/IMAG0328.jpg">tidier</a>.</li>
+</ol>
+</li>
+<li><p class="first">Install the portable charger</p>
+<ol class="arabic simple">
+<li>Use <a class="reference external" href="https://en.wikipedia.org/wiki/Hook-and-loop_fastener">Hook-and-loop fastener</a> to join the portable charger and the Car_base together.</li>
+</ol>
+</li>
+<li><p class="first">Install and lock the parallax servo shield, then wire the parts on the breadboard.</p>
+<div class="instruct docutils container">
+<p>Five pins on the USB to pin converter are GND, IO, D+, D-, VBUS. GND is portable charger's ground. VBUS is charger's 5V. D+ and D- are for USB communicate use, we will not use it here.</p>
+</div>
+</li>
+<li><p class="first">Your Boe Bot car is finished. <a class="reference external" href="labs/img/bbcar_installation/bbcar.jpg">Screenshot</a></p>
+</li>
+</ol>
+<div class="warning docutils container">
+<p>Parallax servo shield board has three power modes. If you want to use the servo
+socket (black) on the top of the board, please select <span class="hl">MODE 0</span>, and
+connect V+ of battery box with one of the middle pin. The connection will be</p>
+<ol class="arabic simple">
+<li>Battery V+ --- middle of servo socket</li>
+<li>Battery GND --- any GND on adapting board</li>
+<li>Servo signal (white) --- top of servo socket</li>
+<li>Servo signal (red) --- middle of servo socket</li>
+<li>Servo signal (black) --- bottom of servo socket</li>
+</ol>
+<p>In the following connection, power of battery box is connected to first row of breadboard, and there is another
+wire connect this row into middle of pin10. So the schmatic will be like <a class="reference external" href="labs/img/bbcar_installation/adapting.png">this</a>
+For more detail about schmatic of this adapting board, you can visit its <a class="reference external" href="https://www.parallax.com/sites/default/files/downloads/35000-BOE-Shield-Schematic-RevB.pdf">datasheet</a></p>
+</div>
+</div>
+<div class="section" id="modulize-bbcar-control">
+<h3><a class="toc-backref" href="#id6">4.2&nbsp;&nbsp;&nbsp;Modulize BBCar Control</a></h3>
+<div class="instruct docutils container">
+<p>We created a high-level library to wrap the BB Car function for easier handling.</p>
+<p>We make Boe-Bot car go forward with certain speed.
+Note that we use two continuous servo, and they rotate in opposite directions
+to move forward or backward (because the servos face different side of the car).</p>
+</div>
+<div class="instruct docutils container">
+We provide three pins only. So you have better use the servo socket (black), and follow the power supply shown above.</div>
+<ol class="arabic">
+<li><p class="first">Connect servos like <a class="reference external" href="labs/img/bbcar_installation/bbcar_servo.png">this</a>. One servo wire to D5, the other wire to D6.</p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>13_1_Simple_test</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Import BB Car library.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git">https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;bbcar.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">Ticker</span> <span class="n">servo_ticker</span><span class="p">;</span>
+<span class="lineno"> 5 </span><span class="n">PwmOut</span> <span class="nf">pin5</span><span class="p">(</span><span class="n">D5</span><span class="p">),</span> <span class="n">pin6</span><span class="p">(</span><span class="n">D6</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">BBCar</span> <span class="nf">car</span><span class="p">(</span><span class="n">pin5</span><span class="p">,</span> <span class="n">pin6</span><span class="p">,</span> <span class="n">servo_ticker</span><span class="p">);</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 9 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+<span class="lineno">10 </span>      <span class="n">car</span><span class="p">.</span><span class="n">goStraight</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<span class="lineno">11 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">5</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">12 </span>      <span class="n">car</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="lineno">13 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">5</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">14 </span>   <span class="p">}</span>
+<span class="lineno">15 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program to test BB Car.</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+<li><p class="first">BB Car control library</p>
+<p>We implemented a damping mechanism in bbcar library. For every movement, instead of abruptly
+set servo motor to new desire speed. We change a small amount of speed every small time interval. If the car
+going to stop when moving, it will stop slowly (in 1s). You can see this <a class="reference external" href="https://learn.parallax.com/tutorials/robot/shield-bot/robotics-board-education-shield-arduino/chapter-4-boe-shield-bot-10">link</a> for more information.
+Our implementation in damping is mainly modified in parallex_servo.h and parallax_servo.cpp. You can modify your
+library if you are not satisfied.</p>
+<p>This is how we implement the library for the part above.
+For more details, please check <a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git">the BB Car library</a></p>
+<p>In <span class="hl">bbcar.h</span> :</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="k">class</span> <span class="nc">BBCar</span> <span class="p">{</span>
+<span class="lineno"> 2 </span>   <span class="k">public</span><span class="o">:</span>
+<span class="lineno"> 3 </span>      <span class="n">BBCar</span> <span class="p">(</span> <span class="n">PwmOut</span> <span class="o">&amp;</span><span class="n">pin_servo0</span><span class="p">,</span> <span class="n">PwmOut</span> <span class="o">&amp;</span><span class="n">pin_servo1</span><span class="p">,</span> <span class="n">Ticker</span> <span class="o">&amp;</span><span class="n">servo_ticker</span> <span class="p">);</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span>      <span class="n">parallax_servo</span> <span class="n">servo0</span><span class="p">;</span>
+<span class="lineno"> 6 </span>      <span class="n">parallax_servo</span> <span class="n">servo1</span><span class="p">;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span>      <span class="kt">void</span> <span class="nf">controlWheel</span><span class="p">();</span>
+<span class="lineno"> 9 </span>      <span class="kt">void</span> <span class="nf">stop</span><span class="p">();</span>
+<span class="lineno">10 </span>      <span class="kt">void</span> <span class="nf">goStraight</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">speed</span> <span class="p">);</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span>      <span class="c1">// turn left/right with a factor of speed</span>
+<span class="lineno">13 </span>      <span class="kt">void</span> <span class="nf">turn</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">speed</span><span class="p">,</span> <span class="kt">double</span> <span class="n">factor</span> <span class="p">);</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span>      <span class="c1">// limit the value by max and min</span>
+<span class="lineno">16 </span>      <span class="kt">float</span> <span class="nf">clamp</span> <span class="p">(</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="kt">float</span> <span class="n">max</span><span class="p">,</span> <span class="kt">float</span> <span class="n">min</span> <span class="p">);</span>
+<span class="lineno">17 </span>      <span class="kt">int</span> <span class="nf">turn2speed</span> <span class="p">(</span> <span class="kt">float</span> <span class="n">turn</span> <span class="p">);</span>
+<span class="lineno">18 </span><span class="p">};</span>
+</pre></div>
+<p>In <span class="hl">bbcar.cpp</span> :</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;bbcar.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">BBCar</span><span class="o">::</span><span class="n">BBCar</span><span class="p">(</span> <span class="n">PwmOut</span> <span class="o">&amp;</span><span class="n">pin_servo0</span><span class="p">,</span> <span class="n">PwmOut</span> <span class="o">&amp;</span><span class="n">pin_servo1</span><span class="p">,</span> <span class="n">Ticker</span> <span class="o">&amp;</span><span class="n">servo_ticker</span> <span class="p">)</span><span class="o">:</span><span class="n">servo0</span><span class="p">(</span><span class="n">pin_servo0</span><span class="p">),</span> <span class="n">servo1</span><span class="p">(</span><span class="n">pin_servo1</span><span class="p">){</span>
+<span class="lineno"> 4 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="lineno"> 5 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="lineno"> 6 </span>   <span class="n">servo_ticker</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">BBCar</span><span class="o">::</span><span class="n">controlWheel</span><span class="p">),</span> <span class="mi">20</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno"> 7 </span><span class="p">}</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="kt">void</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">controlWheel</span><span class="p">(){</span>
+<span class="lineno">10 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">control</span><span class="p">();</span>
+<span class="lineno">11 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">control</span><span class="p">();</span>
+<span class="lineno">12 </span><span class="p">}</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span><span class="kt">void</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">stop</span><span class="p">(){</span>
+<span class="lineno">15 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="lineno">16 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="lineno">17 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">18 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">19 </span><span class="p">}</span>
+<span class="lineno">20 </span>
+<span class="lineno">21 </span><span class="kt">void</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">goStraight</span><span class="p">(</span> <span class="kt">double</span> <span class="n">speed</span> <span class="p">){</span>
+<span class="lineno">22 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="n">speed</span><span class="p">);</span>
+<span class="lineno">23 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="o">-</span><span class="n">speed</span><span class="p">);</span>
+<span class="lineno">24 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">25 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">26 </span><span class="p">}</span>
+<span class="lineno">27 </span>
+<span class="lineno">28 </span><span class="kt">void</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">setCalibTable</span><span class="p">(</span> <span class="kt">int</span> <span class="n">len0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">pwm_table0</span><span class="p">[],</span> <span class="kt">double</span> <span class="n">speed_table0</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">len1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">pwm_table1</span><span class="p">[],</span> <span class="kt">double</span> <span class="n">speed_table1</span><span class="p">[]</span> <span class="p">){</span>
+<span class="lineno">29 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_calib_table</span><span class="p">(</span><span class="n">len0</span><span class="p">,</span> <span class="n">pwm_table0</span><span class="p">,</span> <span class="n">speed_table0</span><span class="p">);</span>
+<span class="lineno">30 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_calib_table</span><span class="p">(</span><span class="n">len1</span><span class="p">,</span> <span class="n">pwm_table1</span><span class="p">,</span> <span class="n">speed_table1</span><span class="p">);</span>
+<span class="lineno">31 </span><span class="p">}</span>
+<span class="lineno">32 </span><span class="kt">void</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">goStraightCalib</span> <span class="p">(</span> <span class="kt">double</span> <span class="n">speed</span> <span class="p">){</span>
+<span class="lineno">33 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_speed_by_cm</span><span class="p">(</span><span class="n">speed</span><span class="p">);</span>
+<span class="lineno">34 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_speed_by_cm</span><span class="p">(</span><span class="o">-</span><span class="n">speed</span><span class="p">);</span>
+<span class="lineno">35 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">36 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">37 </span><span class="p">}</span>
+<span class="lineno">38 </span>
+<span class="lineno">39 </span><span class="cm">/*        speed : speed value of servo</span>
+<span class="lineno">40 </span><span class="cm">   factor: control the speed value with 0~1</span>
+<span class="lineno">41 </span><span class="cm">            control left/right turn with +/-</span>
+<span class="lineno">42 </span><span class="cm">*/</span>
+<span class="lineno">43 </span><span class="kt">void</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">turn</span><span class="p">(</span> <span class="kt">double</span> <span class="n">speed</span><span class="p">,</span> <span class="kt">double</span> <span class="n">factor</span> <span class="p">){</span>
+<span class="lineno">44 </span>   <span class="n">servo0</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="n">speed</span><span class="p">);</span>
+<span class="lineno">45 </span>   <span class="n">servo1</span><span class="p">.</span><span class="n">set_speed</span><span class="p">(</span><span class="o">-</span><span class="n">speed</span><span class="p">);</span>
+<span class="lineno">46 </span>   <span class="k">if</span><span class="p">(</span><span class="n">factor</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+<span class="lineno">47 </span>      <span class="n">servo0</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="n">factor</span><span class="p">);</span>
+<span class="lineno">48 </span>      <span class="n">servo1</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">49 </span>   <span class="p">}</span>
+<span class="lineno">50 </span>   <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">factor</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">){</span>
+<span class="lineno">51 </span>      <span class="n">servo0</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">52 </span>      <span class="n">servo1</span><span class="p">.</span><span class="n">set_factor</span><span class="p">(</span><span class="o">-</span><span class="n">factor</span><span class="p">);</span>
+<span class="lineno">53 </span>   <span class="p">}</span>
+<span class="lineno">54 </span><span class="p">}</span>
+<span class="lineno">55 </span>
+<span class="lineno">56 </span><span class="kt">float</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="kt">float</span> <span class="n">max</span><span class="p">,</span> <span class="kt">float</span> <span class="n">min</span> <span class="p">){</span>
+<span class="lineno">57 </span>   <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+<span class="lineno">58 </span>   <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">min</span><span class="p">)</span> <span class="k">return</span> <span class="n">min</span><span class="p">;</span>
+<span class="lineno">59 </span>   <span class="k">else</span> <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+<span class="lineno">60 </span><span class="p">}</span>
+<span class="lineno">61 </span>
+<span class="lineno">62 </span><span class="kt">int</span> <span class="n">BBCar</span><span class="o">::</span><span class="n">turn2speed</span><span class="p">(</span> <span class="kt">float</span> <span class="n">turn</span> <span class="p">){</span>
+<span class="lineno">63 </span>   <span class="k">return</span> <span class="mi">25</span><span class="o">+</span><span class="n">abs</span><span class="p">(</span><span class="mi">25</span><span class="o">*</span><span class="n">turn</span><span class="p">);</span>
+<span class="lineno">64 </span><span class="p">}</span>
+</pre></div>
+</li>
+</ol>
+</div>
+<div class="section" id="go-certain-distance">
+<h3><a class="toc-backref" href="#id7">4.3&nbsp;&nbsp;&nbsp;Go Certain Distance</a></h3>
+<div class="instruct docutils container">
+<p>Optical encoder can be used to track the rotation of wheels, becuase we know the number of
+slits on a wheel. By the total count of detected light transmitting by an encoder, we
+can calculate the number of rotations of wheels. Then we can convert the rotation into
+distance by the wheels.</p>
+<p>Note that it is more accurate to track distance with encoders than just using assigned
+speed of servos, because many factors (mostly friction on the wheel surface and torque of servo)
+will influence the actual rotation.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Connect encoder like <a class="reference external" href="labs/img/bbcar_installation/bbcar_encoder.jpg">this</a>, but wire the signal pin to D11.</p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>13_2_Distance</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Import BB Car library.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git">https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<p>We use the code to make the car go about 30cm.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;bbcar.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span> <span class="n">USBRX</span><span class="p">);</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">Ticker</span> <span class="n">servo_ticker</span><span class="p">;</span>
+<span class="lineno"> 6 </span><span class="n">Ticker</span> <span class="n">encoder_ticker</span><span class="p">;</span>
+<span class="lineno"> 7 </span><span class="n">PwmOut</span> <span class="nf">pin5</span><span class="p">(</span><span class="n">D5</span><span class="p">),</span> <span class="n">pin6</span><span class="p">(</span><span class="n">D6</span><span class="p">);</span>
+<span class="lineno"> 8 </span><span class="n">DigitalIn</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">D11</span><span class="p">);</span>
+<span class="lineno"> 9 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">steps</span><span class="p">;</span>
+<span class="lineno">10 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">last</span><span class="p">;</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="n">BBCar</span> <span class="nf">car</span><span class="p">(</span><span class="n">pin5</span><span class="p">,</span> <span class="n">pin6</span><span class="p">,</span> <span class="n">servo_ticker</span><span class="p">);</span>
+<span class="lineno">13 </span><span class="kt">void</span> <span class="nf">encoder_control</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">14 </span>   <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">;</span>
+<span class="lineno">15 </span>   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="n">steps</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">16 </span>   <span class="n">last</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+<span class="lineno">17 </span><span class="p">}</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">20 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">21 </span>   <span class="n">encoder_ticker</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="o">&amp;</span><span class="n">encoder_control</span><span class="p">,</span> <span class="mi">10</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">22 </span>   <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">23 </span>   <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">24 </span>   <span class="n">car</span><span class="p">.</span><span class="n">goStraight</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<span class="lineno">25 </span>   <span class="k">while</span><span class="p">(</span><span class="n">steps</span><span class="o">*</span><span class="mf">6.5</span><span class="o">*</span><span class="mf">3.14</span><span class="o">/</span><span class="mi">32</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">26 </span>      <span class="c1">// printf(&quot;encoder = %d\r\n&quot;, steps);</span>
+<span class="lineno">27 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">28 </span>   <span class="p">}</span>
+<span class="lineno">29 </span>   <span class="n">car</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="lineno">30 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and test the program.</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="control-bbcar-using-calibration-table">
+<h3><a class="toc-backref" href="#id8">4.4&nbsp;&nbsp;&nbsp;Control BBCar Using Calibration Table</a></h3>
+<ol class="arabic">
+<li><p class="first">Connect servos like <a class="reference external" href="labs/img/bbcar_installation/bbcar_servo.png">this</a>. One servo wire to D8, the other wire to D9.</p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>13_3_BBCar_Calibration</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Import BB Car library.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git">https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>. We use the code to make the car go about 30cm.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;bbcar.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">Ticker</span> <span class="n">servo_ticker</span><span class="p">;</span>
+<span class="lineno"> 5 </span><span class="n">PwmOut</span> <span class="nf">pin5</span><span class="p">(</span><span class="n">D5</span><span class="p">),</span> <span class="n">pin6</span><span class="p">(</span><span class="n">D6</span><span class="p">);</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="n">BBCar</span> <span class="nf">car</span><span class="p">(</span><span class="n">pin5</span><span class="p">,</span> <span class="n">pin6</span><span class="p">,</span> <span class="n">servo_ticker</span><span class="p">);</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">10 </span>   <span class="c1">// please contruct you own calibration table with each servo</span>
+<span class="lineno">11 </span>   <span class="kt">double</span> <span class="n">pwm_table0</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">150</span><span class="p">};</span>
+<span class="lineno">12 </span>   <span class="kt">double</span> <span class="n">speed_table0</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mf">10.445</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.812</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.647</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.408</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.900</span><span class="p">,</span> <span class="mf">0.000</span><span class="p">,</span> <span class="mf">5.900</span><span class="p">,</span> <span class="mf">10.843</span><span class="p">,</span> <span class="mf">11.880</span><span class="p">,</span> <span class="mf">11.401</span><span class="p">,</span> <span class="mf">12.199</span><span class="p">};</span>
+<span class="lineno">13 </span>   <span class="kt">double</span> <span class="n">pwm_table1</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">150</span><span class="p">};</span>
+<span class="lineno">14 </span>   <span class="kt">double</span> <span class="n">speed_table1</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mf">10.445</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.812</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.647</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.408</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.900</span><span class="p">,</span> <span class="mf">0.000</span><span class="p">,</span> <span class="mf">5.900</span><span class="p">,</span> <span class="mf">10.843</span><span class="p">,</span> <span class="mf">11.880</span><span class="p">,</span> <span class="mf">11.401</span><span class="p">,</span> <span class="mf">12.199</span><span class="p">};</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span>   <span class="c1">// first and fourth argument : length of table</span>
+<span class="lineno">17 </span>   <span class="n">car</span><span class="p">.</span><span class="n">setCalibTable</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">pwm_table0</span><span class="p">,</span> <span class="n">speed_table0</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">pwm_table1</span><span class="p">,</span> <span class="n">speed_table1</span><span class="p">);</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span>   <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">20 </span>      <span class="n">car</span><span class="p">.</span><span class="n">goStraightCalib</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="lineno">21 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">5</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">22 </span>      <span class="n">car</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="lineno">23 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">5</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">24 </span>   <span class="p">}</span>
+<span class="lineno">25 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Generate calibration table by yourself.</p>
+<ol class="arabic simple">
+<li>Generate calibration tables for two servo with the method in
+<a class="reference external" href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-12-servos-encoder-and-ping.html">mbed Lab 12 Servos, encoder and ping</a></li>
+<li>Replace <strong>pwm_table0</strong> and <strong>speed_table0</strong> by your result of first servo in <span class="file">main.cpp</span> .</li>
+<li>Replace <strong>pwm_table1</strong> and <strong>speed_table1</strong> by your result of second servo in <span class="file">main.cpp</span> .</li>
+</ol>
+</li>
+<li><p class="first">Please try to understand the function <strong>set_speed_by_cm()</strong> in <span class="file">parallax_servo.cpp</span>.</p>
+</li>
+<li><p class="first">Compile and test the program.</p>
+<p>How does the results compare with the previous section?</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="navigate-by-ultrasound-ping">
+<h3><a class="toc-backref" href="#id9">4.5&nbsp;&nbsp;&nbsp;Navigate by Ultrasound (Ping)</a></h3>
+<ol class="arabic">
+<li><p class="first">Plug the ping on car like <a class="reference external" href="labs/img/bbcar_installation/bbcar.jpg">this</a> ,and wire it like <a class="reference external" href="labs/img/bbcar_installation/bbcar_ping.jpg">this</a>, but wire the signal pin to D10.</p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>13_4_Navigate_by_Ultrasound</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Import BB Car library.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git">https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span><span class="cp">#include</span> <span class="cpf">&quot;bbcar.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">);</span>
+<span class="lineno"> 5 </span><span class="n">Ticker</span> <span class="n">servo_ticker</span><span class="p">;</span>
+<span class="lineno"> 6 </span><span class="n">PwmOut</span> <span class="nf">pin5</span><span class="p">(</span><span class="n">D5</span><span class="p">),</span> <span class="n">pin6</span><span class="p">(</span><span class="n">D6</span><span class="p">);</span>
+<span class="lineno"> 7 </span><span class="n">DigitalInOut</span> <span class="nf">pin10</span><span class="p">(</span><span class="n">D10</span><span class="p">);</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">BBCar</span> <span class="nf">car</span><span class="p">(</span><span class="n">pin5</span><span class="p">,</span> <span class="n">pin6</span><span class="p">,</span> <span class="n">servo_ticker</span><span class="p">);</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">12 </span>   <span class="n">parallax_ping</span>  <span class="n">ping1</span><span class="p">(</span><span class="n">pin10</span><span class="p">);</span>
+<span class="lineno">13 </span>   <span class="n">car</span><span class="p">.</span><span class="n">goStraight</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="lineno">14 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">15 </span>      <span class="k">if</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">ping1</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">)</span> <span class="n">led1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno">16 </span>      <span class="k">else</span> <span class="p">{</span>
+<span class="lineno">17 </span>         <span class="n">led1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">18 </span>         <span class="n">car</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="lineno">19 </span>         <span class="k">break</span><span class="p">;</span>
+<span class="lineno">20 </span>      <span class="p">}</span>
+<span class="lineno">21 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">10</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">22 </span>   <span class="p">}</span>
+<span class="lineno">23 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and test the program.</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="remote-controlled-boe-bot-car-with-uart">
+<h3><a class="toc-backref" href="#id10">4.6&nbsp;&nbsp;&nbsp;Remote Controlled BOE BOT Car with UART</a></h3>
+<p>In this part, we send eRPC commands to Boe-Bot car through serial port and XBee.
+In the following, we follow basically the same steps as in
+<a class="reference external" href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-9-serial-rpc.html">mbed Lab 9 Serial RPC</a>
+except for the service function calls.</p>
+<div class="section" id="generate-erpc-shim-codes">
+<h4><a class="toc-backref" href="#id11">4.6.1&nbsp;&nbsp;&nbsp;Generate eRPC Shim Codes</a></h4>
+<p>These are interface codes (objects) to encode and decode the RPC function calls.
+These codes are generated automatically from an IDL file: <span class="file">bbcar-service.erpc</span>:</p>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="n">program</span> <span class="n">bbcar_control</span><span class="p">;</span> <span class="c1">// specify name of output files</span>
+<span class="lineno">2 </span>
+<span class="lineno">3 </span><span class="n">interface</span> <span class="n">BBCarService</span> <span class="c1">// cover functions for same topic</span>
+<span class="lineno">4 </span><span class="p">{</span>
+<span class="lineno">5 </span>   <span class="n">stop</span><span class="p">(</span><span class="n">in</span> <span class="n">uint8</span> <span class="n">car</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">void</span> <span class="c1">//car is an index to a BBCar object</span>
+<span class="lineno">6 </span>   <span class="n">goStraight</span><span class="p">(</span><span class="n">in</span> <span class="n">uint8</span> <span class="n">car</span><span class="p">,</span> <span class="n">in</span> <span class="n">int32</span> <span class="n">speed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">void</span>
+<span class="lineno">7 </span>   <span class="n">turn</span><span class="p">(</span><span class="n">in</span> <span class="n">uint8</span> <span class="n">car</span><span class="p">,</span> <span class="n">in</span> <span class="n">int32</span> <span class="n">speed</span><span class="p">,</span> <span class="n">in</span> <span class="kt">double</span> <span class="n">factor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">void</span>
+<span class="lineno">8 </span><span class="p">}</span>
+</pre></div>
+<ol class="arabic">
+<li><p class="first">Create a folder <span class="file">~/MbedPrograms/bbcar_erpc</span> to store <span class="file">bbcar-service.erpc</span>.</p>
+</li>
+<li><p class="first">Start a Terminal app and go to folder <span class="file">~/MbedPrograms/bbcar_erpc</span></p>
+<p><code class="cmd-host">$ cd ~/Mbed\ Programs/bbcar_erpc</code></p>
+</li>
+<li><p class="first">Generate C codes</p>
+<p><code class="cmd-host">$ ~/Downloads/erpcgen bbcar-service.erpc</code></p>
+<p><code class="cmd-host">$ ls</code></p>
+<pre class="terminal literal-block">
+bbcar-service.erpc         bbcar_control_client.cpp        bbcar_control_server.h
+bbcar_control.h            bbcar_control_server.cpp
+</pre>
+<p>Four new files are generated. We will use bbcar_control.h, bbcar_control_server.cpp, and bbcar_control_server.h in
+our mbed program in the following.</p>
+</li>
+<li><p class="first">Generate Python codes</p>
+<p><code class="cmd-host">$ ~/Downloads/erpcgen -g py bbcar-service.erpc</code></p>
+<p>A new folder will be created to keep the Python erpc codes:
+We will use these interface codes for the host Python program.</p>
+<p><code class="cmd-host">$ ls bbcar_control/</code></p>
+<pre class="terminal literal-block">
+__init__.py client.py common.py interface.py server.py
+</pre>
+</li>
+</ol>
+</div>
+<div class="section" id="build-a-usb-serial-connection">
+<h4><a class="toc-backref" href="#id12">4.6.2&nbsp;&nbsp;&nbsp;Build a USB Serial Connection</a></h4>
+<p>We will use a USB serial shield to create another USB connection
+between mbed and PC host (besides the mbed USBTX and USBRX).
+We use this connection to send/receive RPC commands.</p>
+<ol class="arabic simple">
+<li>Use the XBee USB serial shield without the XBee chip.</li>
+<li>Connect mbed D1 to Rx and mbed D0 to Tx of the USB serial shield.
+Also connect mbed Gnd to Gnd of the USB serial shield.</li>
+</ol>
+</div>
+<div class="section" id="create-a-mbed-erpc-server">
+<h4><a class="toc-backref" href="#id13">4.6.3&nbsp;&nbsp;&nbsp;Create a mbed eRPC server</a></h4>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>13_5_BBCar_uart_RPC</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Add a erpc library to the current project</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in <cite>https://gitlab.larc-nthu.net/ee2405_2022/erpc_c.git</cite>
+And click &quot;Next&quot;</li>
+<li>Select &quot;Main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Import BB Car library.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git">https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<p>Note that we comment out the actual codes to control the BB Car
+to test the operations by printf on mbed. To run the BB Car,
+please uncomment the control codes.</p>
+<div class="highlight"><pre><span></span><span class="lineno">  1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno">  2 </span><span class="cp">#include</span> <span class="cpf">&quot;drivers/DigitalOut.h&quot;</span><span class="cp"></span>
+<span class="lineno">  3 </span>
+<span class="lineno">  4 </span><span class="cp">#include</span> <span class="cpf">&quot;erpc_simple_server.h&quot;</span><span class="cp"></span>
+<span class="lineno">  5 </span><span class="cp">#include</span> <span class="cpf">&quot;erpc_basic_codec.h&quot;</span><span class="cp"></span>
+<span class="lineno">  6 </span><span class="cp">#include</span> <span class="cpf">&quot;erpc_crc16.h&quot;</span><span class="cp"></span>
+<span class="lineno">  7 </span><span class="cp">#include</span> <span class="cpf">&quot;UARTTransport.h&quot;</span><span class="cp"></span>
+<span class="lineno">  8 </span><span class="cp">#include</span> <span class="cpf">&quot;DynamicMessageBufferFactory.h&quot;</span><span class="cp"></span>
+<span class="lineno">  9 </span><span class="cp">#include</span> <span class="cpf">&quot;bbcar_control_server.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 10 </span><span class="cm">/* Uncomment for actual BB Car operations</span>
+<span class="lineno"> 11 </span><span class="cm">#include &quot;bbcar.h&quot;</span>
+<span class="lineno"> 12 </span>
+<span class="lineno"> 13 </span><span class="cm">Ticker servo_ticker;</span>
+<span class="lineno"> 14 </span><span class="cm">PwmOut pin5(D5), pin6(D6);</span>
+<span class="lineno"> 15 </span>
+<span class="lineno"> 16 </span><span class="cm">BBCar car(pin5, pin6, servo_ticker);</span>
+<span class="lineno"> 17 </span><span class="cm">*/</span>
+<span class="lineno"> 18 </span>
+<span class="lineno"> 19 </span><span class="cm">/**</span>
+<span class="lineno"> 20 </span><span class="cm"> * Macros for setting console flow control.</span>
+<span class="lineno"> 21 </span><span class="cm"> */</span>
+<span class="lineno"> 22 </span><span class="cp">#define CONSOLE_FLOWCONTROL_RTS     1</span>
+<span class="lineno"> 23 </span><span class="cp">#define CONSOLE_FLOWCONTROL_CTS     2</span>
+<span class="lineno"> 24 </span><span class="cp">#define CONSOLE_FLOWCONTROL_RTSCTS  3</span>
+<span class="lineno"> 25 </span><span class="cp">#define mbed_console_concat_(x) CONSOLE_FLOWCONTROL_##x</span>
+<span class="lineno"> 26 </span><span class="cp">#define mbed_console_concat(x) mbed_console_concat_(x)</span>
+<span class="lineno"> 27 </span><span class="cp">#define CONSOLE_FLOWCONTROL mbed_console_concat(MBED_CONF_TARGET_CONSOLE_UART_FLOW_CONTROL)</span>
+<span class="lineno"> 28 </span>
+<span class="lineno"> 29 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span> <span class="n">led1</span><span class="p">(</span><span class="n">LED1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno"> 30 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span> <span class="n">led2</span><span class="p">(</span><span class="n">LED2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno"> 31 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span> <span class="n">led3</span><span class="p">(</span><span class="n">LED3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno"> 32 </span><span class="n">mbed</span><span class="o">::</span><span class="n">DigitalOut</span><span class="o">*</span> <span class="n">leds</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&amp;</span><span class="n">led1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">led2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">led3</span> <span class="p">};</span>
+<span class="lineno"> 33 </span><span class="cm">/* Uncomment for actual BB Car operations</span>
+<span class="lineno"> 34 </span><span class="cm">BBCar* cars[] = {&amp;car}; //Control only one car</span>
+<span class="lineno"> 35 </span><span class="cm">*/</span>
+<span class="lineno"> 36 </span><span class="cm">/****** erpc declarations *******/</span>
+<span class="lineno"> 37 </span>
+<span class="lineno"> 38 </span><span class="kt">void</span> <span class="nf">stop</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">car</span><span class="p">){</span>
+<span class="lineno"> 39 </span>    <span class="k">if</span><span class="p">(</span><span class="n">car</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//there is only one car</span>
+<span class="lineno"> 40 </span>          <span class="o">*</span><span class="n">leds</span><span class="p">[</span><span class="n">car</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 41 </span>        <span class="c1">// Uncomment for actual BB Car operations</span>
+<span class="lineno"> 42 </span>        <span class="c1">//*cars[car -1].stop();</span>
+<span class="lineno"> 43 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Car %d stop.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">car</span><span class="p">);</span>
+<span class="lineno"> 44 </span>  <span class="p">}</span>
+<span class="lineno"> 45 </span><span class="p">}</span>
+<span class="lineno"> 46 </span>
+<span class="lineno"> 47 </span><span class="kt">void</span> <span class="nf">goStraight</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">car</span><span class="p">,</span> <span class="kt">int32_t</span>  <span class="n">speed</span><span class="p">){</span>
+<span class="lineno"> 48 </span>    <span class="k">if</span><span class="p">(</span><span class="n">car</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//there is only one car</span>
+<span class="lineno"> 49 </span>          <span class="o">*</span><span class="n">leds</span><span class="p">[</span><span class="n">car</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 50 </span>        <span class="c1">// Uncomment for actual BB Car operations</span>
+<span class="lineno"> 51 </span>        <span class="c1">//*cars[car -1].goStraight(speed);</span>
+<span class="lineno"> 52 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Car %d go straight at speed %d.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">speed</span><span class="p">);</span>
+<span class="lineno"> 53 </span>  <span class="p">}</span>
+<span class="lineno"> 54 </span><span class="p">}</span>
+<span class="lineno"> 55 </span>
+<span class="lineno"> 56 </span><span class="kt">void</span> <span class="nf">turn</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">car</span><span class="p">,</span> <span class="kt">int32_t</span> <span class="n">speed</span><span class="p">,</span> <span class="kt">double</span> <span class="n">factor</span><span class="p">){</span>
+<span class="lineno"> 57 </span>    <span class="k">if</span><span class="p">(</span><span class="n">car</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//there is only one car</span>
+<span class="lineno"> 58 </span>          <span class="o">*</span><span class="n">leds</span><span class="p">[</span><span class="n">car</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 59 </span>        <span class="c1">// Uncomment for actual BB Car operations</span>
+<span class="lineno"> 60 </span>        <span class="c1">//*cars[car -1].turn(speed, factor);</span>
+<span class="lineno"> 61 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Car %d turn at speed %d with a factor of %f.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">car</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">factor</span><span class="p">);</span>
+<span class="lineno"> 62 </span>  <span class="p">}</span>
+<span class="lineno"> 63 </span><span class="p">}</span>
+<span class="lineno"> 64 </span>
+<span class="lineno"> 65 </span><span class="cm">/** erpc infrastructure */</span>
+<span class="lineno"> 66 </span><span class="n">ep</span><span class="o">::</span><span class="n">UARTTransport</span> <span class="n">uart_transport</span><span class="p">(</span><span class="n">D1</span><span class="p">,</span> <span class="n">D0</span><span class="p">,</span> <span class="mi">9600</span><span class="p">);</span>
+<span class="lineno"> 67 </span><span class="n">ep</span><span class="o">::</span><span class="n">DynamicMessageBufferFactory</span> <span class="n">dynamic_mbf</span><span class="p">;</span>
+<span class="lineno"> 68 </span><span class="n">erpc</span><span class="o">::</span><span class="n">BasicCodecFactory</span> <span class="n">basic_cf</span><span class="p">;</span>
+<span class="lineno"> 69 </span><span class="n">erpc</span><span class="o">::</span><span class="n">Crc16</span> <span class="n">crc16</span><span class="p">;</span>
+<span class="lineno"> 70 </span><span class="n">erpc</span><span class="o">::</span><span class="n">SimpleServer</span> <span class="n">rpc_server</span><span class="p">;</span>
+<span class="lineno"> 71 </span>
+<span class="lineno"> 72 </span><span class="cm">/** LED service */</span>
+<span class="lineno"> 73 </span><span class="n">BBCarService_service</span> <span class="n">car_control_service</span><span class="p">;</span>
+<span class="lineno"> 74 </span>
+<span class="lineno"> 75 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 76 </span>
+<span class="lineno"> 77 </span>  <span class="c1">// Initialize the rpc server</span>
+<span class="lineno"> 78 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">setCrc16</span><span class="p">(</span><span class="o">&amp;</span><span class="n">crc16</span><span class="p">);</span>
+<span class="lineno"> 79 </span>
+<span class="lineno"> 80 </span>  <span class="c1">// Set up hardware flow control, if needed</span>
+<span class="lineno"> 81 </span><span class="cp">#if CONSOLE_FLOWCONTROL == CONSOLE_FLOWCONTROL_RTS</span>
+<span class="lineno"> 82 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">set_flow_control</span><span class="p">(</span><span class="n">mbed</span><span class="o">::</span><span class="n">SerialBase</span><span class="o">::</span><span class="n">RTS</span><span class="p">,</span> <span class="n">STDIO_UART_RTS</span><span class="p">,</span> <span class="n">NC</span><span class="p">);</span>
+<span class="lineno"> 83 </span><span class="cp">#elif CONSOLE_FLOWCONTROL == CONSOLE_FLOWCONTROL_CTS</span>
+<span class="lineno"> 84 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">set_flow_control</span><span class="p">(</span><span class="n">mbed</span><span class="o">::</span><span class="n">SerialBase</span><span class="o">::</span><span class="n">CTS</span><span class="p">,</span> <span class="n">NC</span><span class="p">,</span> <span class="n">STDIO_UART_CTS</span><span class="p">);</span>
+<span class="lineno"> 85 </span><span class="cp">#elif CONSOLE_FLOWCONTROL == CONSOLE_FLOWCONTROL_RTSCTS</span>
+<span class="lineno"> 86 </span>  <span class="n">uart_transport</span><span class="p">.</span><span class="n">set_flow_control</span><span class="p">(</span><span class="n">mbed</span><span class="o">::</span><span class="n">SerialBase</span><span class="o">::</span><span class="n">RTSCTS</span><span class="p">,</span> <span class="n">STDIO_UART_RTS</span><span class="p">,</span> <span class="n">STDIO_UART_CTS</span><span class="p">);</span>
+<span class="lineno"> 87 </span><span class="cp">#endif</span>
+<span class="lineno"> 88 </span>
+<span class="lineno"> 89 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Initializing server.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 90 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">setTransport</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_transport</span><span class="p">);</span>
+<span class="lineno"> 91 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">setCodecFactory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">basic_cf</span><span class="p">);</span>
+<span class="lineno"> 92 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">setMessageBufferFactory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dynamic_mbf</span><span class="p">);</span>
+<span class="lineno"> 93 </span>
+<span class="lineno"> 94 </span>  <span class="c1">// Add the led service to the server</span>
+<span class="lineno"> 95 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Adding BBCar server.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 96 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">addService</span><span class="p">(</span><span class="o">&amp;</span><span class="n">car_control_service</span><span class="p">);</span>
+<span class="lineno"> 97 </span>
+<span class="lineno"> 98 </span>  <span class="c1">// Run the server. This should never exit</span>
+<span class="lineno"> 99 </span>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Running server.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">100 </span>  <span class="n">rpc_server</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+<span class="lineno">101 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Copy bbcar_control.h, bbcar_control_server.cpp, and bbcar_control_server.h in <span class="file">~/MbedPrograms/bbcar_erpc/</span>
+to our mbed program folder (<span class="file">~/MbedPrograms/13_5_BBCar_uart_RPC/</span>).</p>
+</li>
+<li><p class="first">Compile and run the program.</p>
+<p>The following messages will be in the console:</p>
+<pre class="terminal literal-block">
+Initializing server.
+Adding BBCar server.
+Running server.
+</pre>
+</li>
+</ol>
+</div>
+<div class="section" id="using-python-to-remote-control-bbcar">
+<h4><a class="toc-backref" href="#id14">4.6.4&nbsp;&nbsp;&nbsp;Using Python to remote control BBCar</a></h4>
+<ol class="arabic">
+<li><p class="first">Copy the following codes into <span class="file">car_control.py</span>.
+Also assume the file is in <span class="file">~/MbedPrograms/13_5_BBCar_uart_RPC/</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">curses</span>
+<span class="lineno"> 2 </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="lineno"> 3 </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="lineno"> 4 </span><span class="kn">import</span> <span class="nn">erpc</span>
+<span class="lineno"> 5 </span><span class="kn">from</span> <span class="nn">bbcar_control</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span>    <span class="sd">&quot;&quot;&quot;</span>
+<span class="lineno">10 </span><span class="sd">    The curses.wrapper function is an optional function that</span>
+<span class="lineno">11 </span><span class="sd">    encapsulates a number of lower-level setup and teardown</span>
+<span class="lineno">12 </span><span class="sd">    functions, and takes a single function to run when</span>
+<span class="lineno">13 </span><span class="sd">    the initializations have taken place.</span>
+<span class="lineno">14 </span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+<span class="lineno">17 </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Usage: python bbcar_control.py &lt;serial port to use&gt;&quot;</span><span class="p">)</span>
+<span class="lineno">18 </span>        <span class="n">exit</span><span class="p">()</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span>    <span class="c1"># Initialize all erpc infrastructure</span>
+<span class="lineno">21 </span>    <span class="k">global</span> <span class="n">client</span>
+<span class="lineno">22 </span>    <span class="n">xport</span> <span class="o">=</span> <span class="n">erpc</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">SerialTransport</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">9600</span><span class="p">)</span>
+<span class="lineno">23 </span>    <span class="n">client_mgr</span> <span class="o">=</span> <span class="n">erpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">ClientManager</span><span class="p">(</span><span class="n">xport</span><span class="p">,</span> <span class="n">erpc</span><span class="o">.</span><span class="n">basic_codec</span><span class="o">.</span><span class="n">BasicCodec</span><span class="p">)</span>
+<span class="lineno">24 </span>    <span class="n">client</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">BBCarServiceClient</span><span class="p">(</span><span class="n">client_mgr</span><span class="p">)</span>
+<span class="lineno">25 </span>
+<span class="lineno">26 </span>    <span class="n">curses</span><span class="o">.</span><span class="n">wrapper</span><span class="p">(</span><span class="n">curses_main</span><span class="p">)</span>
+<span class="lineno">27 </span>
+<span class="lineno">28 </span>
+<span class="lineno">29 </span><span class="k">def</span> <span class="nf">curses_main</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+<span class="lineno">30 </span>
+<span class="lineno">31 </span>    <span class="sd">&quot;&quot;&quot;</span>
+<span class="lineno">32 </span><span class="sd">    This function is called curses_main to emphasise that it is</span>
+<span class="lineno">33 </span><span class="sd">    the logical if not actual main function, called by curses.wrapper.</span>
+<span class="lineno">34 </span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="lineno">35 </span>
+<span class="lineno">36 </span>    <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;----------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="lineno">37 </span>    <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;| Use arrow keys to control car. |</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="lineno">38 </span>    <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;| s to stop car and q to exit.   |</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="lineno">39 </span>    <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;---------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="lineno">40 </span>    <span class="n">w</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="lineno">41 </span>
+<span class="lineno">42 </span>    <span class="n">bbcar_control</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="lineno">43 </span>
+<span class="lineno">44 </span>
+<span class="lineno">45 </span><span class="k">def</span> <span class="nf">bbcar_control</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+<span class="lineno">46 </span>    <span class="n">w</span><span class="o">.</span><span class="n">nodelay</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="lineno">47 </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="lineno">48 </span>        <span class="n">char</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">getch</span><span class="p">()</span>
+<span class="lineno">49 </span>        <span class="n">w</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="lineno">50 </span>        <span class="n">w</span><span class="o">.</span><span class="n">clrtobot</span><span class="p">()</span>
+<span class="lineno">51 </span>        <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">):</span> <span class="k">break</span>  <span class="c1"># q</span>
+<span class="lineno">52 </span>        <span class="k">elif</span> <span class="n">char</span> <span class="o">==</span> <span class="n">curses</span><span class="o">.</span><span class="n">KEY_RIGHT</span><span class="p">:</span>
+<span class="lineno">53 </span>           <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;Turn right.&quot;</span><span class="p">)</span>
+<span class="lineno">54 </span>           <span class="n">w</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="lineno">55 </span>           <span class="n">client</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="lineno">56 </span>        <span class="k">elif</span> <span class="n">char</span> <span class="o">==</span> <span class="n">curses</span><span class="o">.</span><span class="n">KEY_LEFT</span><span class="p">:</span>
+<span class="lineno">57 </span>           <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;Turn left.&quot;</span><span class="p">)</span>
+<span class="lineno">58 </span>           <span class="n">w</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="lineno">59 </span>           <span class="n">client</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="lineno">60 </span>        <span class="k">elif</span> <span class="n">char</span> <span class="o">==</span> <span class="n">curses</span><span class="o">.</span><span class="n">KEY_UP</span><span class="p">:</span>
+<span class="lineno">61 </span>           <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;Go straight.&quot;</span><span class="p">)</span>
+<span class="lineno">62 </span>           <span class="n">w</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="lineno">63 </span>           <span class="n">client</span><span class="o">.</span><span class="n">goStraight</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="lineno">64 </span>        <span class="k">elif</span> <span class="n">char</span> <span class="o">==</span> <span class="n">curses</span><span class="o">.</span><span class="n">KEY_DOWN</span><span class="p">:</span>
+<span class="lineno">65 </span>           <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;Go backward.&quot;</span><span class="p">)</span>
+<span class="lineno">66 </span>           <span class="n">w</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="lineno">67 </span>           <span class="n">client</span><span class="o">.</span><span class="n">goStraight</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span>
+<span class="lineno">68 </span>        <span class="k">elif</span> <span class="n">char</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">):</span>
+<span class="lineno">69 </span>           <span class="n">w</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="s2">&quot;Stop.&quot;</span><span class="p">)</span>
+<span class="lineno">70 </span>           <span class="n">w</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<span class="lineno">71 </span>           <span class="n">client</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="lineno">72 </span>        <span class="k">else</span><span class="p">:</span> <span class="k">pass</span>
+<span class="lineno">73 </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="lineno">74 </span>
+<span class="lineno">75 </span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+<div class="instruct docutils container">
+<p>This program uses curses library to control the terminal.</p>
+<ol class="arabic simple">
+<li>Key UP: go forward</li>
+<li>Key DOWN: go backward</li>
+<li>Key RIGHT: go right</li>
+<li>Key LEFT: go left</li>
+<li>Key s: stop</li>
+<li>Key q: quit</li>
+</ol>
+</div>
+</li>
+<li><p class="first">Copy folder <span class="file">bbcar_control/</span> in <span class="file">~/MbedPrograms/bbcar_erpc/</span>
+to our mbed program folder (<span class="file">~/MbedPrograms/13_5_BBCar_uart_RPC/</span>).</p>
+</li>
+<li><p class="first">Start a Terminal app</p>
+</li>
+<li><p class="first">Check the USB serial port</p>
+<p>Note that USB-to-Serial cable will create a UART device like COM* (Windows) or /dev/cu.usbserial-* (Mac OS).
+For example, it's &quot;/dev/cu.usbserial-AC00CNOQ&quot; in Mac OS or COM7 in Windows.</p>
+<p><code class="cmd-host">$ python3 -m serial.tools.list_ports -v</code></p>
+</li>
+<li><p class="first">Run python codes</p>
+<p><code class="cmd-host">$ cd ~/Mbed\ Programs/13_5_BBCar_uart_RPC/</code></p>
+<p><code class="cmd-host">$ python3 car_control.py /dev/cu.usbserial-AC00CNOQ</code></p>
+<p>or</p>
+<p><code class="cmd-host">$ python3 car_control.py COM7</code></p>
+<ol class="arabic">
+<li><p class="first">Press arrow key on the keyboard to control the car and s to stop the car. And press 'q' to leave the program</p>
+<p>The LEDs will blink and the following messages will show in Mbed Studio according to the key press at Python program:</p>
+<pre class="terminal literal-block">
+Car 1 go straight at speed 100.
+Car 1 turn at speed 100 with a factor of -0.3.
+Car 1 go straight at speed 100.
+...
+</pre>
+</li>
+</ol>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="remote-controlled-boe-bot-car-with-xbee">
+<h3><a class="toc-backref" href="#id15">4.7&nbsp;&nbsp;&nbsp;Remote Controlled BOE BOT Car with Xbee</a></h3>
+<p>Continuing from previous USB-serial cable control, we can also send RPC commands to Boe-Bot car through Xbee.</p>
+<ol class="arabic simple">
+<li>Connect one of your Xbee to the mbed <a class="reference external" href="labs/img/XBee/191359.png">like this</a> onto BBCar (Chip B), and plug the other Xbee to the host's USB port (Chip A).</li>
+<li>Please test previous UART control codes. The programs should run without modification (except for serial device names).</li>
+</ol>
+</div>
+<div class="section" id="boe-bot-controls-with-pid-optional">
+<h3><a class="toc-backref" href="#id16">4.8&nbsp;&nbsp;&nbsp;Boe Bot Controls with PID (Optional)</a></h3>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>13_8_PID_control</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Import BSP library.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in <cite>https://gitlab.larc-nthu.net/ee2405_2022/bsp-b-l475e-iot01.git</cite>
+And click &quot;Next&quot;</li>
+<li>Select &quot;main&quot; branch and click &quot;Finish&quot;</li>
+<li>Delete the following file:
+<span class="file">bsp-b-l475e-iot01/Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_qspi.*</span>
+&quot;*&quot; means any file extension.</li>
+</ol>
+</li>
+<li><p class="first">Import BB Car library.</p>
+<ol class="arabic simple">
+<li>Click <strong>+</strong> in the Library tab under program source.</li>
+<li>Fill in &quot;<a class="reference external" href="https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git">https://gitlab.larc-nthu.net/ee2405_2022/bbcar.git</a>&quot;
+And click &quot;Next&quot;</li>
+<li>Select &quot;main&quot; branch and click &quot;Finish&quot;</li>
+</ol>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno">  1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno">  2 </span><span class="cp">#include</span> <span class="cpf">&quot;bbcar.h&quot;</span><span class="cp"></span>
+<span class="lineno">  3 </span><span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<span class="lineno">  4 </span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="lineno">  5 </span><span class="cp">#include</span> <span class="cpf">&quot;stm32l475e_iot01_magneto.h&quot;</span><span class="cp"></span>
+<span class="lineno">  6 </span>
+<span class="lineno">  7 </span><span class="cp">#define bound 0.9</span>
+<span class="lineno">  8 </span><span class="cp">#define PI 3.14159</span>
+<span class="lineno">  9 </span>
+<span class="lineno"> 10 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span> <span class="n">USBRX</span><span class="p">);</span>
+<span class="lineno"> 11 </span>
+<span class="lineno"> 12 </span><span class="n">Ticker</span> <span class="n">servo_ticker</span><span class="p">;</span>
+<span class="lineno"> 13 </span><span class="n">PwmOut</span> <span class="nf">pin5</span><span class="p">(</span><span class="n">D5</span><span class="p">),</span> <span class="n">pin6</span><span class="p">(</span><span class="n">D6</span><span class="p">);</span>
+<span class="lineno"> 14 </span><span class="n">BBCar</span> <span class="nf">car</span><span class="p">(</span><span class="n">pin5</span><span class="p">,</span> <span class="n">pin6</span><span class="p">,</span> <span class="n">servo_ticker</span><span class="p">);</span>
+<span class="lineno"> 15 </span>
+<span class="lineno"> 16 </span>
+<span class="lineno"> 17 </span><span class="kt">float</span> <span class="n">state</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="lineno"> 18 </span><span class="kt">float</span> <span class="n">Kp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Ki</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Kd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 19 </span><span class="kt">float</span> <span class="n">a0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 20 </span>
+<span class="lineno"> 21 </span><span class="c1">//The formula is:</span>
+<span class="lineno"> 22 </span><span class="c1">//y[n] = y[n-1] + A0 * x[n] + A1 * x[n-1] + A2 * x[n-2]</span>
+<span class="lineno"> 23 </span><span class="c1">//A0 = Kp + Ki + Kd</span>
+<span class="lineno"> 24 </span><span class="c1">//A1 = (-Kp ) - (2 * Kd )</span>
+<span class="lineno"> 25 </span><span class="c1">//A2 = Kd</span>
+<span class="lineno"> 26 </span><span class="kt">void</span> <span class="nf">pid_init</span><span class="p">(){</span>
+<span class="lineno"> 27 </span>   <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 28 </span>   <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 29 </span>   <span class="n">state</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 30 </span>   <span class="n">a0</span> <span class="o">=</span> <span class="n">Kp</span> <span class="o">+</span> <span class="n">Ki</span> <span class="o">+</span> <span class="n">Kd</span><span class="p">;</span>
+<span class="lineno"> 31 </span>   <span class="n">a1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">Kp</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">Kd</span><span class="p">;</span>
+<span class="lineno"> 32 </span>   <span class="n">a2</span> <span class="o">=</span> <span class="n">Kd</span><span class="p">;</span>
+<span class="lineno"> 33 </span><span class="p">}</span>
+<span class="lineno"> 34 </span><span class="kt">float</span> <span class="nf">pid_process</span><span class="p">(</span><span class="kt">float</span> <span class="n">in</span><span class="p">){</span>
+<span class="lineno"> 35 </span>   <span class="kt">int</span> <span class="n">out</span> <span class="o">=</span> <span class="n">in</span><span class="o">*</span><span class="n">a0</span> <span class="o">+</span> <span class="n">a1</span><span class="o">*</span><span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a2</span><span class="o">*</span><span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">state</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="lineno"> 36 </span>
+<span class="lineno"> 37 </span>   <span class="c1">//update state</span>
+<span class="lineno"> 38 </span>   <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="lineno"> 39 </span>   <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">in</span><span class="p">;</span>
+<span class="lineno"> 40 </span>   <span class="n">state</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">;</span>
+<span class="lineno"> 41 </span>
+<span class="lineno"> 42 </span>   <span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+<span class="lineno"> 43 </span><span class="p">}</span>
+<span class="lineno"> 44 </span>
+<span class="lineno"> 45 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 46 </span>   <span class="kt">int16_t</span> <span class="n">pDataXYZ</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="lineno"> 47 </span>   <span class="kt">char</span> <span class="n">rotation</span><span class="p">;</span>
+<span class="lineno"> 48 </span>   <span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="lineno"> 49 </span>   <span class="kt">float</span> <span class="n">degree</span><span class="p">,</span> <span class="n">target_degree</span><span class="p">,</span> <span class="n">diff</span><span class="p">;</span>
+<span class="lineno"> 50 </span>   <span class="kt">FILE</span> <span class="o">*</span><span class="n">devin</span> <span class="o">=</span> <span class="n">fdopen</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pc</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">);</span>
+<span class="lineno"> 51 </span>   <span class="kt">FILE</span> <span class="o">*</span><span class="n">devout</span> <span class="o">=</span> <span class="n">fdopen</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pc</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">);</span>
+<span class="lineno"> 52 </span>
+<span class="lineno"> 53 </span>   <span class="c1">//pid control setup</span>
+<span class="lineno"> 54 </span>   <span class="n">Kp</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span> <span class="n">Ki</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span> <span class="n">Kd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno"> 55 </span>   <span class="n">pid_init</span><span class="p">();</span>
+<span class="lineno"> 56 </span>
+<span class="lineno"> 57 </span>   <span class="c1">// acc sensor setup</span>
+<span class="lineno"> 58 </span>   <span class="n">BSP_MAGNETO_Init</span><span class="p">();</span>
+<span class="lineno"> 59 </span>
+<span class="lineno"> 60 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 61 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno"> 62 </span>      <span class="c1">// read wanted degree</span>
+<span class="lineno"> 63 </span>      <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 64 </span>         <span class="n">rotation</span> <span class="o">=</span> <span class="n">fputc</span><span class="p">(</span><span class="n">fgetc</span><span class="p">(</span><span class="n">devin</span><span class="p">),</span> <span class="n">devout</span><span class="p">);</span>
+<span class="lineno"> 65 </span>      <span class="p">}</span>
+<span class="lineno"> 66 </span>      <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 67 </span>         <span class="n">buff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fputc</span><span class="p">(</span><span class="n">fgetc</span><span class="p">(</span><span class="n">devin</span><span class="p">),</span> <span class="n">devout</span><span class="p">);</span>
+<span class="lineno"> 68 </span>      <span class="p">}</span>
+<span class="lineno"> 69 </span>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno"> 70 </span>
+<span class="lineno"> 71 </span>      <span class="kt">int</span> <span class="n">turn</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">buff</span><span class="p">);</span>
+<span class="lineno"> 72 </span>
+<span class="lineno"> 73 </span>      <span class="c1">// judge current car degree</span>
+<span class="lineno"> 74 </span>      <span class="n">BSP_MAGNETO_GetXYZ</span><span class="p">(</span><span class="n">pDataXYZ</span><span class="p">);</span>
+<span class="lineno"> 75 </span>      <span class="n">degree</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">pDataXYZ</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pDataXYZ</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
+<span class="lineno"> 76 </span>
+<span class="lineno"> 77 </span>      <span class="k">if</span> <span class="p">(</span><span class="n">rotation</span> <span class="o">==</span> <span class="sc">&#39;l&#39;</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 78 </span>         <span class="n">target_degree</span> <span class="o">=</span> <span class="n">degree</span> <span class="o">-</span> <span class="n">turn</span><span class="p">;</span>
+<span class="lineno"> 79 </span>      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">rotation</span> <span class="o">==</span> <span class="sc">&#39;r&#39;</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 80 </span>         <span class="n">target_degree</span> <span class="o">=</span> <span class="n">degree</span> <span class="o">+</span> <span class="n">turn</span><span class="p">;</span>
+<span class="lineno"> 81 </span>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+<span class="lineno"> 82 </span>         <span class="n">target_degree</span> <span class="o">=</span> <span class="n">degree</span><span class="p">;</span>
+<span class="lineno"> 83 </span>      <span class="p">}</span>
+<span class="lineno"> 84 </span>
+<span class="lineno"> 85 </span>      <span class="k">if</span> <span class="p">(</span><span class="n">target_degree</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 86 </span>         <span class="n">target_degree</span> <span class="o">=</span> <span class="mi">360</span> <span class="o">+</span> <span class="n">target_degree</span><span class="p">;</span>
+<span class="lineno"> 87 </span>      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">target_degree</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 88 </span>         <span class="n">target_degree</span> <span class="o">=</span> <span class="mi">360</span> <span class="o">-</span> <span class="n">target_degree</span><span class="p">;</span>
+<span class="lineno"> 89 </span>      <span class="p">}</span>
+<span class="lineno"> 90 </span>      <span class="n">diff</span> <span class="o">=</span> <span class="n">degree</span> <span class="o">-</span> <span class="n">target_degree</span><span class="p">;</span>
+<span class="lineno"> 91 </span>
+<span class="lineno"> 92 </span>      <span class="c1">//The car will continue to turn to the target degree until the error is small enough</span>
+<span class="lineno"> 93 </span>      <span class="k">while</span><span class="p">(</span> <span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 94 </span>         <span class="c1">//Process the PID control</span>
+<span class="lineno"> 95 </span>         <span class="kt">float</span> <span class="n">correction</span> <span class="o">=</span> <span class="n">pid_process</span><span class="p">(</span><span class="n">diff</span><span class="p">);</span>
+<span class="lineno"> 96 </span>         <span class="c1">//bound the value from -0.9 to -.9</span>
+<span class="lineno"> 97 </span>         <span class="n">correction</span> <span class="o">=</span> <span class="n">car</span><span class="p">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">correction</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> <span class="o">-</span><span class="n">bound</span><span class="p">);</span>
+<span class="lineno"> 98 </span>         <span class="kt">float</span> <span class="n">turn</span> <span class="o">=</span> <span class="p">(</span><span class="n">rotation</span> <span class="o">==</span> <span class="sc">&#39;l&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">abs</span><span class="p">(</span><span class="n">correction</span><span class="p">))</span> <span class="o">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">abs</span><span class="p">(</span><span class="n">correction</span><span class="p">));</span>
+<span class="lineno"> 99 </span>         <span class="n">car</span><span class="p">.</span><span class="n">turn</span><span class="p">(</span><span class="n">car</span><span class="p">.</span><span class="n">turn2speed</span><span class="p">(</span><span class="n">turn</span><span class="p">),</span><span class="n">turn</span><span class="p">);</span>
+<span class="lineno">100 </span>         <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">101 </span>
+<span class="lineno">102 </span>         <span class="n">BSP_MAGNETO_GetXYZ</span><span class="p">(</span><span class="n">pDataXYZ</span><span class="p">);</span>
+<span class="lineno">103 </span>         <span class="n">degree</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">pDataXYZ</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pDataXYZ</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
+<span class="lineno">104 </span>
+<span class="lineno">105 </span>         <span class="n">diff</span> <span class="o">=</span> <span class="n">degree</span> <span class="o">-</span> <span class="n">target_degree</span><span class="p">;</span>
+<span class="lineno">106 </span>         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;degree:%f, target: %f, diff:%f </span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">target_degree</span><span class="p">,</span> <span class="n">diff</span><span class="p">);</span>
+<span class="lineno">107 </span>      <span class="p">}</span>
+<span class="lineno">108 </span>      <span class="n">car</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="lineno">109 </span>      <span class="n">pid_init</span><span class="p">();</span>
+<span class="lineno">110 </span>   <span class="p">}</span>
+<span class="lineno">111 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">The portable power bank is made in lithium battery, and it will disturb the magnetometer severely.</p>
+<p><strong>So you have to hold the portable power bank in hand and let the distance between power bank and the car as far as possible.</strong></p>
+</li>
+<li><p class="first">Start CoolTerm app and connect to mbed to control the car.</p>
+<ol class="arabic simple">
+<li>Enter <code class="cmd-host">l</code> or <code class="cmd-host">r</code> and followed by degrees(00~99) to make the car turn left or right.
+For example, If you want to make the car turn right 30 degrees, please enter <code class="cmd-host">r30</code>.</li>
+<li>Screenshot the result.</li>
+</ol>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id17">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Show your git remote repository.</li>
+<li>Use xbee to remote control BBCar, and make sure your car can go <strong>straight</strong> forward and backward by using calibration table or other method.</li>
+</ol>
+</div>
+<div class="section" id="reference-list">
+<h2><a class="toc-backref" href="#id18">6&nbsp;&nbsp;&nbsp;Reference List</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="labs/doc/mbed12/900-00005-Standard-Servo-Product-Documentation-v2.2.pdf">Parallax Standard Servo</a>, by Parallax Inc.</li>
+<li><a class="reference external" href="labs/doc/mbed12/900-00008-Continuous-Rotation-Servo-Documentation-v2.2.pdf">Parallax Continuous Rotation Servo</a>, by Parallax Inc.</li>
+<li><a class="reference external" href="labs/doc/mbed12/28107-Boe-Bot-Digital-Encoder-Product-Guide-v2.0.pdf">Boe-Bot Digital Encoder Kit</a>, by Parallax Inc.</li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>

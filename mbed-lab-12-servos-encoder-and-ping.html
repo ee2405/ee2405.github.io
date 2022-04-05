@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>mbed Lab 12 Servos, encoder and ping</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/pygment.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.ee.nthu.edu.tw/ee240500/theme/LARC.css" />
+
+ 
+        <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="https://www.ee.nthu.edu.tw/ee240500/">Embedded System Lab <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/">Home</a></li>
+
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+                <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+              <form class="navbar-form navbar-right" role="search" action="https://www.ee.nthu.edu.tw/ee240500/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa
+                          fa-search fa-fw"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="https://www.ee.nthu.edu.tw/ee240500/mbed-lab-12-servos-encoder-and-ping.html" rel="bookmark"
+                   title="Permalink to mbed Lab 12 Servos, encoder and ping">mbed Lab 12 Servos, encoder and ping</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2022-05-11T15:00:00+08:00">
+                May 11, 2022
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="https://www.ee.nthu.edu.tw/ee240500/author/jing-jia-liou.html"> Jing-Jia Liou</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <!-- usage: include:: LARC_def.txt -->
+<!-- please check https://github.com/nevir/groc/issues/63#issuecomment-24299684 for pygments' lexer list -->
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#lab-due" id="id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></li>
+<li><a class="reference internal" href="#lab-introduction" id="id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></li>
+<li><a class="reference internal" href="#equipment-list" id="id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></li>
+<li><a class="reference internal" href="#lab-description" id="id4">4&nbsp;&nbsp;&nbsp;Lab Description</a><ul class="auto-toc">
+<li><a class="reference internal" href="#lecture-notes" id="id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></li>
+<li><a class="reference internal" href="#center-and-test-the-continuous-servos" id="id6">4.2&nbsp;&nbsp;&nbsp;Center and Test the Continuous Servos</a></li>
+<li><a class="reference internal" href="#optical-encoder" id="id7">4.3&nbsp;&nbsp;&nbsp;Optical encoder</a></li>
+<li><a class="reference internal" href="#ping" id="id8">4.4&nbsp;&nbsp;&nbsp;Ping</a></li>
+<li><a class="reference internal" href="#continuous-servos-calibration-table" id="id9">4.5&nbsp;&nbsp;&nbsp;Continuous Servos calibration table</a></li>
+<li><a class="reference internal" href="#use-of-calibration-table" id="id10">4.6&nbsp;&nbsp;&nbsp;Use of calibration table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demo-and-checkpoints" id="id11">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></li>
+</ul>
+</div>
+<div class="tasklist docutils container">
+<p>The goal of this lab is to learn:</p>
+<ol class="arabic simple">
+<li>Continuous servo control</li>
+<li>Encoder and ping</li>
+</ol>
+</div>
+<div class="section" id="lab-due">
+<h2><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Lab Due</a></h2>
+<p><strong>May. 11, 2022</strong></p>
+</div>
+<div class="section" id="lab-introduction">
+<h2><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Lab Introduction</a></h2>
+<p>In this lab, we will work with servo control (programmable electric
+motors).
+We will also experiment a few sensing techniques to assist the BB car
+to navigate, such as encoder and ping.</p>
+<div class="instruct docutils container">
+Please google the difference between a standard and continuous servo.
+Basically a standard servo control the rotation degree to certain
+angles, while continuous servo set the speed/direction of the motor (the
+motor will continuously rotate).</div>
+</div>
+<div class="section" id="equipment-list">
+<h2><a class="toc-backref" href="#id3">3&nbsp;&nbsp;&nbsp;Equipment List</a></h2>
+<ol class="arabic simple">
+<li>B_L4S5I_IOT01A * 1</li>
+<li>Continuous Servo * 2</li>
+<li>Optical encoder * 2</li>
+<li>Ping * 1</li>
+<li>2.2k-ohm resistor * 1</li>
+<li>10k-ohm resistor * 1</li>
+<li>M3*8mm screws * 2</li>
+<li>M3 nuts * 2</li>
+<li>Wheel * 1</li>
+<li>micro-USB to 5V * 1</li>
+</ol>
+</div>
+<div class="section" id="lab-description">
+<h2><a class="toc-backref" href="#id4">4&nbsp;&nbsp;&nbsp;Lab Description</a></h2>
+<div class="section" id="lecture-notes">
+<h3><a class="toc-backref" href="#id5">4.1&nbsp;&nbsp;&nbsp;Lecture Notes</a></h3>
+<ul class="simple">
+<li>Chapter 13: Servo <a class="reference external" href="notes/ch13_servo.pdf">ch13_servo.pdf</a></li>
+</ul>
+</div>
+<div class="section" id="center-and-test-the-continuous-servos">
+<h3><a class="toc-backref" href="#id6">4.2&nbsp;&nbsp;&nbsp;Center and Test the Continuous Servos</a></h3>
+<div class="warning docutils container">
+<ol class="arabic simple">
+<li>For the following steps, please unplug B_L4S5I_IOT01A from power while wiring circuits.</li>
+<li>Note that you should not use power servo modules by sources from B_L4S5I_IOT01A.
+Servo may draw a large instaneous current when in operation, which may impact operations of B_L4S5I_IOT01A if sharing the same power source.</li>
+</ol>
+</div>
+<ol class="arabic simple">
+<li>A servo circuit is shown <a class="reference external" href="labs/img/bbcar_installation/bbcar_servo.png">here</a>. Note that the white line on power supply is GND.</li>
+</ol>
+<div class="warning docutils container">
+Before you use a continuous servo, you should calibrate it first.
+You should set <strong>speed</strong> to 0 in the code below, and make sure that the servo stay still.
+If not, use a screwdriver to adjust the potentiometer inside the continuous servo until it stay still.</div>
+<ol class="arabic">
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>12_1_Continuous_Servos_Test</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<p>We use the following code to test servos.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="cp">#define CENTER_BASE 1500</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">PwmOut</span> <span class="nf">servo</span><span class="p">(</span><span class="n">D11</span><span class="p">);</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kt">void</span> <span class="nf">servo_control</span><span class="p">(</span><span class="kt">int</span> <span class="n">speed</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 8 </span>   <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">)</span>       <span class="n">speed</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+<span class="lineno"> 9 </span>   <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">200</span><span class="p">)</span> <span class="n">speed</span> <span class="o">=</span> <span class="o">-</span><span class="mi">200</span><span class="p">;</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span>   <span class="n">servo</span> <span class="o">=</span> <span class="p">(</span><span class="n">CENTER_BASE</span> <span class="o">+</span> <span class="n">speed</span><span class="p">)</span><span class="o">/</span><span class="mf">20000.0f</span><span class="p">;</span>
+<span class="lineno">12 </span><span class="p">}</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">15 </span>   <span class="n">servo</span><span class="p">.</span><span class="n">period_ms</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">18 </span>      <span class="n">servo_control</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="lineno">19 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">2000</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">20 </span>      <span class="n">servo_control</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">);</span>
+<span class="lineno">21 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">2000</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">22 </span>   <span class="p">}</span>
+<span class="lineno">23 </span><span class="p">}</span>
+</pre></div>
+<div class="instruct docutils container">
+<p>How does it work?</p>
+<ol class="arabic simple">
+<li>Above program will run the servo forward and backward continuously due to the changes of PWM signal.</li>
+<li>If we set PWM pulse width = 1500us (with a period of 20ms), servo will stay still.
+Otherwise, if &lt; 1500us, servo will rotate clockwise.
+And, if &gt; 1500us, servo will rotate counterclockwise.</li>
+</ol>
+</div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Please change above program to set the servo speed to 0, and calibrate such that the servo does not run at this speed.</p>
+</li>
+<li><p class="first">Push the code to your git remote repository, and check your remote repository for new files.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="optical-encoder">
+<h3><a class="toc-backref" href="#id7">4.3&nbsp;&nbsp;&nbsp;Optical encoder</a></h3>
+<div class="instruct docutils container">
+<p>What is an optical encoder?</p>
+<p>An optical rotary encoder is an electro-mechanical device that converts the angular motion to digital signal, using a light shining onto a photodiode through slits.</p>
+<p>Please read the official reference about <a class="reference external" href="labs/doc/mbed12/28107-Boe-Bot-Digital-Encoder-Product-Guide-v2.0.pdf">Boe-Bot Digital Encoder Kit</a>.</p>
+</div>
+<div class="instruct docutils container">
+<p>How to test an encoder?</p>
+<p>Optical encoder count the number of times the light is detected through slits.
+For a simple test of the function, swing your hand in front of the sensor and count the sensor values.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Connect the encoder</p>
+<ol class="arabic simple">
+<li>Encoder red &lt;-&gt; B_L4S5I_IOT01A 5V</li>
+<li>Encoder black &lt;-&gt; B_L4S5I_IOT01A GND</li>
+<li>Encoder white &lt;-&gt; B_L4S5I_IOT01A D11</li>
+<li>Encoder white &lt;-&gt; 10k-ohm resistor &lt;-&gt; B_L4S5I_IOT01A 5V</li>
+<li>After connection, it will be like this <a class="reference external" href="labs/img/bbcar_installation/bbcar_encoder.jpg">picture</a></li>
+</ol>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>12_3_Optical_Encoder</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span> <span class="n">USBRX</span><span class="p">);</span>
+<span class="lineno"> 4 </span><span class="n">DigitalIn</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">D11</span><span class="p">);</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="n">Ticker</span> <span class="n">encoder_ticker</span><span class="p">;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">steps</span><span class="p">;</span>
+<span class="lineno"> 9 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">last</span><span class="p">;</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="kt">void</span> <span class="nf">encoder_control</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">12 </span>   <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">;</span>
+<span class="lineno">13 </span>   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="n">steps</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">14 </span>   <span class="n">last</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+<span class="lineno">15 </span><span class="p">}</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">18 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">19 </span>   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Before start</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">20 </span>
+<span class="lineno">21 </span>   <span class="n">encoder_ticker</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="o">&amp;</span><span class="n">encoder_control</span><span class="p">,</span> <span class="mf">.01</span><span class="p">);</span>
+<span class="lineno">22 </span>
+<span class="lineno">23 </span>   <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">24 </span>   <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">25 </span>
+<span class="lineno">26 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">27 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">2000</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">28 </span>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;encoder = %d</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">steps</span><span class="p">);</span>
+<span class="lineno">29 </span>   <span class="p">}</span>
+<span class="lineno">30 </span><span class="p">}</span>
+</pre></div>
+<div class="instruct docutils container">
+<p>How does it work?</p>
+<ol class="arabic simple">
+<li>After the <span class="hl">encoder_control</span> is attached to ticker, mbed program will monitor the encoder pin every 10ms.
+The sensor counts the change from low to high.</li>
+</ol>
+</div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Use your hand to block the encoder on and off, and try to change the recorded encoder value.</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="ping">
+<h3><a class="toc-backref" href="#id8">4.4&nbsp;&nbsp;&nbsp;Ping</a></h3>
+<div class="instruct docutils container">
+<p>What is Ping?</p>
+<p>Ping is an ultrasonic distance sensor. It sends a sound wave to an object, and measure the distance by calculate the time interval between sending the signal and receiving the echo.</p>
+<p>Please read the official reference about <a class="reference external" href="http://learn.parallax.com/activitybot/build-and-test-ping-sensor-circuit">Ping Reference</a></p>
+</div>
+<div class="instruct docutils container">
+<p>How it works?</p>
+<ol class="arabic simple">
+<li>First, set the pin to output mode and output a 5us pulse.
+After the echo pulse is received (by setting pin to input mode),
+we use a mbed timer to calculate the pulse width.</li>
+</ol>
+</div>
+<div class="warning docutils container">
+<p>Notice that ping will not function correctly in the following situations :</p>
+<ol class="arabic simple">
+<li>Blind zone effect : the distance is shorter than 2 cm.</li>
+<li>The sensor is oblique to the object.</li>
+</ol>
+<p>Please check the conclusion part in <a class="reference external" href="https://deepbluembedded.com/ultrasonic-sensor-hc-sr04-pic-microcontrollers-tutorial/">this page</a> for the detail.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Connect the ping</p>
+<ol class="arabic simple">
+<li>ping red &lt;-&gt; B_L4S5I_IOT01A 5V</li>
+<li>ping black &lt;-&gt; B_L4S5I_IOT01A GND</li>
+<li>ping white &lt;-&gt; 2.2k-ohm resistor &lt;-&gt; B_L4S5I_IOT01A D11</li>
+<li>After connection, it will be like this <a class="reference external" href="labs/img/bbcar_installation/bbcar_ping.jpg">picture</a></li>
+</ol>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>12_4_Ping</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span> <span class="n">USBRX</span><span class="p">);</span>
+<span class="lineno"> 4 </span><span class="n">DigitalInOut</span> <span class="nf">ping</span><span class="p">(</span><span class="n">D11</span><span class="p">);</span>
+<span class="lineno"> 5 </span><span class="n">Timer</span> <span class="n">t</span><span class="p">;</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span>   <span class="kt">float</span> <span class="n">val</span><span class="p">;</span>
+<span class="lineno">10 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span>      <span class="n">ping</span><span class="p">.</span><span class="n">output</span><span class="p">();</span>
+<span class="lineno">15 </span>      <span class="n">ping</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">wait_us</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<span class="lineno">16 </span>      <span class="n">ping</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">wait_us</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="lineno">17 </span>      <span class="n">ping</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">wait_us</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span>      <span class="n">ping</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+<span class="lineno">20 </span>      <span class="k">while</span><span class="p">(</span><span class="n">ping</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+<span class="lineno">21 </span>      <span class="n">t</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="lineno">22 </span>      <span class="k">while</span><span class="p">(</span><span class="n">ping</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span>
+<span class="lineno">23 </span>      <span class="n">val</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="lineno">24 </span>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Ping = %lf</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">17700.4f</span><span class="p">);</span>
+<span class="lineno">25 </span>      <span class="n">t</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="lineno">26 </span>      <span class="n">t</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="lineno">27 </span>
+<span class="lineno">28 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">);</span>
+<span class="lineno">29 </span>   <span class="p">}</span>
+<span class="lineno">30 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">Record your results and push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="continuous-servos-calibration-table">
+<h3><a class="toc-backref" href="#id9">4.5&nbsp;&nbsp;&nbsp;Continuous Servos calibration table</a></h3>
+<div class="warning docutils container">
+Before you do this part, please make sure that your servos are calibrated.
+In other words, when you set <strong>speed</strong> to 0 in the code in <span class="hl">4.3 Center and
+Test the Continuous Servos</span>, the servos should stay still.</div>
+<div class="instruct docutils container">
+<p>Why do we need calibration table?</p>
+<p>Every servo has different rotation speed even if we give them the same pwm
+signal. We can use the encoder to measure the actual rotation speed by
+inputting several values of PWM, and get a table (for each servo) of PWM v.s
+rotation speed.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">First, we need to put the encoder and the continuous servo together.</p>
+<ol class="arabic simple">
+<li>Align the sensor on encoder with center of continuous servo, and lock them with M3*8mm screws and M3 nuts like <a class="reference external" href="labs/img/bbcar_installation/encoder_servo1.jpg">this</a>.</li>
+<li>Plug in the wheel and lock with screws like <a class="reference external" href="labs/img/bbcar_installation/encoder_servo2.jpg">this</a>.</li>
+</ol>
+</li>
+<li><p class="first">Wire encoder and servo to Mbed as previous parts like <a class="reference external" href="labs/img/bbcar_installation/encoder_servo3.jpg">this</a> (encoder:D10, servo:D11). <strong>Notice that GND on encoder, servo, powerbank and Mbed should be wired together</strong>
+If you don't use a powerbank, you can connect servo power source to another USB cable from PC.</p>
+</li>
+<li><p class="first">Create a new program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>12_5_Continuous_Servos_Table</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="cp">#define CENTER_BASE 1500</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span> <span class="n">USBRX</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">DigitalIn</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">D10</span><span class="p">);</span>
+<span class="lineno"> 7 </span><span class="n">PwmOut</span> <span class="nf">servo</span><span class="p">(</span><span class="n">D11</span><span class="p">);</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">Timer</span> <span class="n">t</span><span class="p">;</span>
+<span class="lineno">10 </span><span class="n">Ticker</span> <span class="n">encoder_ticker</span><span class="p">;</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">steps</span><span class="p">;</span>
+<span class="lineno">13 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">last</span><span class="p">;</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span><span class="kt">void</span> <span class="nf">servo_control</span><span class="p">(</span><span class="kt">int</span> <span class="n">speed</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">16 </span>   <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">)</span>       <span class="n">speed</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+<span class="lineno">17 </span>   <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">200</span><span class="p">)</span> <span class="n">speed</span> <span class="o">=</span> <span class="o">-</span><span class="mi">200</span><span class="p">;</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span>   <span class="n">servo</span> <span class="o">=</span> <span class="p">(</span><span class="n">CENTER_BASE</span> <span class="o">+</span> <span class="n">speed</span><span class="p">)</span> <span class="o">/</span> <span class="mf">20000.0f</span><span class="p">;</span>
+<span class="lineno">20 </span><span class="p">}</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span><span class="kt">void</span> <span class="nf">encoder_control</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">23 </span>   <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">;</span>
+<span class="lineno">24 </span>   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="n">steps</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">25 </span>   <span class="n">last</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+<span class="lineno">26 </span><span class="p">}</span>
+<span class="lineno">27 </span>
+<span class="lineno">28 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">29 </span>
+<span class="lineno">30 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">31 </span>
+<span class="lineno">32 </span>   <span class="n">encoder_ticker</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="o">&amp;</span><span class="n">encoder_control</span><span class="p">,</span> <span class="mf">.01</span><span class="p">);</span>
+<span class="lineno">33 </span>
+<span class="lineno">34 </span>   <span class="n">servo</span><span class="p">.</span><span class="n">period_ms</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="lineno">35 </span>
+<span class="lineno">36 </span>   <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">37 </span>   <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">150</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">38 </span>
+<span class="lineno">39 </span>      <span class="n">servo_control</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="lineno">40 </span>
+<span class="lineno">41 </span>      <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">42 </span>      <span class="n">t</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="lineno">43 </span>      <span class="n">t</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="lineno">44 </span>
+<span class="lineno">45 </span>      <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">8000</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">46 </span>
+<span class="lineno">47 </span>      <span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="lineno">48 </span>
+<span class="lineno">49 </span>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%1.3f</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">steps</span> <span class="o">*</span> <span class="mf">6.5</span> <span class="o">*</span> <span class="mf">3.14</span> <span class="o">/</span> <span class="mi">32</span> <span class="o">/</span> <span class="n">time</span><span class="p">);</span>
+<span class="lineno">50 </span>
+<span class="lineno">51 </span>      <span class="n">i</span> <span class="o">+=</span> <span class="mi">30</span><span class="p">;</span>
+<span class="lineno">52 </span>   <span class="p">}</span>
+<span class="lineno">53 </span>   <span class="n">servo_control</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="lineno">54 </span>
+<span class="lineno">55 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="lineno">56 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Edit <span class="file">speed_table.py</span> Python program.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">speed_table.py</span>.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="lineno"> 2 </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="lineno"> 3 </span><span class="kn">import</span> <span class="nn">serial</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">Ts</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>   <span class="c1"># signal interval</span>
+<span class="lineno"> 6 </span><span class="n">end</span> <span class="o">=</span> <span class="mi">150</span><span class="p">;</span> <span class="c1"># signal end point</span>
+<span class="lineno"> 7 </span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="o">/</span><span class="n">Ts</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="c1"># x axis</span>
+<span class="lineno">10 </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>                <span class="c1"># y axis</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="n">serdev</span> <span class="o">=</span> <span class="s1">&#39;/dev/ttyACM0&#39;</span>
+<span class="lineno">13 </span><span class="n">s</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="n">serdev</span><span class="p">)</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="lineno">16 </span>    <span class="n">line</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span> <span class="c1"># Read a string from B_L4S5I_IOT01A terminated with &#39;\n&#39;</span>
+<span class="lineno">17 </span>    <span class="nb">print</span> <span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="lineno">18 </span>    <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="lineno">19 </span>
+<span class="lineno">20 </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="lineno">21 </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="lineno">22 </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;signal&#39;</span><span class="p">)</span>
+<span class="lineno">23 </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;speed (cm/sec)&#39;</span><span class="p">)</span>
+<span class="lineno">24 </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="lineno">25 </span><span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and flash the mbed program.</p>
+</li>
+<li><p class="first">Quit mbed Studio.</p>
+</li>
+<li><p class="first">Replace &quot;serdev&quot; in above <span class="file">speed_table.py</span> created by your Operating System for B_L4S5I_IOT01A.</p>
+</li>
+<li><p class="first">Execute above Python script.</p>
+<div class="warning docutils container">
+<p>The powerbank will turn off automatically if we only use power line and ground line like this situation, so you have to push the power button every several seconds. <strong>Don't let the powerbank turn off during meaturement!!!!!</strong>. Or you will have to meature it again.</p>
+</div>
+</li>
+<li><p class="first">The result will be like <a class="reference external" href="labs/img/bbcar_installation/servo_table.PNG">this</a></p>
+</li>
+<li><p class="first">Screenshot the result, and record the speed values (python output).</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="use-of-calibration-table">
+<h3><a class="toc-backref" href="#id10">4.6&nbsp;&nbsp;&nbsp;Use of calibration table</a></h3>
+<div class="instruct docutils container">
+<p>How can we use the calibration table?</p>
+<p>Use a regression curve fitting (numpy can do this) to find a polynomial with proper parameters. We can use the inverse of the polynomial to find a function that convert speed to the real PWM setting.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Edit <span class="file">regression.py</span>.</p>
+<p>Understand the codes in <span class="file">regression.py</span>, and modify <span class="hl">speed array</span> according to your results above.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="lineno"> 2 </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">Ts</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>   <span class="c1"># signal interval</span>
+<span class="lineno"> 5 </span><span class="n">end</span> <span class="o">=</span> <span class="mi">150</span><span class="p">;</span> <span class="c1"># signal end point</span>
+<span class="lineno"> 6 </span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="o">/</span><span class="n">Ts</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="c1"># signal vector</span>
+<span class="lineno"> 9 </span>
+<span class="lineno">10 </span><span class="c1"># TODO: revise this array to your results</span>
+<span class="lineno">11 </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.000</span><span class="p">,</span> <span class="mf">5.900</span><span class="p">,</span> <span class="mf">10.843</span><span class="p">,</span> <span class="mf">11.880</span><span class="p">,</span> <span class="mf">11.401</span><span class="p">,</span> <span class="mf">12.199</span><span class="p">])</span> <span class="c1"># speed vector</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># Least squares polynomial fit, and return the coefficients.</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span><span class="n">goal</span> <span class="o">=</span> <span class="mi">7</span>             <span class="c1"># if we want to let the servo run at 7 cm/sec</span>
+<span class="lineno">16 </span>                     <span class="c1"># equation : z[0]*x^2 + z[1]*x + z[2] = goal</span>
+<span class="lineno">17 </span><span class="n">z</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-=</span> <span class="n">goal</span>         <span class="c1"># z[0]*x^2 + z[1]*x + z[2] - goal = 0</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span><span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roots</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="c1"># Return the roots of a polynomial with coefficients given</span>
+<span class="lineno">20 </span>
+<span class="lineno">21 </span><span class="c1"># output the correct one</span>
+<span class="lineno">22 </span><span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">):</span>
+<span class="lineno">23 </span>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="lineno">24 </span><span class="k">else</span><span class="p">:</span>
+<span class="lineno">25 </span>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</li>
+<li><p class="first">Execute <span class="file">regression.py</span></p>
+<p>The program will output a result, which is the speed you need to set in <span class="hl">main.cpp</span> when we want to make the servo run at 7 cm/sec.</p>
+</li>
+<li><p class="first">Create a new mbed program.</p>
+</li>
+<li><p class="first">Open the <strong>File</strong> menu and select <strong>New Program....</strong></p>
+</li>
+<li><p class="first">Select &quot;empty Mbed OS program&quot; under <strong>MBED OS 6</strong>
+Enter <em>12_6_use_servo_table</em> for Program name.
+Check &quot;Make this the active program&quot; (default).
+Under &quot;<strong>Mbed OS Location</strong>&quot;, check &quot;Link to an existing shared Mbed OS instance&quot;
+and select &quot;~/Mbed Programs/mbed01/mbed-os/&quot;. This will reuse Mbed OS in mbed01/.
+Click &quot;Add Program&quot;.</p>
+</li>
+<li><p class="first">Copy the following codes into <span class="file">main.cpp</span>.</p>
+<p>Understand the codes in <span class="file">main.cpp</span>, and modify <span class="hl">speed</span> according to your result above.</p>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="cp">#define CENTER_BASE 1500</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">BufferedSerial</span> <span class="nf">pc</span><span class="p">(</span><span class="n">USBTX</span><span class="p">,</span> <span class="n">USBRX</span><span class="p">);</span>
+<span class="lineno"> 6 </span><span class="n">DigitalIn</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">D10</span><span class="p">);</span>
+<span class="lineno"> 7 </span><span class="n">PwmOut</span> <span class="nf">servo</span><span class="p">(</span><span class="n">D11</span><span class="p">);</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">Timer</span> <span class="n">t</span><span class="p">;</span>
+<span class="lineno">10 </span><span class="n">Ticker</span> <span class="n">encoder_ticker</span><span class="p">;</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">steps</span><span class="p">;</span>
+<span class="lineno">13 </span><span class="k">volatile</span> <span class="kt">int</span> <span class="n">last</span><span class="p">;</span>
+<span class="lineno">14 </span>
+<span class="lineno">15 </span><span class="kt">void</span> <span class="nf">servo_control</span><span class="p">(</span><span class="kt">int</span> <span class="n">speed</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">16 </span>   <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">)</span>       <span class="n">speed</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+<span class="lineno">17 </span>   <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">200</span><span class="p">)</span> <span class="n">speed</span> <span class="o">=</span> <span class="o">-</span><span class="mi">200</span><span class="p">;</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span>   <span class="n">servo</span><span class="o">=</span><span class="p">(</span><span class="n">CENTER_BASE</span> <span class="o">+</span> <span class="n">speed</span><span class="p">)</span><span class="o">/</span><span class="mf">20000.0f</span><span class="p">;</span>
+<span class="lineno">20 </span><span class="p">}</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span><span class="kt">void</span> <span class="nf">encoder_control</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">23 </span>   <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">;</span>
+<span class="lineno">24 </span>   <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="n">steps</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">25 </span>   <span class="n">last</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+<span class="lineno">26 </span><span class="p">}</span>
+<span class="lineno">27 </span>
+<span class="lineno">28 </span>
+<span class="lineno">29 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">30 </span>
+<span class="lineno">31 </span>   <span class="n">pc</span><span class="p">.</span><span class="n">set_baud</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="lineno">32 </span>
+<span class="lineno">33 </span>   <span class="n">encoder_ticker</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="o">&amp;</span><span class="n">encoder_control</span><span class="p">,</span> <span class="mf">.01</span><span class="p">);</span>
+<span class="lineno">34 </span>
+<span class="lineno">35 </span>   <span class="n">servo</span><span class="p">.</span><span class="n">period_ms</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="lineno">36 </span>
+<span class="lineno">37 </span>   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">38 </span>
+<span class="lineno">39 </span>   <span class="c1">//TODO: revise this value according to your result</span>
+<span class="lineno">40 </span>   <span class="n">servo_control</span><span class="p">(</span><span class="mf">37.222</span><span class="p">);</span>
+<span class="lineno">41 </span>
+<span class="lineno">42 </span>   <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">43 </span>   <span class="n">t</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="lineno">44 </span>   <span class="n">t</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="lineno">45 </span>
+<span class="lineno">46 </span>   <span class="n">ThisThread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">8000</span><span class="n">ms</span><span class="p">);</span>
+<span class="lineno">47 </span>
+<span class="lineno">48 </span>   <span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="lineno">49 </span>
+<span class="lineno">50 </span>   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%1.3f</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span> <span class="n">steps</span> <span class="o">*</span> <span class="mf">6.5</span> <span class="o">*</span> <span class="mf">3.14</span> <span class="o">/</span> <span class="mi">32</span> <span class="o">/</span> <span class="n">time</span><span class="p">);</span>
+<span class="lineno">51 </span>
+<span class="lineno">52 </span>   <span class="p">}</span>
+<span class="lineno">53 </span><span class="p">}</span>
+</pre></div>
+</li>
+<li><p class="first">Compile and run the program.</p>
+</li>
+<li><p class="first">You should see the actual result is close to 7.</p>
+</li>
+<li><p class="first">Push the code to your GitHub repo.</p>
+</li>
+</ol>
+<div class="instruct docutils container">
+Can you create a PWM table for B_L4S5I_IOT01A to control servo to run at a range of speeds?</div>
+</div>
+</div>
+<div class="section" id="demo-and-checkpoints">
+<h2><a class="toc-backref" href="#id11">5&nbsp;&nbsp;&nbsp;Demo and Checkpoints</a></h2>
+<ol class="arabic simple">
+<li>Show your git remote repository.</li>
+<li>Show the results above (increasing encoder value, ping value and python plot).</li>
+<li>Show that your two continuous servos are calibrated (when you set <strong>speed</strong> to 0 in the code in <span class="hl">4.3 Center and Test the Continuous Servos</span>, the servos should stay still) .</li>
+<li>The lab above only creates a calibration table when servo rotates in counterclockwise. Please creates the table when servo rotates in clockwise, and let it run at 5 cm/sec in clockwise for 5 seconds, then run at 8 cm/sec in counterclockwise for 5 seconds (actual result +-0.5 cm/sec is acceptable).</li>
+</ol>
+</div>
+
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/lab-schedule.html">Lab Schedule</a></li>
+      <li><a href="https://www.ee.nthu.edu.tw/ee240500/pages/class-rules.html">Class Rules</a></li>
+  </ul>
+
+<h4>Categories</h4>
+<ul class="blank">
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/homework.html">homework</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/labs.html">labs</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/misc.html">misc</a></li>
+		<li><a href="https://www.ee.nthu.edu.tw/ee240500/category/tutorial.html">tutorial</a></li>
+</ul>
+
+
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/libs/gumby.min.js"></script>
+  <script src="https://www.ee.nthu.edu.tw/ee240500/theme/js/plugins.js"></script>
+</body>
+</html>
